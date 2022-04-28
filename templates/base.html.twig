@@ -7,13 +7,20 @@
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+            {{ encore_entry_link_tags('tailwind') }}
         {% endblock %}
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body>
-        {% block body %}{% endblock %}
+    <body class="bg-slate-200 grid grid-cols-6 gap-4 p-8">
+        <div class="col-span-1 bg-white rounded drop-shadow-md p-8">
+            {% include "_menu.html.twig" %}
+        </div>
+        <div class="col-span-5">
+            {% block body %}
+            {% endblock %}
+        </div>
     </body>
 </html>

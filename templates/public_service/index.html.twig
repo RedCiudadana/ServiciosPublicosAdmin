@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% import "_table.html.twig" as table %}
+{% import "_buttons.html.twig" as buttons %}
+
+{% block title %}Public Services{% endblock %}
+
+{% block body %}
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Public Services</h1>
+
+    <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
+        <thead class="bg-slate-50">
+            <tr>
+                {{ table.th("Id") }}
+                {{ table.th("Name") }}
+                {{ table.th("Description") }}
+                {{ table.th("Instructions") }}
+                {{ table.th("Requirements") }}
+                {{ table.th("Cost") }}
+                {{ table.th("TimeResponse") }}
+                {{ table.th("TypeOfDocumentObtainable") }}
+                {{ table.th("Url") }}
+                {{ table.th("actions") }}
+            </tr>
+        </thead>
+        <tbody>
+        {% for public_service in public_services %}
+            <tr>
+                {{ table.td(public_service.id) }}
+                {{ table.td(public_service.name) }}
+                {{ table.td(public_service.description) }}
+                {{ table.td(public_service.instructions) }}
+                {{ table.td(public_service.requirements) }}
+                {{ table.td(public_service.cost) }}
+                {{ table.td(public_service.timeResponse ? public_service.timeResponse.format('%y year(s), %m month(s), %d day(s)') : '') }}
+                {{ table.td(public_service.typeOfDocumentObtainable) }}
+                {{ table.td(public_service.url) }}
+
+                {% set actions %}
+                    <a href="{{ path('app_public_service_show', {'id': public_service.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_public_service_edit', {'id': public_service.id}) }}" class="underline pr-2">edit</a>
+                {% endset %}
+                
+                {{ table.td(actions, "w-48") }}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ buttons.link(path('app_public_service_new'), "Create new")}}
+{% endblock %}

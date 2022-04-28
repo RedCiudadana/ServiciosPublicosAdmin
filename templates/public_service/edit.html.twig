@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit PublicService{% endblock %}
+
+{% block body %}
+    <h1>Edit PublicService</h1>
+
+    {{ include('public_service/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_public_service_index') }}">back to list</a>
+
+    {{ include('public_service/_delete_form.html.twig') }}
+{% endblock %}

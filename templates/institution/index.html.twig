@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% import "_table.html.twig" as table %}
+{% import "_buttons.html.twig" as buttons %}
+
+{% block title %}Institution index{% endblock %}
+
+{% block body %}
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Institution</h1>
+
+    <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
+        <thead class="bg-slate-50">
+            <tr>
+                {{ table.th("Id") }}
+                {{ table.th("Name") }}
+                {{ table.th("actions") }}
+            </tr>
+        </thead>
+        <tbody>
+        {% for institution in institutions %}
+            <tr>
+                {{ table.td(institution.id) }}
+                {{ table.td(institution.name) }}
+
+                {% set actions %}
+                    <a href="{{ path('app_institution_show', {'id': institution.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_institution_edit', {'id': institution.id}) }}" class="underline pr-2">edit</a>
+                {% endset %}
+
+                {{ table.td(actions, "w-48") }}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {{ buttons.link(path('app_institution_new'), "Create new")}}
+{% endblock %}

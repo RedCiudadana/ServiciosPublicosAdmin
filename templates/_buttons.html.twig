@@ -1,0 +1,5 @@
+{% macro link(url, text, cssStyles = "") %}
+  <a href="{{ url }}" class="bg-blue-700 text-white font-medium px-4 py-2 rounded text-center {{cssStyles}}">
+    {{ text }}
+  </a>
+{% endmacro %}

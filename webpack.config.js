@@ -55,6 +55,15 @@ Encore
         config.corejs = 3;
     })
 
+    .addStyleEntry('tailwind', './assets/styles/tailwind.css')
+
+    .enablePostCssLoader((options) => {
+        options.postcssOptions = {
+            // directory where the postcss.config.js file is stored
+            path: './postcss.config.js'
+        };
+    })
+
     // enables Sass/SCSS support
     //.enableSassLoader()
 
