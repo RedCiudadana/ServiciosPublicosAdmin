@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\SubCategory;
 use App\Form\SubCategory\BaseType as SubCategoryType;
 use App\Repository\SubCategoryRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * @Route("/sub/category")
+ * @IsGranted("ROLE_ADMIN")
  */
 class SubCategoryController extends AbstractController
 {

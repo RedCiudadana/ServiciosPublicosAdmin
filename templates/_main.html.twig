@@ -15,7 +15,12 @@
         {% endblock %}
     </head>
     <body class="bg-slate-200 grid grid-cols-6 gap-4 p-8">
-        {% block body %}
-        {% endblock %}
+        <div class="col-span-1 bg-white rounded drop-shadow-md p-8 h-fit">
+            {% include "_menu.html.twig" %}
+        </div>
+        <div class="col-span-5">
+            {% block body %}
+            {% endblock %}
+        </div>
     </body>
 </html>
