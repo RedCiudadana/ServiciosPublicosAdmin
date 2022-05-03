@@ -3,11 +3,15 @@
 {% block title %}Edit PublicService{% endblock %}
 
 {% block body %}
-    <h1>Edit PublicService</h1>
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
+        Edit PublicService
+    </h1>
 
-    {{ include('public_service/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
+        {{ include('public_service/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
 
-    <a href="{{ path('app_public_service_index') }}">back to list</a>
+    <a class="font-bold" href="{{ path('app_public_service_index') }}">back to list</a>
 
     {{ include('public_service/_delete_form.html.twig') }}
 {% endblock %}

@@ -29,6 +29,46 @@ class Institution
      */
     private $publicServices;
 
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $address;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $schedule;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $daysOpen;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $webpage;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $facebookURL;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $twitterURL;
+
     public function __construct()
     {
         $this->publicServices = new ArrayCollection();
@@ -84,5 +124,101 @@ class Institution
     public function __toString()
     {
         return $this->name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }
+
+    public function setAddress(string $address): self
+    {
+        $this->address = $address;
+
+        return $this;
+    }
+
+    public function getSchedule(): ?string
+    {
+        return $this->schedule;
+    }
+
+    public function setSchedule(string $schedule): self
+    {
+        $this->schedule = $schedule;
+
+        return $this;
+    }
+
+    public function getDaysOpen(): ?string
+    {
+        return $this->daysOpen;
+    }
+
+    public function setDaysOpen(string $daysOpen): self
+    {
+        $this->daysOpen = $daysOpen;
+
+        return $this;
+    }
+
+    public function getWebpage(): ?string
+    {
+        return $this->webpage;
+    }
+
+    public function setWebpage(string $webpage): self
+    {
+        $this->webpage = $webpage;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFacebookURL(): ?string
+    {
+        return $this->facebookURL;
+    }
+
+    public function setFacebookURL(string $facebookURL): self
+    {
+        $this->facebookURL = $facebookURL;
+
+        return $this;
+    }
+
+    public function getTwitterURL(): ?string
+    {
+        return $this->twitterURL;
+    }
+
+    public function setTwitterURL(string $twitterURL): self
+    {
+        $this->twitterURL = $twitterURL;
+
+        return $this;
     }
 }

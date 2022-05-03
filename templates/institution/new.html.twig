@@ -3,9 +3,13 @@
 {% block title %}New Institution{% endblock %}
 
 {% block body %}
-    <h1>Create new Institution</h1>
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
+        Create new Institution
+    </h1>
 
-    {{ include('institution/_form.html.twig') }}
+    <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
+        {{ include('institution/_form.html.twig') }}
+    </div>
 
-    <a href="{{ path('app_institution_index') }}">back to list</a>
+    <a class="font-bold" href="{{ path('app_institution_index') }}">back to list</a>
 {% endblock %}

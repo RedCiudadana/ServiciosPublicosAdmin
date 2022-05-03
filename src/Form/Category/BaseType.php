@@ -13,6 +13,8 @@ class BaseType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('description')
+            ->add('highlight')
         ;
     }
 

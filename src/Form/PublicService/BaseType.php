@@ -17,20 +17,15 @@ class BaseType extends AbstractType
         $builder
             ->add('name')
             ->add('description')
+            ->add('institution')
+            ->add('subcategory')
             ->add('instructions')
             ->add('requirements')
             ->add('cost', NumberType::class)
-            ->add('timeResponse', DateIntervalType::class, [
-                'widget' => 'integer',
-                'with_years'  => false,
-                'with_months' => false,
-                'with_days'   => true,
-                'with_hours'  => true
-            ])
+            ->add('timeResponse')
             ->add('typeOfDocumentObtainable')
             ->add('url')
-            ->add('institution')
-            ->add('category')
+            ->add('hightlight')
         ;
     }
 

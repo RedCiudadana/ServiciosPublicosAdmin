@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\CategoryRepository;
+use App\Repository\SubCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Entity(repositoryClass=SubCategoryRepository::class)
  */
-class Category
+class SubCategory
 {
     /**
      * @ORM\Id
@@ -30,19 +30,24 @@ class Category
     private $description;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="subCategories")
+     * @ORM\JoinColumn(nullable=false)
      */
-    private $highlight = false;
+    private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity=SubCategory::class, mappedBy="category")
+     * @ORM\Column(type="boolean")
      */
-    private $subCategories;
+    private $highlight;
+
+    /**
+     * @ORM\OneToMany(targetEntity=PublicService::class, mappedBy="subcategory")
+     */
+    private $publicServices;
 
     public function __construct()
     {
         $this->publicServices = new ArrayCollection();
-        $this->subCategories = new ArrayCollection();
     }
 
     public function __toString()
@@ -79,6 +84,18 @@ class Category
         return $this;
     }
 
+    public function getCategory(): ?Category
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?Category $category): self
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
     public function getHighlight(): ?bool
     {
         return $this->highlight;
@@ -92,29 +109,29 @@ class Category
     }
 
     /**
-     * @return Collection<int, SubCategory>
+     * @return Collection<int, PublicService>
      */
-    public function getSubCategories(): Collection
+    public function getPublicServices(): Collection
     {
-        return $this->subCategories;
+        return $this->publicServices;
     }
 
-    public function addSubCategory(SubCategory $subCategory): self
+    public function addPublicService(PublicService $publicService): self
     {
-        if (!$this->subCategories->contains($subCategory)) {
-            $this->subCategories[] = $subCategory;
-            $subCategory->setCategory($this);
+        if (!$this->publicServices->contains($publicService)) {
+            $this->publicServices[] = $publicService;
+            $publicService->setSubcategory($this);
         }
 
         return $this;
     }
 
-    public function removeSubCategory(SubCategory $subCategory): self
+    public function removePublicService(PublicService $publicService): self
     {
-        if ($this->subCategories->removeElement($subCategory)) {
+        if ($this->publicServices->removeElement($publicService)) {
             // set the owning side to null (unless already changed)
-            if ($subCategory->getCategory() === $this) {
-                $subCategory->setCategory(null);
+            if ($publicService->getSubcategory() === $this) {
+                $publicService->setSubcategory(null);
             }
         }
 

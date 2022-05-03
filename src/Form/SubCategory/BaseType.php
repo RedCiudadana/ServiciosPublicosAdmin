@@ -1,25 +1,28 @@
 <?php
 
-namespace App\Form;
+namespace App\Form\SubCategory;
 
-use App\Entity\Institution;
+use App\Entity\SubCategory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class InstitutionType extends AbstractType
+class BaseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('name')
+            ->add('description')
+            ->add('highlight')
+            ->add('category')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Institution::class,
+            'data_class' => SubCategory::class,
         ]);
     }
 }

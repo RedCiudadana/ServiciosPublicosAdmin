@@ -13,6 +13,14 @@ class BaseType extends AbstractType
     {
         $builder
             ->add('name')
+            ->add('description')
+            ->add('address')
+            ->add('schedule')
+            ->add('daysOpen')
+            ->add('webpage')
+            ->add('email')
+            ->add('facebookURL')
+            ->add('twitterURL')
         ;
     }
 

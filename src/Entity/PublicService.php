@@ -29,12 +29,6 @@ class PublicService
     private $institution;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="publicServices")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $category;
-
-    /**
      * @ORM\Column(type="text")
      */
     private $description;
@@ -55,7 +49,7 @@ class PublicService
     private $cost;
 
     /**
-     * @ORM\Column(type="dateinterval")
+     * @ORM\Column(type="string")
      */
     private $timeResponse;
 
@@ -65,9 +59,25 @@ class PublicService
     private $typeOfDocumentObtainable;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(type="string", length=255)
      */
     private $url;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=SubCategory::class, inversedBy="publicServices")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $subcategory;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $normative;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $highlight;
 
     public function getId(): ?int
     {
@@ -94,18 +104,6 @@ class PublicService
     public function setInstitution(?Institution $institution): self
     {
         $this->institution = $institution;
-
-        return $this;
-    }
-
-    public function getCategory(): ?Category
-    {
-        return $this->category;
-    }
-
-    public function setCategory(?Category $category): self
-    {
-        $this->category = $category;
 
         return $this;
     }
@@ -158,12 +156,12 @@ class PublicService
         return $this;
     }
 
-    public function getTimeResponse(): ?\DateInterval
+    public function getTimeResponse(): ?string
     {
         return $this->timeResponse;
     }
 
-    public function setTimeResponse(\DateInterval $timeResponse): self
+    public function setTimeResponse(string $timeResponse): self
     {
         $this->timeResponse = $timeResponse;
 
@@ -190,6 +188,42 @@ class PublicService
     public function setUrl(?string $url): self
     {
         $this->url = $url;
+
+        return $this;
+    }
+
+    public function getSubcategory(): ?SubCategory
+    {
+        return $this->subcategory;
+    }
+
+    public function setSubcategory(?SubCategory $subcategory): self
+    {
+        $this->subcategory = $subcategory;
+
+        return $this;
+    }
+
+    public function getNormative(): ?string
+    {
+        return $this->normative;
+    }
+
+    public function setNormative(string $normative): self
+    {
+        $this->normative = $normative;
+
+        return $this;
+    }
+
+    public function getHighlight(): ?bool
+    {
+        return $this->highlight;
+    }
+
+    public function setHighlight(bool $highlight): self
+    {
+        $this->highlight = $highlight;
 
         return $this;
     }
