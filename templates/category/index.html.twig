@@ -23,7 +23,7 @@
                 {{ table.td(category.name) }}
 
                 {% set actions %}
-                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_category_show', {'id': category.id}) }}" class="underline pr-2 hidden">show</a>
                     <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="underline pr-2">edit</a>
                 {% endset %}
 

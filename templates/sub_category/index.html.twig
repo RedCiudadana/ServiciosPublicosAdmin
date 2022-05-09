@@ -27,7 +27,7 @@
                 {{ table.td(sub_category.highlight ? 'Yes' : 'No') }}
 
                 {% set actions %}
-                    <a href="{{ path('app_sub_category_show', {'id': sub_category.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_sub_category_show', {'id': sub_category.id}) }}" class="underline pr-2 hidden">show</a>
                     <a href="{{ path('app_sub_category_edit', {'id': sub_category.id}) }}" class="underline pr-2">edit</a>
                 {% endset %}
 

@@ -37,7 +37,7 @@
                 {{ table.td(public_service.url) }}
 
                 {% set actions %}
-                    <a href="{{ path('app_public_service_show', {'id': public_service.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_public_service_show', {'id': public_service.id}) }}" class="underline pr-2 hidden">show</a>
                     <a href="{{ path('app_public_service_edit', {'id': public_service.id}) }}" class="underline pr-2">edit</a>
                 {% endset %}
                 

@@ -29,7 +29,7 @@
                 {{ table.td(roles) }}
 
                 {% set actions %}
-                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="underline pr-2 hidden">show</a>
                     <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="underline pr-2">edit</a>
                 {% endset %}
 
