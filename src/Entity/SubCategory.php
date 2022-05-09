@@ -41,7 +41,7 @@ class SubCategory
     private $highlight;
 
     /**
-     * @ORM\OneToMany(targetEntity=PublicService::class, mappedBy="subcategory")
+     * @ORM\OneToMany(targetEntity=PublicService::class, mappedBy="subcategory", fetch="EXTRA_LAZY")
      */
     private $publicServices;
 

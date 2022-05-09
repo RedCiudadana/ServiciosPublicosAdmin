@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\PublicService;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
@@ -45,6 +46,23 @@ class PublicServiceRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+     * @return PublicService[] Returns an array of PublicService objects
+     */
+    public function findByUser(User $user)
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.institution', 'i')
+            ->innerJoin('i.members', 'm')
+            ->andWhere('m = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.id', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
     }
 
     // /**

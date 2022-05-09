@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -36,6 +38,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string")
      */
     private $password;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Institution::class, mappedBy="members")
+     */
+    private $institutions;
+
+    public function __construct()
+    {
+        $this->institutions = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -133,5 +145,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Institution>
+     */
+    public function getInstitutions(): Collection
+    {
+        return $this->institutions;
+    }
+
+    public function addInstitution(Institution $institution): self
+    {
+        if (!$this->institutions->contains($institution)) {
+            $this->institutions[] = $institution;
+            $institution->addMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeInstitution(Institution $institution): self
+    {
+        if ($this->institutions->removeElement($institution)) {
+            $institution->removeMember($this);
+        }
+
+        return $this;
     }
 }

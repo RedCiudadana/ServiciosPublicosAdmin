@@ -2,26 +2,38 @@
 
 namespace App\Controller;
 
+use App\Config\Roles;
 use App\Entity\PublicService;
+use App\Entity\User;
 use App\Form\PublicService\BaseType as PublicServiceType;
 use App\Repository\PublicServiceRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @Route("/public/service")
  */
-class PublicServiceController extends AbstractController
+class PublicServiceController extends BaseController
 {
     /**
      * @Route("/", name="app_public_service_index", methods={"GET"})
      */
     public function index(PublicServiceRepository $publicServiceRepository): Response
     {
+        $publicServices = null;
+
+        if ($this->isGranted(Roles::ADMIN)) {
+            $publicServices = $publicServiceRepository->findAll();
+        } else {
+            $publicServices =
+                $publicServiceRepository->findByUser($this->getUser());
+        }
+
         return $this->render('public_service/index.html.twig', [
-            'public_services' => $publicServiceRepository->findAll(),
+            'public_services' => $publicServices
         ]);
     }
 
@@ -50,6 +62,10 @@ class PublicServiceController extends AbstractController
      */
     public function show(PublicService $publicService): Response
     {
+        if (!$this->validateAccessToResource($publicService)) {
+            return new AccessDeniedException('You cannot access this page');
+        };
+
         return $this->render('public_service/show.html.twig', [
             'public_service' => $publicService,
         ]);
@@ -60,6 +76,10 @@ class PublicServiceController extends AbstractController
      */
     public function edit(Request $request, PublicService $publicService, PublicServiceRepository $publicServiceRepository): Response
     {
+        if (!$this->validateAccessToResource($publicService)) {
+            return new AccessDeniedException('You cannot access this page');
+        };
+
         $form = $this->createForm(PublicServiceType::class, $publicService);
         $form->handleRequest($request);
 
@@ -79,10 +99,19 @@ class PublicServiceController extends AbstractController
      */
     public function delete(Request $request, PublicService $publicService, PublicServiceRepository $publicServiceRepository): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$publicService->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $publicService->getId(), $request->request->get('_token'))) {
             $publicServiceRepository->remove($publicService);
         }
 
         return $this->redirectToRoute('app_public_service_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    private function validateAccessToResource(PublicService $publicService)
+    {
+        if ($this->isGranted(Roles::ADMIN)) {
+            return true;
+        }
+
+        return in_array($publicService->getInstitution(), $this->getUser()->getInstitutions()->toArray());
     }
 }

@@ -69,9 +69,20 @@ class Institution
      */
     private $twitterURL;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="institutions", fetch="EXTRA_LAZY")
+     */
+    private $members;
+
     public function __construct()
     {
         $this->publicServices = new ArrayCollection();
+        $this->members = new ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -119,11 +130,6 @@ class Institution
         }
 
         return $this;
-    }
-
-    public function __toString()
-    {
-        return $this->name;
     }
 
     public function getDescription(): ?string
@@ -218,6 +224,30 @@ class Institution
     public function setTwitterURL(string $twitterURL): self
     {
         $this->twitterURL = $twitterURL;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getMembers(): Collection
+    {
+        return $this->members;
+    }
+
+    public function addMember(User $member): self
+    {
+        if (!$this->members->contains($member)) {
+            $this->members[] = $member;
+        }
+
+        return $this;
+    }
+
+    public function removeMember(User $member): self
+    {
+        $this->members->removeElement($member);
 
         return $this;
     }

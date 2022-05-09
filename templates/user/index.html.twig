@@ -1,0 +1,48 @@
+{% extends '_main.html.twig' %}
+
+{% import "_table.html.twig" as table %}
+{% import "_buttons.html.twig" as buttons %}
+
+{% block title %}User index{% endblock %}
+
+{% block body %}
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Usuarios</h1>
+
+    <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
+        <thead class="bg-slate-50">
+            <tr>
+                {{ table.th("Id") }}
+                {{ table.th("Email") }}
+                {{ table.th("Roles") }}
+                {{ table.th("actions", "w-48") }}
+            </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                {{ table.td(user.id) }}
+                {{ table.td(user.email) }}
+                {% set roles %}
+                    {{ user.roles ? (user.roles|map(p => "<span
+                        class='bg-orange-400 text-white font-bold rounded mx-1 px-1 text-xs'>#{p}</span>")|join('')|raw) : '' }}
+                {% endset %}
+                {{ table.td(roles) }}
+
+                {% set actions %}
+                    <a href="{{ path('app_user_show', {'id': user.id}) }}" class="underline pr-2">show</a>
+                    <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="underline pr-2">edit</a>
+                {% endset %}
+
+                {{ table.td(actions, "w-48") }}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_user_new') }}">Create new</a>
+    <!-- B4PHLKMGUX6R8!y -->
+{% endblock %}

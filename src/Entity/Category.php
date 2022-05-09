@@ -41,7 +41,6 @@ class Category
 
     public function __construct()
     {
-        $this->publicServices = new ArrayCollection();
         $this->subCategories = new ArrayCollection();
     }
 

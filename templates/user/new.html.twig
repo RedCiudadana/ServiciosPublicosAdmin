@@ -1,0 +1,22 @@
+{% extends '_main.html.twig' %}
+
+{% block title %}New User{% endblock %}
+
+{% block body %}
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
+        Create new User
+    </h1>
+
+    <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
+        {{ form_start(form) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.plainPassword, {
+                label: 'Password'
+            }) }}
+
+            <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold">{{ button_label|default('Register') }}</button>
+        {{ form_end(form) }}
+    </div>
+
+    <a class="font-bold" href="{{ path('app_user_index') }}">back to list</a>
+{% endblock %}

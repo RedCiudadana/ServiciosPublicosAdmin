@@ -24,8 +24,9 @@ class BaseType extends AbstractType
             ->add('cost', NumberType::class)
             ->add('timeResponse')
             ->add('typeOfDocumentObtainable')
+            ->add('normative')
             ->add('url')
-            ->add('hightlight')
+            ->add('highlight')
         ;
     }
 

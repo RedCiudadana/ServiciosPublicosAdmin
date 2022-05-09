@@ -1,0 +1,21 @@
+{% extends '_main.html.twig' %}
+
+{% import "_buttons.html.twig" as buttons %}
+
+{% block title %}Edit User{% endblock %}
+
+{% block body %}
+    <div class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-base font-bold">
+        <a class="font-bold" href="{{ path('app_user_index') }}">Usuarios</a>
+        \ Editar
+    </div>
+
+    <div class="flex">
+        {{ buttons.link(path('app_user_institutions', { id: user.id } ), "Instituciones", "text-xs ml-auto mb-4") }}
+    </div>
+    <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
+        {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+    </div>
+
+    {{ include('user/_delete_form.html.twig') }}
+{% endblock %}
