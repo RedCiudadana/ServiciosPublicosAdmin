@@ -3,14 +3,23 @@
 namespace App\Entity;
 
 use App\Repository\PublicServiceRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource(
+ *  normalizationContext={"groups"={"get"}},
+ *  collectionOperations={"get"},
+ *  itemOperations={"get"},
+ * )
  * @ORM\Entity(repositoryClass=PublicServiceRepository::class)
  */
 class PublicService
 {
     /**
+     * @Groups("get")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -23,58 +32,69 @@ class PublicService
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Institution::class, inversedBy="publicServices")
+     * @Groups("get")
+     * @ORM\ManyToOne(targetEntity=Institution::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $institution;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="text")
      */
     private $instructions;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="text")
      */
     private $requirements;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="float")
      */
     private $cost;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string")
      */
     private $timeResponse;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $typeOfDocumentObtainable;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity=SubCategory::class, inversedBy="publicServices")
+     * @Groups("get")
+     * @ORM\ManyToOne(targetEntity=SubCategory::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $subcategory;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $normative;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="boolean")
      */
     private $highlight;

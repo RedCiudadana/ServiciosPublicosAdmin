@@ -3,16 +3,23 @@
 namespace App\Entity;
 
 use App\Repository\InstitutionRepository;
+use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
+ * @ApiResource(
+ *  collectionOperations={"get"},
+ *  itemOperations={"get"},
+ * )
  * @ORM\Entity(repositoryClass=InstitutionRepository::class)
  */
 class Institution
 {
     /**
+     * @Groups("get")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -20,14 +27,10 @@ class Institution
     private $id;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
-
-    /**
-     * @ORM\OneToMany(targetEntity=PublicService::class, mappedBy="institution")
-     */
-    private $publicServices;
 
     /**
      * @ORM\Column(type="text")
@@ -69,17 +72,6 @@ class Institution
      */
     private $twitterURL;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="institutions", fetch="EXTRA_LAZY")
-     */
-    private $members;
-
-    public function __construct()
-    {
-        $this->publicServices = new ArrayCollection();
-        $this->members = new ArrayCollection();
-    }
-
     public function __toString()
     {
         return $this->name;
@@ -98,36 +90,6 @@ class Institution
     public function setName(string $name): self
     {
         $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, PublicService>
-     */
-    public function getPublicServices(): Collection
-    {
-        return $this->publicServices;
-    }
-
-    public function addPublicService(PublicService $publicService): self
-    {
-        if (!$this->publicServices->contains($publicService)) {
-            $this->publicServices[] = $publicService;
-            $publicService->setInstitution($this);
-        }
-
-        return $this;
-    }
-
-    public function removePublicService(PublicService $publicService): self
-    {
-        if ($this->publicServices->removeElement($publicService)) {
-            // set the owning side to null (unless already changed)
-            if ($publicService->getInstitution() === $this) {
-                $publicService->setInstitution(null);
-            }
-        }
 
         return $this;
     }
@@ -224,30 +186,6 @@ class Institution
     public function setTwitterURL(string $twitterURL): self
     {
         $this->twitterURL = $twitterURL;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getMembers(): Collection
-    {
-        return $this->members;
-    }
-
-    public function addMember(User $member): self
-    {
-        if (!$this->members->contains($member)) {
-            $this->members[] = $member;
-        }
-
-        return $this;
-    }
-
-    public function removeMember(User $member): self
-    {
-        $this->members->removeElement($member);
 
         return $this;
     }

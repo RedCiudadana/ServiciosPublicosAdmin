@@ -9,6 +9,8 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
         App\Entity\User:
             algorithm: auto
+        Symfony\Component\Security\Core\UserInterface:
+            algorithm: auto
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
@@ -17,10 +19,22 @@ security:
             entity:
                 class: App\Entity\User
                 property: email
+        users_in_memory:
+            memory:
+                users:
+                    web: { password: "$2y$13$zSNmivzhd/Wj9Wy7I97qF.dHIxHcYHlADB7FZ4GTw8wLnK.h5vQZG", roles: ['ROLE_ADMIN'] } #web!2022inparadise
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        api:
+            pattern: ^/api
+            login_throttling:
+                max_attempts: 3
+                interval: '30 minutes'
+            provider: users_in_memory
+            http_basic:
+                realm: Secured Area
         main:
             login_throttling:
                 max_attempts: 3
