@@ -4,8 +4,7 @@ namespace App\Entity;
 
 use App\Repository\InstitutionRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 
@@ -15,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  itemOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=InstitutionRepository::class)
+ * @Gedmo\Loggable
  */
 class Institution
 {
@@ -28,46 +28,55 @@ class Institution
 
     /**
      * @Groups("get")
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $address;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $schedule;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $daysOpen;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $webpage;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $facebookURL;
 
     /**
+     * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $twitterURL;

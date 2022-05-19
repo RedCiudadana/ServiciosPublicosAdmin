@@ -2,11 +2,12 @@
 
 namespace App\Entity;
 
-use App\Repository\PublicServiceRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
-use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\PublicServiceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ApiResource(
@@ -15,6 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
  *  itemOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=PublicServiceRepository::class)
+ * @Gedmo\Loggable
  */
 class PublicService
 {
@@ -27,11 +29,14 @@ class PublicService
     private $id;
 
     /**
+     * @Gedmo\Versioned
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\ManyToOne(targetEntity=Institution::class)
      * @ORM\JoinColumn(nullable=false)
@@ -39,24 +44,28 @@ class PublicService
     private $institution;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="text")
      */
     private $instructions;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="text")
      */
     private $requirements;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="float")
      */
@@ -69,18 +78,21 @@ class PublicService
     private $timeResponse;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $typeOfDocumentObtainable;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $url;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\ManyToOne(targetEntity=SubCategory::class)
      * @ORM\JoinColumn(nullable=false)
@@ -88,12 +100,14 @@ class PublicService
     private $subcategory;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $normative;
 
     /**
+     * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\Column(type="boolean")
      */

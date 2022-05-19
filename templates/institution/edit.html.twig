@@ -1,11 +1,23 @@
 {% extends '_main.html.twig' %}
 
+{% import "_buttons.html.twig" as buttons %}
+
 {% block title %}Edit Institution{% endblock %}
 
 {% block body %}
     <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
         Edit Institution
     </h1>
+
+    {% if is_granted('ROLE_ADMIN') %}
+        <div class="w-full flex">
+            {{ buttons.link_text(
+                path('app_institution_history', { id: institution.id }),
+                "History",
+                "ml-auto mb-2"
+            ) }}
+        </div>
+    {% endif %}
 
     <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
         {{ include('institution/_form.html.twig', {'button_label': 'Update'}) }}

@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Institution;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
-use App\Form\SelectInstitutionType;
+use App\Form\User\SelectInstitutionType;
 use App\Form\UserType;
 use App\Repository\InstitutionRepository;
 use App\Repository\UserRepository;

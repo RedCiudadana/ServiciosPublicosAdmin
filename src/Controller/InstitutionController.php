@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Institution;
 use App\Form\Institution\BaseType as InstitutionType;
 use App\Repository\InstitutionRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Loggable\Entity\LogEntry;
+use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,5 +89,41 @@ class InstitutionController extends AbstractController
         }
 
         return $this->redirectToRoute('app_institution_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/{id}/history", name="app_institution_history", methods={"GET"})
+     */
+    public function history(EntityManagerInterface $em, Institution $institution)
+    {
+        /**
+         * @var LogEntryRepository
+         */
+        $logRepo = $em->getRepository(LogEntry::class);
+        $logs = $logRepo->getLogEntries($institution);
+
+        return $this->render('institution/history.html.twig', [
+            'institution' => $institution,
+            'logs' => $logs
+        ]);
+    }
+
+    /**
+     * @Route("/{id}/history/apply/{version}", name="app_institution_apply_version", methods={"GET"})
+     */
+    public function applyVersion(Institution $institution, string $version, EntityManagerInterface $em)
+    {
+        /**
+         * @var LogEntryRepository
+         */
+        $logRepo = $em->getRepository(LogEntry::class);
+        $logRepo->revert($institution, $version);
+
+        $em->persist($institution);
+        $em->flush();
+
+        return $this->redirectToRoute('app_institution_edit', [
+            'id' => $institution->getId()
+        ]);
     }
 }

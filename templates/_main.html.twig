@@ -16,6 +16,9 @@
     </head>
     <body class="bg-slate-200 grid grid-cols-6 gap-4 p-8">
         <div class="col-span-1 bg-white rounded drop-shadow-md p-8 h-fit">
+            <h1><span class="text-sm">Logged as</span><br>{{ app.token.user.email }}</h1>
+            <a href="/logout" class="underline text-sm font-bold">Logout</a>
+            <hr class="my-6">
             {% include "_menu.html.twig" %}
         </div>
         <div class="col-span-5">
