@@ -9,7 +9,7 @@ security:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
         App\Entity\User:
             algorithm: auto
-        Symfony\Component\Security\Core\UserInterface:
+        Symfony\Component\Security\Core\User:
             algorithm: auto
 
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
@@ -22,7 +22,7 @@ security:
         users_in_memory:
             memory:
                 users:
-                    web: { password: "$2y$13$zSNmivzhd/Wj9Wy7I97qF.dHIxHcYHlADB7FZ4GTw8wLnK.h5vQZG", roles: ['ROLE_ADMIN'] } #web!2022inparadise
+                    web: { password: "$2y$13$6dVf1jPyTVY4qN.5C5EHIOks5eiMQZZ8cbrr9I6Ad8EPXaoxa16eC", roles: ['ROLE_ADMIN'] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -30,7 +30,7 @@ security:
         api:
             pattern: ^/api
             login_throttling:
-                max_attempts: 3
+                max_attempts: 300
                 interval: '30 minutes'
             provider: users_in_memory
             http_basic:
