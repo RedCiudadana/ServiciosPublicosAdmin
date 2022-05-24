@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $password;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Institution::class)
+     * @ORM\ManyToMany(targetEntity=Institution::class, mappedBy="members")
      */
     private $institutions;
 
