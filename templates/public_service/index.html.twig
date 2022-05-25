@@ -3,24 +3,24 @@
 {% import "_table.html.twig" as table %}
 {% import "_buttons.html.twig" as buttons %}
 
-{% block title %}Public Services{% endblock %}
+{% block title %}{% trans %}PublicService index{% endtrans %}{% endblock %}
 
 {% block body %}
-    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Public Services</h1>
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}PublicService index{% endtrans %}</h1>
 
     <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
         <thead class="bg-slate-50">
             <tr>
-                {{ table.th("Id") }}
-                {{ table.th("Name") }}
-                {{ table.th("Description") }}
-                {{ table.th("Instructions") }}
-                {{ table.th("Requirements") }}
-                {{ table.th("Cost") }}
-                {{ table.th("TimeResponse") }}
-                {{ table.th("TypeOfDocumentObtainable") }}
-                {{ table.th("Url") }}
-                {{ table.th("actions") }}
+                {{ table.th("Id"|trans) }}
+                {{ table.th("Name"|trans) }}
+                {{ table.th("Description"|trans) }}
+                {{ table.th("Instructions"|trans) }}
+                {{ table.th("Requirements"|trans) }}
+                {{ table.th("Cost"|trans) }}
+                {{ table.th("TimeResponse"|trans) }}
+                {{ table.th("TypeOfDocumentObtainable"|trans) }}
+                {{ table.th("Url"|trans) }}
+                {{ table.th("actions"|trans) }}
             </tr>
         </thead>
         <tbody>
@@ -37,19 +37,19 @@
                 {{ table.td(public_service.url) }}
 
                 {% set actions %}
-                    <a href="{{ path('app_public_service_show', {'id': public_service.id}) }}" class="underline pr-2 hidden">show</a>
-                    <a href="{{ path('app_public_service_edit', {'id': public_service.id}) }}" class="underline pr-2">edit</a>
+                    <a href="{{ path('app_public_service_show', {'id': public_service.id}) }}" class="underline pr-2 hidden">{% trans %}show{% endtrans %}</a>
+                    <a href="{{ path('app_public_service_edit', {'id': public_service.id}) }}" class="underline pr-2">{% trans %}edit{% endtrans %}</a>
                 {% endset %}
                 
                 {{ table.td(actions, "w-48") }}
             </tr>
         {% else %}
             <tr>
-                <td colspan="10">no records found</td>
+                <td colspan="10">{% trans %}no records found{% endtrans %}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {{ buttons.link(path('app_public_service_new'), "Create new")}}
+    {{ buttons.link(path('app_public_service_new'), "Create new"|trans)}}
 {% endblock %}

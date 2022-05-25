@@ -1,15 +1,15 @@
 {% extends '_main.html.twig' %}
 
-{% block title %}New Institution{% endblock %}
+{% block title %}{% trans %}New Institution{% endtrans %}{% endblock %}
 
 {% block body %}
     <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
-        Create new Institution
+        {% trans %}Create new Institution{% endtrans %}
     </h1>
 
     <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
         {{ include('institution/_form.html.twig') }}
     </div>
 
-    <a class="font-bold" href="{{ path('app_institution_index') }}">back to list</a>
+    <a class="font-bold" href="{{ path('app_institution_index') }}">{% trans %}back to list{% endtrans %}</a>
 {% endblock %}

@@ -3,24 +3,24 @@
 {% import "_table.html.twig" as table %}
 {% import "_buttons.html.twig" as buttons %}
 
-{% block title %}User index{% endblock %}
+{% block title %}{% trans %}User index{% endtrans %}{% endblock %}
 
 {% block body %}
-    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Add institution</h1>
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}Add institution{% endtrans %}</h1>
 
     {{ form_start(form) }}
         {{ form_widget(form) }}
         <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold text-xs mb-4">{{ button_label|default('Agregar institución') }}</button>
     {{ form_end(form) }}
 
-    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Institutions</h1>
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}Institutions{% endtrans %}</h1>
 
     <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
         <thead class="bg-slate-50">
             <tr>
-                {{ table.th("Id") }}
-                {{ table.th("Name") }}
-                {{ table.th("actions") }}
+                {{ table.th("Id"|trans) }}
+                {{ table.th("Name"|trans) }}
+                {{ table.th("actions"|trans) }}
             </tr>
         </thead>
         <tbody>
@@ -31,7 +31,7 @@
 
                 {% set actions %}
                     <form action="{{ path('app_user_institutions_delete', {'id': user.id, institution: institution.id }) }}" method="post">
-                        <button type="submit" class="underline pr-2 text-red-600">delete</a>
+                        <button type="submit" class="underline pr-2 text-red-600">{% trans %}delete{% endtrans %}</a>
                     </form>
                 {% endset %}
 
@@ -39,7 +39,7 @@
             </tr>
             {% else %}
             <tr>
-                <td colspan="3">This user has no institutions</td>
+                <td colspan="3">{% trans %}This user has no institutions{% endtrans %}</td>
             </tr>
             {% endfor %}
         </tbody>

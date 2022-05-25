@@ -20,8 +20,8 @@
         <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
             <thead>
                 <tr>
-                    {{ table.th("Version #{log.version}") }}
-                    {{ table.th("") }}
+                    {{ table.th("Version #{log.version}"|trans) }}
+                    {{ table.th() }}
                 </tr>
             </thead>
             <tbody>
@@ -35,5 +35,5 @@
         </table>
     {% endfor %}
 
-    <a class="font-bold" href="{{ path('app_institution_index') }}">back to list</a>
+    <a class="font-bold" href="{{ path('app_institution_index') }}">{% trans %}back to list{% endtrans %}</a>
 {% endblock %}

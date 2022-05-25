@@ -18,9 +18,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_institution_index') }}">back to list</a>
+    <a href="{{ path('app_institution_index') }}">{% trans %}back to list{% endtrans %}</a>
 
-    <a href="{{ path('app_institution_edit', {'id': institution.id}) }}">edit</a>
+    <a href="{{ path('app_institution_edit', {'id': institution.id}) }}">{% trans %}edit{% endtrans %}</a>
 
     {{ include('institution/_delete_form.html.twig') }}
 {% endblock %}

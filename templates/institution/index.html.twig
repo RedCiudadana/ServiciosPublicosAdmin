@@ -3,17 +3,17 @@
 {% import "_table.html.twig" as table %}
 {% import "_buttons.html.twig" as buttons %}
 
-{% block title %}Institution index{% endblock %}
+{% block title %}{% trans %}Institution index{% endtrans %}{% endblock %}
 
 {% block body %}
-    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">Institution</h1>
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}Institution index{% endtrans %}</h1>
 
     <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
         <thead class="bg-slate-50">
             <tr>
-                {{ table.th("Id") }}
-                {{ table.th("Name") }}
-                {{ table.th("actions") }}
+                {{ table.th("Id"|trans) }}
+                {{ table.th("Name"|trans) }}
+                {{ table.th("actions"|trans) }}
             </tr>
         </thead>
         <tbody>
@@ -23,19 +23,19 @@
                 {{ table.td(institution.name) }}
 
                 {% set actions %}
-                    <a href="{{ path('app_institution_show', {'id': institution.id}) }}" class="underline pr-2 hidden">show</a>
-                    <a href="{{ path('app_institution_edit', {'id': institution.id}) }}" class="underline pr-2">edit</a>
+                    <a href="{{ path('app_institution_show', {'id': institution.id}) }}" class="underline pr-2 hidden">{% trans %}show{% endtrans %}</a>
+                    <a href="{{ path('app_institution_edit', {'id': institution.id}) }}" class="underline pr-2">{% trans %}edit{% endtrans %}</a>
                 {% endset %}
 
                 {{ table.td(actions, "w-48") }}
             </tr>
         {% else %}
             <tr>
-                <td colspan="3">no records found</td>
+                <td colspan="3">{% trans %}no records found{% endtrans %}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    {{ buttons.link(path('app_institution_new'), "Create new")}}
+    {{ buttons.link(path('app_institution_new'), "Create new"|trans)}}
 {% endblock %}

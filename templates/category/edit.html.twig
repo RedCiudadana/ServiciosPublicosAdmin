@@ -1,17 +1,19 @@
 {% extends '_main.html.twig' %}
 
-{% block title %}Edit Category{% endblock %}
+{% block title %}{% trans %}Edit Category{% endtrans %}{% endblock %}
 
 {% block body %}
     <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
-        Edit Category
+        {% trans %}
+            Edit Category
+        {% endtrans %}
     </h1>
 
     <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
-        {{ include('category/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('category/_form.html.twig', {'button_label': 'Update'|trans}) }}
     </div>
 
-    <a class="font-bold" href="{{ path('app_category_index') }}">back to list</a>
+    <a class="font-bold" href="{{ path('app_category_index') }}">{% trans %}back to list{% endtrans %}</a>
 
     {{ include('category/_delete_form.html.twig') }}
 {% endblock %}

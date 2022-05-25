@@ -2,19 +2,18 @@
 
 {% import "_buttons.html.twig" as buttons %}
 
-{% block title %}Edit User{% endblock %}
+{% block title %}{% trans %}Edit User{% endtrans %}{% endblock %}
 
 {% block body %}
     <div class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-base font-bold">
-        <a class="font-bold" href="{{ path('app_user_index') }}">Usuarios</a>
-        \ Editar
+        <a class="font-bold" href="{{ path('app_user_index') }}">{% trans %}User index{% endtrans %}</a>\ {% trans %}Edit{% endtrans %}
     </div>
 
     <div class="flex">
-        {{ buttons.link(path('app_user_institutions', { id: user.id } ), "Instituciones", "text-xs ml-auto mb-4") }}
+        {{ buttons.link(path('app_user_institutions', { id: user.id } ), "Institutions"|trans, "text-xs ml-auto mb-4") }}
     </div>
     <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
-        {{ include('user/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('user/_form.html.twig', {'button_label': 'Update'|trans}) }}
     </div>
 
     {{ include('user/_delete_form.html.twig') }}

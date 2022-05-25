@@ -2,11 +2,11 @@
 
 {% import "_buttons.html.twig" as buttons %}
 
-{% block title %}Edit PublicService{% endblock %}
+{% block title %}{% trans %}Edit PublicService{% endtrans %}{% endblock %}
 
 {% block body %}
     <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
-        Edit PublicService
+        {% trans %}Edit PublicService{% endtrans %}
     </h1>
 
     {% if is_granted('ROLE_ADMIN') %}
@@ -20,10 +20,10 @@
     {% endif %}
 
     <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
-        {{ include('public_service/_form.html.twig', {'button_label': 'Update'}) }}
+        {{ include('public_service/_form.html.twig', {'button_label': 'Update'|trans}) }}
     </div>
 
-    <a class="font-bold" href="{{ path('app_public_service_index') }}">back to list</a>
+    <a class="font-bold" href="{{ path('app_public_service_index') }}">{% trans %}back to list{% endtrans %}</a>
 
     {{ include('public_service/_delete_form.html.twig') }}
 {% endblock %}

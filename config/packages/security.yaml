@@ -37,7 +37,7 @@ security:
                 realm: Secured Area
         main:
             login_throttling:
-                max_attempts: 3
+                max_attempts: 6
                 interval: '30 minutes'
             lazy: true
             provider: app_user_provider

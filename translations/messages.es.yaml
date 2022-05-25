@@ -1,0 +1,68 @@
+Name: Nombre
+Description: Descripción
+Institution: 'Institución o Dependencia'
+Subcategory: Subcategoría
+Instructions: Instrucciones
+Requirements: Requisitos
+TimeResponse: 'Tiempo de respuesta'
+TypeOfDocumentObtainable: 'Tipo de documento obtenible'
+Cost: Costo
+'Time response': 'Respuesta de tiempo'
+'Type of document obtainable': 'Tipo de documento obtenible'
+Normative: Normativa
+Url: URL
+Highlight: Resaltar
+'Logged as': 'Sesión como'
+'Log out': 'Cerrar sesión'
+'Public Services Administration': 'Plataforma de tramites'
+Home: Inicio
+Save: Guardar
+'back to list': 'Regresar a la lista'
+edit: Editar
+'New PublicService': 'Nuevo trámite'
+'Create new PublicService': 'Crear nuevo trámite'
+Id: Id
+Actions: Acciones
+show: Mostrar
+'no records found': 'No se encontraron registros'
+'Create new': 'Crear nuevo'
+'New Category': 'Nueva categoría'
+'Create new Category': 'Crear nueva categoría'
+actions: acciones
+'New Institution': 'Nueva Institución o Dependencia'
+'Create new Institution': 'Crear nueva Institución o Dependencia'
+Email: 'Correo electrónico'
+Roles: Roles
+'New User': 'Nuevo usuario'
+'Create new User': 'Crear nuevo usuario'
+Password: Contraseña
+Register: Registrar
+'Public Services': Tramites
+Categories: Categorias
+SubCategories: Subcategorias
+Institutions: 'Instituciones o Dependencias'
+Users: Usuarios
+Address: Dirección
+Schedule: Horario
+'Days open': 'Dias abiertos'
+Webpage: 'Página web'
+'Facebook u r l': Facebook
+'Twitter u r l': Twitter
+Login: 'Iniciar sesión'
+Delete: Eliminar
+Update: Actualizar
+'Edit PublicService': 'Editar trámite'
+'Category index': Categorías
+'Edit Category': 'Editar Categoría'
+'Institution index': 'Instituciones y Dependencias'
+'Edit Institution': 'Editar Institución o Dependencias'
+'SubCategory index': Subcategorías
+'Edit SubCategory': 'Editar Subcategoría'
+'User index': Usuarios
+'Edit User': 'Editar Usuario'
+Edit: Editar
+Category: Categoría
+'Is admin': 'Es administrador'
+'Add institution': 'Agregar Institución o Dependencias'
+delete: Eliminar
+'This user has no institutions': 'Este usuario no tiene instituciones asignadas'

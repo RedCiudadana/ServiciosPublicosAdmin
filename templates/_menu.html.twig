@@ -1,22 +1,22 @@
 <div class="block">
   <a href="{{url('app_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-    Home
+    {% trans %}Home{% endtrans %}
   </a>
   <a href="{{url('app_public_service_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-    Public Services
+    {% trans %}Public Services{% endtrans %}
   </a>
   {% if is_granted('ROLE_ADMIN') %}
     <a href="{{url('app_category_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      Categories
+      {% trans %}Categories{% endtrans %}
     </a>
     <a href="{{url('app_sub_category_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      SubCategories
+      {% trans %}SubCategories{% endtrans %}
     </a>
     <a href="{{url('app_institution_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      Institutions
+      {% trans %}Institutions{% endtrans %}
     </a>
     <a href="{{url('app_user_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      Users
+      {% trans %}Users{% endtrans %}
     </a>
   {% endif %}
 </div>

@@ -3,6 +3,7 @@ api_platform:
         paths: ['%kernel.project_dir%/src/Entity']
     formats:
         json: ['application/json']
+        jsonld:   ['application/ld+json']
         html: ['text/html']
     patch_formats:
         json: ['application/merge-patch+json']

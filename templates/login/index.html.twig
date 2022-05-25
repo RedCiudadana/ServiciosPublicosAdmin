@@ -8,15 +8,15 @@
     <form action="{{ path('app_login') }}" method="post">
         <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <label for="username">Email:</label>
+        <label for="username">{% trans %}Email{% endtrans %}:</label>
         <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="text" id="username" name="_username" value="{{ last_username }}"/>
 
-        <label for="password">Password:</label>
+        <label for="password">{% trans %}Password{% endtrans %}:</label>
         <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="password" id="password" name="_password"/>
 
         {# If you want to control the URL the user is redirected to on success
         <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="hidden" name="_target_path" value="/account"/> #}
 
-        <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold mt-4" type="submit">Login</button>
+        <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold mt-4" type="submit">{% trans %}Login{% endtrans %}</button>
     </form>
 {% endblock %}
