@@ -46,6 +46,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $institutions;
 
+    public $isAdministrator;
+
     public function __construct()
     {
         $this->institutions = new ArrayCollection();

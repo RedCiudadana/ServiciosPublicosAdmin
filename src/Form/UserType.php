@@ -18,8 +18,8 @@ class UserType extends AbstractType
                 'disabled' => true
             ])
             // Asigna el rol ADMIN si es marcado
-            ->add('isAdmin', CheckboxType::class,[
-                'mapped' => false
+            ->add('isAdministrator', CheckboxType::class,[
+                'mapped' => true
             ])
             // ->add('password')
             // We dont suppport multiple select so this is disabled for now.

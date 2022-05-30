@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Config\Roles;
 use App\Entity\Institution;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
@@ -79,6 +80,10 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            if ($form->getData()->isAdministrator) {
+                $user->addRole(Roles::ADMIN);
+            }
+
             $userRepository->add($user);
             return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
         }
