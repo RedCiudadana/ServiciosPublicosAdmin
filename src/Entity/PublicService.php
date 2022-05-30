@@ -19,6 +19,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class PublicService
 {
+    const STATUS_DRAFT = 'draft';
+    const STATUS_PUBLISHED = 'published';
+
     /**
      * @Groups("get")
      * @ORM\Id
@@ -37,10 +40,24 @@ class PublicService
     /**
      * @Gedmo\Versioned
      * @Groups("get")
+     * @ORM\Column(type="string", length=255, options={"default" : self::STATUS_DRAFT})
+     */
+    private $status = self::STATUS_DRAFT;
+
+    /**
+     * @Gedmo\Versioned
+     * @Groups("get")
      * @ORM\ManyToOne(targetEntity=Institution::class)
      * @ORM\JoinColumn(nullable=false)
      */
     private $institution;
+
+    /**
+     * @Gedmo\Versioned
+     * @Groups("get")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $institutionDepartment;
 
     /**
      * @Gedmo\Versioned
@@ -108,7 +125,7 @@ class PublicService
     /**
      * @Gedmo\Versioned
      * @Groups("get")
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", options={"default" : false})
      */
     private $highlight;
 
@@ -257,6 +274,46 @@ class PublicService
     public function setHighlight(bool $highlight): self
     {
         $this->highlight = $highlight;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of status
+     */ 
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * Set the value of status
+     *
+     * @return  self
+     */ 
+    public function setStatus($status)
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of institutionDepartment
+     */ 
+    public function getInstitutionDepartment()
+    {
+        return $this->institutionDepartment;
+    }
+
+    /**
+     * Set the value of institutionDepartment
+     *
+     * @return  self
+     */ 
+    public function setInstitutionDepartment($institutionDepartment)
+    {
+        $this->institutionDepartment = $institutionDepartment;
 
         return $this;
     }

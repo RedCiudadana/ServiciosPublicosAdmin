@@ -8,14 +8,13 @@
 {% block body %}
     <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}PublicService index{% endtrans %}</h1>
 
-    <table class="border-collapse table-auto w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
+    <table class="border-collapse table-fixed w-full bg-white rounded text-left font-sans drop-shadow-md mb-8">
         <thead class="bg-slate-50">
             <tr>
                 {{ table.th("Id"|trans) }}
+                {{ table.th("Institution"|trans) }}
                 {{ table.th("Name"|trans) }}
-                {{ table.th("Description"|trans) }}
-                {{ table.th("Instructions"|trans) }}
-                {{ table.th("Requirements"|trans) }}
+                {{ table.th("Description"|trans, "truncate w-48") }}
                 {{ table.th("Cost"|trans) }}
                 {{ table.th("TimeResponse"|trans) }}
                 {{ table.th("TypeOfDocumentObtainable"|trans) }}
@@ -27,10 +26,9 @@
         {% for public_service in public_services %}
             <tr>
                 {{ table.td(public_service.id) }}
+                {{ table.td(public_service.institution.name) }}
                 {{ table.td(public_service.name) }}
-                {{ table.td(public_service.description) }}
-                {{ table.td(public_service.instructions) }}
-                {{ table.td(public_service.requirements) }}
+                {{ table.td(public_service.description, "truncate w-48") }}
                 {{ table.td(public_service.cost) }}
                 {{ table.td(public_service.timeResponse) }}
                 {{ table.td(public_service.typeOfDocumentObtainable) }}
@@ -50,6 +48,8 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <h1 class="w-8"></h1>
 
     {{ buttons.link(path('app_public_service_new'), "Create new"|trans)}}
 {% endblock %}

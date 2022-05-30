@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Config\Roles;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -173,5 +174,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+
+    public function isAdmin()
+    {
+        if (in_array(Roles::ADMIN, $this->getRoles())) {
+            return true;
+        }
+
+        if (in_array(Roles::SUPER_ADMIN, $this->getRoles())) {
+            return true;
+        }
+
+        return false;
     }
 }

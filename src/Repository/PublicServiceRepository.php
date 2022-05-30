@@ -59,7 +59,7 @@ class PublicServiceRepository extends ServiceEntityRepository
             ->andWhere('m = :user')
             ->setParameter('user', $user)
             ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
+            // ->setMaxResults(10)
             ->getQuery()
             ->getResult()
         ;

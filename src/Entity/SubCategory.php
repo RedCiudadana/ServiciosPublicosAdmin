@@ -103,4 +103,9 @@ class SubCategory
 
         return $this;
     }
+
+    public function getNameAndCategory()
+    {
+        return sprintf('%s - %s', $this->name, $this->category->getName());
+    }
 }

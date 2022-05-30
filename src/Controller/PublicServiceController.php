@@ -5,15 +5,18 @@ namespace App\Controller;
 use App\Config\Roles;
 use App\Entity\PublicService;
 use App\Form\PublicService\BaseType as PublicServiceType;
+use App\Form\PublicService\UploadCollectionType;
 use App\Repository\PublicServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 
 /**
  * @Route("/public/service")
@@ -36,6 +39,48 @@ class PublicServiceController extends BaseController
 
         return $this->render('public_service/index.html.twig', [
             'public_services' => $publicServices
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/upload_csv", name="app_public_service_upload_csv", methods={"GET" ,"POST"})
+     */
+    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em)
+    {
+        $form = $this->createForm(UploadCollectionType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var UploadedFile
+             */
+            $file = $form->getData()['file'];
+
+            $fileContents = utf8_encode(file_get_contents($file->getPathname()));
+
+            $csvEncoder = new CsvEncoder();
+            $data = $csvEncoder->decode($fileContents, 'csv');
+
+            foreach ($data as $row) {
+                $publicService = new PublicService();
+
+                $row['Institución'];
+                $row['Categoría'];
+                $row['Subcategoría'];
+
+                $publicService->setInstitutionDepartment($row['Dirección / Unidad Ejecutora / Departamento']);
+                $publicService->setName($row['Trámite']);
+                $publicService->setDescription($row['Descripción']);
+                $publicService->setInstructions($row['Pasos']);
+                $publicService->setRequirements($row['Requisitos']);
+                $publicService->setCost($row['Costo']);
+                $publicService->setTimeResponse($row['Tiempo de respuesta']);
+            }
+        }
+
+        return $this->renderForm('public_service/upload_collection.html.twig', [
+            'form' => $form
         ]);
     }
 

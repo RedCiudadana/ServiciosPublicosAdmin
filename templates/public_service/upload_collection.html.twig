@@ -1,0 +1,17 @@
+{% extends '_main.html.twig' %}
+
+{% import "_buttons.html.twig" as buttons %}
+
+{% block title %}{% trans %}Upload PublicService{% endtrans %}{% endblock %}
+
+{% block body %}
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
+        {% trans %}Upload PublicService{% endtrans %}
+    </h1>
+
+    <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
+        {{ include('public_service/_form.html.twig', {'button_label': 'Update'|trans}) }}
+    </div>
+
+    <a class="font-bold" href="{{ path('app_public_service_index') }}">{% trans %}back to list{% endtrans %}</a>
+{% endblock %}
