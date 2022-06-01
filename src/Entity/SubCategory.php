@@ -5,6 +5,8 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -16,6 +18,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 class SubCategory
 {
+    use TimestampableEntity;
+    use BlameableEntity;
+
     /**
      * @Groups("get")
      * @ORM\Id

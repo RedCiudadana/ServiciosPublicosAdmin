@@ -5,7 +5,9 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PublicServiceRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -21,6 +23,9 @@ class PublicService
 {
     const STATUS_DRAFT = 'draft';
     const STATUS_PUBLISHED = 'published';
+
+    use TimestampableEntity;
+    use BlameableEntity;
 
     /**
      * @Groups("get")
