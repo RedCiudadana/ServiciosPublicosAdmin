@@ -22,7 +22,7 @@ security:
         users_in_memory:
             memory:
                 users:
-                    web: { password: "$2y$13$6dVf1jPyTVY4qN.5C5EHIOks5eiMQZZ8cbrr9I6Ad8EPXaoxa16eC", roles: ['ROLE_ADMIN'] }
+                    web: { password: '%env(resolve:API_WEB_PASSWORD)%', roles: ['ROLE_ADMIN'] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
