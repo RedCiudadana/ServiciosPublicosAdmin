@@ -14,6 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ApiResource(
  *  collectionOperations={"get"},
  *  itemOperations={"get"},
+ *  normalizationContext={"groups"={"get"}}
  * )
  * @ORM\Entity(repositoryClass=InstitutionRepository::class)
  * @Gedmo\Loggable
@@ -36,48 +37,56 @@ class Institution
     private $name;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="text")
      */
     private $description;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $address;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $schedule;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $daysOpen;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $webpage;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $email;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
     private $facebookURL;
 
     /**
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255)
      */
