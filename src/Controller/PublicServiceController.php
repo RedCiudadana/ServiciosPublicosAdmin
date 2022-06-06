@@ -31,7 +31,7 @@ class PublicServiceController extends BaseController
         $publicServices = null;
 
         if ($this->isGranted(Roles::ADMIN)) {
-            $publicServices = $publicServiceRepository->findAll();
+            $publicServices = $publicServiceRepository->findBy([], ['id' => 'DESC']);
         } else {
             $publicServices =
                 $publicServiceRepository->findByUser($this->getUser());

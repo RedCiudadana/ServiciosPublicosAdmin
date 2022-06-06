@@ -9,7 +9,7 @@ TypeOfDocumentObtainable: 'Tipo de documento obtenible'
 Cost: Costo
 'Time response': 'Respuesta de tiempo'
 'Type of document obtainable': 'Tipo de documento obtenible'
-Normative: Normativa
+Normative: Base legal
 Url: URL
 Highlight: Resaltar
 'Logged as': 'Sesión como'
@@ -68,3 +68,4 @@ delete: Eliminar
 'This user has no institutions': 'Este usuario no tiene instituciones asignadas'
 'Upload PublicService': 'Subir tramites'
 'PublicService index': 'Tramites'
+'Image file': 'Imagen'

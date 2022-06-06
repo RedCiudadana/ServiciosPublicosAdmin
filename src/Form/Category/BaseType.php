@@ -5,7 +5,10 @@ namespace App\Form\Category;
 use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class BaseType extends AbstractType
 {
@@ -15,13 +18,16 @@ class BaseType extends AbstractType
             ->add('name')
             ->add('description')
             ->add('highlight')
+            ->add('imageFile', VichImageType::class, [
+                'error_bubbling' => true
+            ])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Category::class,
+            'data_class' => Category::class
         ]);
     }
 }

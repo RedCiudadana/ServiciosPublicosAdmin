@@ -21,5 +21,9 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    'App\Serializer\CategoryNormalizer':
+        tags:
+            - { name: 'serializer.normalizer', priority: 64 }
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
