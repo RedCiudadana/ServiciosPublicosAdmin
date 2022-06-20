@@ -13,14 +13,14 @@ set('application', 'servicios.publicos');
 set('repository', 'git@github.com:RedCiudadana/ServiciosPublicosAdmin.git');
 
 // [Optional] Allocate tty for git clone. Default value is false.
-set('git_tty', true); 
+set('git_tty', true);
 
 // Shared files/dirs between deploys 
 add('shared_files', []);
-add('shared_dirs', []);
+add('shared_dirs', ['public/images']);
 
 // Writable dirs by web server 
-add('writable_dirs', []);
+add('writable_dirs', ['public/images']);
 
 
 // Hosts
@@ -30,7 +30,7 @@ host('servicios-ocean')
     ->user('redciudadana')
     ->set('remote_user', 'redciudadana')
     ->set('deploy_path', '/srv/web-apps/admin.tramites.redciudadana.org');
-    
+
 // Tasks
 
 task('build', function () {
@@ -40,6 +40,8 @@ task('build', function () {
 // [Optional] if deploy fails automatically unlock.
 after('deploy:failed', 'deploy:unlock');
 
+
+// Javascript deployment
 after('deploy:vendors', 'deploy:vendors_js');
 
 task('deploy:vendors_js', function () {
@@ -55,4 +57,3 @@ task('deploy:node', function () {
 // Migrate database before symlink new release.
 
 before('deploy:symlink', 'database:migrate');
-

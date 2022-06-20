@@ -3,6 +3,7 @@
 namespace App\Serializer;
 
 use App\Entity\Category;
+use App\Entity\SubCategory;
 use Symfony\Component\Serializer\Normalizer\ContextAwareNormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
@@ -34,6 +35,6 @@ final class CategoryNormalizer implements ContextAwareNormalizerInterface, Norma
             return false;
         }
 
-        return $data instanceof Category;
+        return $data instanceof Category || $data instanceof SubCategory;
     }
 }

@@ -6,6 +6,7 @@ use App\Entity\SubCategory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class BaseType extends AbstractType
 {
@@ -16,6 +17,10 @@ class BaseType extends AbstractType
             ->add('description')
             ->add('highlight')
             ->add('category')
+            ->add('imageFile', VichImageType::class, [
+                'required' => false,
+                'error_bubbling' => true
+            ])
         ;
     }
 
