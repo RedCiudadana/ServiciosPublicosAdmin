@@ -20,7 +20,7 @@ add('shared_files', []);
 add('shared_dirs', ['public/images']);
 
 // Writable dirs by web server 
-add('writable_dirs', ['public/images']);
+add('writable_dirs', ['public/images', 'node_modules']);
 
 
 // Hosts
