@@ -19,6 +19,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *  normalizationContext={"groups"={"get"}}
  * )
  * @ORM\Entity(repositoryClass=InstitutionRepository::class)
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"name"})})
  * @Gedmo\Loggable
  */
 class Institution
@@ -65,7 +66,7 @@ class Institution
     /**
      * @Groups("get")
      * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $daysOpen;
 
@@ -86,14 +87,14 @@ class Institution
     /**
      * @Groups("get")
      * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $facebookURL;
 
     /**
      * @Groups("get")
      * @Gedmo\Versioned
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $twitterURL;
 

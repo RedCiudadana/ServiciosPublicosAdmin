@@ -130,7 +130,7 @@ class PublicService
     /**
      * @Gedmo\Versioned
      * @Groups("get")
-     * @ORM\Column(type="boolean", options={"default" : false})
+     * @ORM\Column(type="boolean", options={"default" : false}, nullable=true)
      */
     private $highlight;
 

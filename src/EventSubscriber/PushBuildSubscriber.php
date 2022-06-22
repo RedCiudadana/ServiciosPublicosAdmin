@@ -35,23 +35,28 @@ class PushBuildSubscriber implements EventSubscriberInterface
         $this->pushBuildHandler = $pushBuildHandler;
         $this->parameterBag = $parameterBag;
         $this->httpClient = $httpClient;
+        $this->logger = $logger;
     }
 
     public function onKernelFinishRequest(FinishRequestEvent $event)
     {
         $notifications = $this->pushBuildHandler->getBuildNotifications();
 
-        if (count($notifications) < 1) {
-            $message = 'Build trigger by the followed: ';
+        if (count($notifications) > 0) {
+            $message = 'Build triggered by: ';
 
             foreach ($notifications as $title) {
-                $message += sprintf('%s %s', $message, $title);
+                $message = $message . sprintf('\n %s %s', $message, $title);
             }
 
             $netlifyHook = $this->parameterBag->get('app_netlify_build_hook');
 
             if ($netlifyHook) {
-                $this->httpClient->request('POST', $netlifyHook);
+                try {
+                    $this->httpClient->request('POST', $netlifyHook);
+                } catch (\Throwable $th) {
+                    $this->looger->error(sprintf('Fail the push build notification to Netlify %s', $netlifyHook));
+                }
             }
         }
     }

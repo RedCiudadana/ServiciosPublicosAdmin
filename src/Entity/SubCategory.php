@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *  itemOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=SubCategoryRepository::class)
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"name"})})
  */
 class SubCategory
 {

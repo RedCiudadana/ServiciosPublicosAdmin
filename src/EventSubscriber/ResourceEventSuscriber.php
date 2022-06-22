@@ -8,6 +8,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class ResourceEventSuscriber implements EventSubscriberInterface
 {
+    /**
+     * @var PushBuildHandler
+     */
+    private $pushBuildHandler;
+
+    public function __construct(PushBuildHandler $pushBuildHandler) {
+        $this->pushBuildHandler = $pushBuildHandler;
+    }
+
     public static function getSubscribedEvents()
     {
         return [
@@ -15,7 +24,7 @@ class ResourceEventSuscriber implements EventSubscriberInterface
         ];
     }
 
-    public function pushBuild(ResourceEvent $resourceEvent, PushBuildHandler $pushBuildHandler)
+    public function pushBuild(ResourceEvent $resourceEvent)
     {
         $resource = $resourceEvent->getResource();
 
@@ -27,6 +36,6 @@ class ResourceEventSuscriber implements EventSubscriberInterface
             $id = $resource->getId();
         }
 
-        $pushBuildHandler->addBuildNotification(sprintf('%s %s trigger udpate', $className, $id));
+        $this->pushBuildHandler->addBuildNotification(sprintf('%s %s trigger udpate', $className, $id));
     }
 }
