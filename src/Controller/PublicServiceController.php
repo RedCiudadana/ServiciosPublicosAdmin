@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Config\Roles;
 use App\Entity\PublicService;
+use App\Event\ResourceEvent;
 use App\Form\PublicService\BaseType as PublicServiceType;
 use App\Form\PublicService\UploadCollectionType;
 use App\Repository\PublicServiceRepository;
@@ -11,6 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -46,7 +48,7 @@ class PublicServiceController extends BaseController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/upload_csv", name="app_public_service_upload_csv", methods={"GET" ,"POST"})
      */
-    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em)
+    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher)
     {
         $form = $this->createForm(UploadCollectionType::class);
         $form->handleRequest($request);
@@ -77,6 +79,9 @@ class PublicServiceController extends BaseController
                 $publicService->setCost($row['Costo']);
                 $publicService->setTimeResponse($row['Tiempo de respuesta']);
             }
+
+            $event = new ResourceEvent($publicService);
+            $eventDispatcher->dispatch($event, ResourceEvent::name);
         }
 
         return $this->renderForm('public_service/upload_collection.html.twig', [
@@ -87,7 +92,7 @@ class PublicServiceController extends BaseController
     /**
      * @Route("/new", name="app_public_service_new", methods={"GET", "POST"})
      */
-    public function new(Request $request, PublicServiceRepository $publicServiceRepository): Response
+    public function new(Request $request, PublicServiceRepository $publicServiceRepository, EventDispatcherInterface $eventDispatcher): Response
     {
         $publicService = new PublicService();
         $form = $this->createForm(PublicServiceType::class, $publicService);
@@ -95,6 +100,10 @@ class PublicServiceController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $publicServiceRepository->add($publicService);
+
+            $event = new ResourceEvent($publicService);
+            $eventDispatcher->dispatch($event, ResourceEvent::name);
+
             return $this->redirectToRoute('app_public_service_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -121,7 +130,7 @@ class PublicServiceController extends BaseController
     /**
      * @Route("/{id}/edit", name="app_public_service_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, PublicService $publicService, PublicServiceRepository $publicServiceRepository): Response
+    public function edit(Request $request, PublicService $publicService, PublicServiceRepository $publicServiceRepository, EventDispatcherInterface $eventDispatcher): Response
     {
         if (!$this->validateAccessToResource($publicService)) {
             return new AccessDeniedException('You cannot access this page');
@@ -132,6 +141,10 @@ class PublicServiceController extends BaseController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $publicServiceRepository->add($publicService);
+
+            $event = new ResourceEvent($publicService);
+            $eventDispatcher->dispatch($event, ResourceEvent::name);
+
             return $this->redirectToRoute('app_public_service_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -144,10 +157,13 @@ class PublicServiceController extends BaseController
     /**
      * @Route("/{id}", name="app_public_service_delete", methods={"POST"})
      */
-    public function delete(Request $request, PublicService $publicService, PublicServiceRepository $publicServiceRepository): Response
+    public function delete(Request $request, PublicService $publicService, PublicServiceRepository $publicServiceRepository, EventDispatcherInterface $eventDispatcher): Response
     {
         if ($this->isCsrfTokenValid('delete' . $publicService->getId(), $request->request->get('_token'))) {
             $publicServiceRepository->remove($publicService);
+
+            $event = new ResourceEvent($publicService);
+            $eventDispatcher->dispatch($event, ResourceEvent::name);
         }
 
         return $this->redirectToRoute('app_public_service_index', [], Response::HTTP_SEE_OTHER);

@@ -20,6 +20,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *  itemOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"name"})})
  */
 class Category
 {
