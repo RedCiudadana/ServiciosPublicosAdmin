@@ -211,6 +211,33 @@ class PublicServiceController extends BaseController
     }
 
     /**
+     * Last 30 changes applied to public services
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/history", name="app_public_service_history_index", methods={"GET"})
+     * {@inheritdoc}
+     */
+    public function indexHistory(Request $request, EntityManagerInterface $em)
+    {
+        /**
+         * @var LogEntryRepository
+         */
+        $logRepo = $em->getRepository(LogEntry::class);
+        $logs = $logRepo->findBy(
+            [
+                'objectClass' => PublicService::class
+            ],
+            [
+                'loggedAt' => 'DESC'
+            ],
+            30
+        );
+
+        return $this->render('public_service/index_history.html.twig', [
+            'logs' => $logs
+        ]);
+    }
+
+    /**
      * @Route("/new", name="app_public_service_new", methods={"GET", "POST"})
      */
     public function new(Request $request, PublicServiceRepository $publicServiceRepository, EventDispatcherInterface $eventDispatcher): Response

@@ -10,9 +10,14 @@
 
     <div class="w-full flex">
         {{ buttons.link_text(
+            path('app_public_service_history_index'),
+            "Ver últimos cambios",
+            "ml-auto mb-2 mr-2"
+        ) }}
+        {{ buttons.link_text(
             path('app_public_service_upload_csv'),
             "Cargar CSV",
-            "ml-auto mb-2"
+            "mb-2"
         ) }}
     </div>
 
