@@ -3,7 +3,10 @@
 namespace App\Controller;
 
 use App\Config\Roles;
+use App\Entity\Category;
+use App\Entity\Institution;
 use App\Entity\PublicService;
+use App\Entity\SubCategory;
 use App\Event\ResourceEvent;
 use App\Form\PublicService\BaseType as PublicServiceType;
 use App\Form\PublicService\UploadCollectionType;
@@ -13,12 +16,14 @@ use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/public/service")
@@ -48,7 +53,7 @@ class PublicServiceController extends BaseController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/upload_csv", name="app_public_service_upload_csv", methods={"GET" ,"POST"})
      */
-    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher)
+    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, ValidatorInterface $validator)
     {
         $form = $this->createForm(UploadCollectionType::class);
         $form->handleRequest($request);
@@ -64,24 +69,140 @@ class PublicServiceController extends BaseController
             $csvEncoder = new CsvEncoder();
             $data = $csvEncoder->decode($fileContents, 'csv');
 
+            $updatedResources = 0;
+            $createdResources = 0;
+
             foreach ($data as $row) {
-                $publicService = new PublicService();
+                $institution = $em->getRepository(Institution::class)->findOneBy([
+                    'name' => $row['institucion']
+                ]);
 
-                $row['Institución'];
-                $row['Categoría'];
-                $row['Subcategoría'];
+                $row = array_map(function($value) { return trim($value); }, $row);
 
-                $publicService->setInstitutionDepartment($row['Dirección / Unidad Ejecutora / Departamento']);
-                $publicService->setName($row['Trámite']);
-                $publicService->setDescription($row['Descripción']);
-                $publicService->setInstructions($row['Pasos']);
-                $publicService->setRequirements($row['Requisitos']);
-                $publicService->setCost($row['Costo']);
-                $publicService->setTimeResponse($row['Tiempo de respuesta']);
+                if (!$institution) {
+                    $this->addFlash(
+                        'warning',
+                        sprintf('La institución %s no existe', $row['institucion'])
+                    );
+
+                    $form->addError(
+                        new FormError(sprintf(
+                            'La institución %s no existe',
+                            $row['institucion']
+                        ))
+                    );
+
+                    return $this->renderForm('public_service/upload_collection.html.twig', [
+                        'form' => $form
+                    ]);
+                }
+
+                $publicService = $em->getRepository(PublicService::class)->findOneBy([
+                    'name' => $row['nombre'],
+                    'institution' => $institution
+                ]);
+
+                if (!$publicService) {
+                    $publicService = new PublicService();
+                }
+
+                $category = $em->getRepository(Category::class)->findOneBy([
+                    'name' => $row['categoria']
+                ]);
+
+                $subcategory = $em->getRepository(SubCategory::class)->findOneBy([
+                    'name' => $row['subcategoria']
+                ]);
+
+                if (!$subcategory) {
+                    $this->addFlash(
+                        'warning',
+                        sprintf('La sub-categoría %s no existe', $row['subcategoria'])
+                    );
+
+                    $form->addError(
+                        new FormError(sprintf(
+                            'La sub-categoría %s no existe',
+                            $row['subcategoria']
+                        ))
+                    );
+
+                    return $this->renderForm('public_service/upload_collection.html.twig', [
+                        'form' => $form
+                    ]);
+                }
+
+
+                $publicService->setInstitution($institution);
+                $publicService->setSubcategory($subcategory);
+
+                $publicService->setName($row['nombre']);
+                $publicService->setDescription($row['descripcion']);
+                $publicService->setInstructions($row['instrucciones']);
+                $publicService->setRequirements($row['requisitos']);
+                $publicService->setCost($row['costo']);
+                $publicService->setTimeResponse($row['tiempo_de_respuesta']);
+                $publicService->setTypeOfDocumentObtainable($row['documento_obtenible']);
+                $publicService->setUrl($row['enlace']);
+                $publicService->setNormative($row['respaldo_legal']);
+
+                $errors = $validator->validate($publicService);
+
+                if (count($errors) > 0) {
+                    $this->addFlash('danger', sprintf('Error al procesar tramite %s', $row['name']));
+
+                    return $this->renderForm('public_service/upload_collection.html.twig', [
+                        'form' => $form
+                    ]);
+                }
+
+                $formService = $this->createForm(PublicServiceType::class, $publicService, [
+                    'csrf_protection' => false
+                ]);
+
+                // TODO: Use validator component
+                $formService->setData($publicService);
+                $formService->submit([], false);
+
+                if (!$formService->isValid()) {
+                    $this->addFlash('warning', sprintf('El servicio %s no es válido', $row['nombre']));
+
+                    return $this->renderForm('public_service/upload_collection.html.twig', [
+                        'form' => $form
+                    ]);
+                }
+
+                if ($publicService->getId()) {
+                    $updatedResources += 1;
+                } else {
+                    $createdResources += 1;
+                }
+
+                $em->persist($publicService);
+
+                $event = new ResourceEvent($publicService);
+                $eventDispatcher->dispatch($event, ResourceEvent::name);
             }
 
-            $event = new ResourceEvent($publicService);
-            $eventDispatcher->dispatch($event, ResourceEvent::name);
+            try {
+                $em->flush();
+            } catch (\Throwable $th) {
+                throw $th;
+                $this->addFlash('warning', 'Error al persistir cambios');
+                $form->addError(new FormError('Error al persistir los cambios'));
+
+                return $this->renderForm('public_service/upload_collection.html.twig', [
+                    'form' => $form
+                ]);
+            }
+
+            if ($updatedResources > 0) {
+                $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+            }
+
+            if ($createdResources > 0) {
+                $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
+            }
         }
 
         return $this->renderForm('public_service/upload_collection.html.twig', [
