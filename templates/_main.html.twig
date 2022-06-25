@@ -2,28 +2,109 @@
 <html>
     <head>
         <meta charset="UTF-8">
+        <meta name="description" content="Singin page example" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        
         <title>{% block title %}{% trans %}Public Services Administration{% endtrans %}{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+        <link rel="icon" href="{{ asset('img/favicon.png') }}">
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
             {{ encore_entry_link_tags('tailwind') }}
+
+            <link href="{{ asset('css/style.bundle.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('css/prismjs.bundle.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('css/plugins.bundle.css') }}" rel="stylesheet"/>
+            <link href="{{ asset('css/sidenav.css') }}" rel="stylesheet"/>
+
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
         {% endblock %}
 
         {% block javascripts %}
             {{ encore_entry_script_tags('app') }}
         {% endblock %}
     </head>
-    <body class="bg-slate-200 grid grid-cols-6 gap-4 p-8">
-        <div class="col-span-1 bg-white rounded drop-shadow-md p-8 h-fit">
-            <h1><span class="text-sm">{% trans %}Logged as{% endtrans %}</span><br>{{ app.token.user.email }}</h1>
-            <a href="/logout" class="underline text-sm font-bold">{% trans %}Log out{% endtrans %}</a>
-            <hr class="my-6">
-            {% include "_menu.html.twig" %}
+    <body id="kt_body" class="header-fixed header-mobile-fixed header-bottom-enabled subheader-enabled page-loading">
+
+        <!--begin::Header Mobile-->
+        {% include "_menumobile.html.twig" %}
+		<!--end::Header Mobile-->
+
+        <div class="d-flex flex-column flex-root">
+
+			<!--begin::Page-->
+			<div class="d-flex flex-row flex-column-fluid page">
+
+				<!--begin::Wrapper-->
+				<div class="d-flex flex-column flex-row-fluid wrapper" id="kt_wrapper">
+
+                    <!--begin::Header-->
+                    <div id="kt_header" class="header flex-column header-fixed" style="height:auto!important">
+                        {% include "_menu.html.twig" %}
+                    </div>
+
+                    <!--begin::Content-->
+					<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+						<!--Content area here-->
+                        <div class="d-flex flex-column-fluid">
+
+							<!--begin::Container-->
+							<div class="container">
+
+								<!--begin::Row-->
+								<div class="row">
+
+                                    {% block body %}
+                                    {% endblock %}
+
+                                </div>
+                            </div>
+                        </div>
+					</div>
+
+                    <!--end::Content-->
+					<!--begin::Footer-->
+					<div class="footer bg-white py-4 d-flex flex-lg-column" id="kt_footer">
+						<!--begin::Container-->
+						<div class="container d-flex flex-column flex-md-row align-items-center justify-content-between">
+							<!--begin::Copyright-->
+							<div class="text-dark order-2 order-md-1 d-flex align-items-center">
+								<span class="text-muted font-weight-bold mr-2">Un proyecto de </span>
+								<img alt="Logo" src="{{ asset('img/GOBIERNO.png') }}" class="max-h-50px mr-2" />
+                                <span class="text-muted font-weight-bold mr-2">en colaboración con </span>
+								<img alt="Logo" src="{{ asset('img/RED.png') }}" class="max-h-50px mr-2" />
+							</div>
+							<!--end::Copyright-->
+							<!--begin::Nav-->
+							<div class="nav nav-dark order-1 order-md-2">
+                                <a href="#" target="_blank" class="nav-link pr-3 pl-0">Acerca de</a>
+								<a href="https://tramites.redciudadana.org/" target="_blank" class="nav-link pr-3 pl-0">Portal de Trámites</a>
+							</div>
+							<!--end::Nav-->
+						</div>
+						<!--end::Container-->
+					</div>
+					<!--end::Footer-->
+
+                </div>
+            </div>
         </div>
-        <div class="col-span-5">
-            {% block body %}
-            {% endblock %}
-        </div>
+
+        {% block javascripts_finales %}
+
+        <script>var HOST_URL = "https://preview.keenthemes.com/metronic/theme/html/tools/preview";</script>
+        <!--begin::Global Config(global config for global JS scripts)-->
+        <script>var KTAppSettings = { "breakpoints": { "sm": 576, "md": 768, "lg": 992, "xl": 1200, "xxl": 1200 }, "colors": { "theme": { "base": { "white": "#ffffff", "primary": "#6993FF", "secondary": "#E5EAEE", "success": "#1BC5BD", "info": "#8950FC", "warning": "#FFA800", "danger": "#F64E60", "light": "#F3F6F9", "dark": "#212121" }, "light": { "white": "#ffffff", "primary": "#E1E9FF", "secondary": "#ECF0F3", "success": "#C9F7F5", "info": "#EEE5FF", "warning": "#FFF4DE", "danger": "#FFE2E5", "light": "#F3F6F9", "dark": "#D6D6E0" }, "inverse": { "white": "#ffffff", "primary": "#ffffff", "secondary": "#212121", "success": "#ffffff", "info": "#ffffff", "warning": "#ffffff", "danger": "#ffffff", "light": "#464E5F", "dark": "#ffffff" } }, "gray": { "gray-100": "#F3F6F9", "gray-200": "#ECF0F3", "gray-300": "#E5EAEE", "gray-400": "#D6D6E0", "gray-500": "#B5B5C3", "gray-600": "#80808F", "gray-700": "#464E5F", "gray-800": "#1B283F", "gray-900": "#212121" } }, "font-family": "Poppins" };</script>
+        <!--end::Global Config-->
+        <!--begin::Global Theme Bundle(used by all pages)-->
+        <script src="{{ asset('js/plugins.bundle.js') }}"></script>
+        <script src="{{ asset('js/prismjs.bundle.js') }}"></script>
+        <script src="{{ asset('js/scripts.bundle.min.js') }}"></script>
+        <!--end::Global Theme Bundle-->
+        <!--begin::Page Scripts(used by this page)-->
+        <script src="{{ asset('js/sidenav.js') }}"></script>
+        <!--end::Page Scripts-->
+
+        {% endblock %}
     </body>
 </html>

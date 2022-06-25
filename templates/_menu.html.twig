@@ -1,22 +1,57 @@
-<div class="block">
-  <a href="{{url('app_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-    {% trans %}Home{% endtrans %}
-  </a>
-  <a href="{{url('app_public_service_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-    {% trans %}Public Services{% endtrans %}
-  </a>
-  {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{url('app_category_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      {% trans %}Categories{% endtrans %}
-    </a>
-    <a href="{{url('app_sub_category_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      {% trans %}SubCategories{% endtrans %}
-    </a>
-    <a href="{{url('app_institution_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      {% trans %}Institutions{% endtrans %}
-    </a>
-    <a href="{{url('app_user_index')}}" class="block w-full h-12 no-underline font-sans font-medium">
-      {% trans %}Users{% endtrans %}
-    </a>
-  {% endif %}
+<!--begin::Container-->
+<div class="container my-2">
+   <!--begin::Left-->
+   <div class="d-none d-lg-flex align-items-center mr-3" style="justify-content:space-between">
+      <ul class="nav align-items-center">
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_index')}}">
+            <img src="{{ asset('img/GOBIERNO.png') }}" style="height:50px">
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_index')}}" >
+            {% trans %}Home{% endtrans %}
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_public_service_index')}}">
+            {% trans %}Public Services{% endtrans %}
+            </a>
+         </li>
+         {% if is_granted('ROLE_ADMIN') %}
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_category_index')}}">
+            {% trans %}Categories{% endtrans %}
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_sub_category_index')}}">
+            {% trans %}SubCategories{% endtrans %}
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_institution_index')}}">
+            {% trans %}Institutions{% endtrans %}
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link" href="{{url('app_user_index')}}">
+            {% trans %}Users{% endtrans %}
+            </a>
+         </li>
+         {% endif %}
+      </ul>
+      <ul class="nav flex-column align-items-end">
+         <li class="nav-item">
+            <a class="nav-link disabled p-0" href="{{url('app_index')}}">
+            <span class="text-sm">{% trans %}Logged as{% endtrans %}</span> &nbsp {{ app.token.user.email }}
+            </a>
+         </li>
+         <li class="nav-item">
+            <a class="nav-link p-0" href="/logout">
+            {% trans %}Log out{% endtrans %}
+            </a>
+         </li>
+      </ul>
+   </div>
 </div>
