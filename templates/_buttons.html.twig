@@ -1,17 +1,17 @@
 {% macro link(url, text, cssStyles = "") %}
-  <a href="{{ url }}" class="bg-blue-700 text-white font-medium px-4 py-2 rounded text-center {{cssStyles}}">
+  <a href="{{ url }}" class="btn btn-success font-weight-bolder font-size-sm mx-2 my-2">
     {{ text }}
   </a>
 {% endmacro %}
 
 {% macro link_text(url, text, cssStyles = "") %}
-<a href="{{ url }}" class="font-medium underline {{cssStyles}}">
+<a href="{{ url }}" class="btn btn-success font-weight-bolder font-size-sm mx-2 my-2">
   {{ text }}
 </a>
 {% endmacro %}
 
 {% macro submit(value, name, cssStyles = "") %}
-  <button type="submit" class="bg-blue-700 text-white px-3 py-2 rounded font-bold" name="{{name}}">
+  <button type="submit" class="btn btn-success font-weight-bolder font-size-sm mx-2 my-2" name="{{name}}">
     {{ value }}
   </button>
 {% endmacro %}
