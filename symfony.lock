@@ -112,6 +112,9 @@
     "egulias/email-validator": {
         "version": "3.1.2"
     },
+    "ezyang/htmlpurifier": {
+        "version": "v4.14.0"
+    },
     "fig/link-util": {
         "version": "1.1.2"
     },
@@ -606,6 +609,9 @@
     },
     "symfonycasts/verify-email-bundle": {
         "version": "v1.10.0"
+    },
+    "trsteel/ckeditor-bundle": {
+        "version": "v1.17.0"
     },
     "twig/extra-bundle": {
         "version": "v3.3.8"

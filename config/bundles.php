@@ -20,4 +20,5 @@ return [
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
     Flasher\Symfony\FlasherSymfonyBundle::class => ['all' => true],
+    Trsteel\CkeditorBundle\TrsteelCkeditorBundle::class => ['all' => true],
 ];

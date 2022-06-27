@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Trsteel\CkeditorBundle\Form\Type\CkeditorType;
 
 class BaseType extends AbstractType
 {
@@ -49,7 +50,7 @@ class BaseType extends AbstractType
                 'class' => SubCategory::class,
                 'choice_label' => 'getNameAndCategory'
             ])
-            ->add('instructions')
+            ->add('instructions', CkeditorType::class)
             ->add('requirements')
             ->add('cost', NumberType::class)
             ->add('timeResponse')
