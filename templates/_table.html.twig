@@ -4,6 +4,6 @@
   </td>
 {% endmacro %}
 
-{% macro th(value, cssStyles = "") %}
-  <th >{{ value }}</th>
+{% macro th(value, cssStyles = "", attributes = "") %}
+  <th style="{{attributes}}">{{ value }}</th>
 {% endmacro %}
