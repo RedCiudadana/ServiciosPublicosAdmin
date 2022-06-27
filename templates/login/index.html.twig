@@ -5,18 +5,74 @@
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <form action="{{ path('app_login') }}" method="post">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+    <!--begin::Main-->
+    <div class="d-flex flex-column flex-root">
+        <!--begin::Login-->
+        <div class="login login-4 wizard d-flex flex-column flex-lg-row flex-column-fluid">
+            <!--begin::Content-->
+            <div class="login-container order-2 order-lg-1 d-flex flex-center flex-row-fluid px-7 pt-lg-0 pb-lg-0 pt-4 pb-6 bg-white">
+                <!--begin::Wrapper-->
+                <div class="login-content d-flex flex-column pt-lg-0 pt-12">
+                    <!--begin::Logo-->
+                    <a href="#" class="login-logo pb-xl-20 pb-15">
+                        <img src="{{ asset('img/GOBIERNO.png') }}" class="max-h-70px" alt="" />
+                    </a>
+                    <!--end::Logo-->
+                    <!--begin::Signin-->
+                    <div class="login-form">
+                        <!--begin::Form-->
+                        <form class="form" id="kt_login_signin_form" action="{{ path('app_login') }}" method="post">
+                            <!--begin::Title-->
+                            <div class="pb-5 pb-lg-15">
+                                <h3 class="font-weight-bolder text-dark font-size-h2 font-size-h1-lg">Iniciar Sesión</h3>
+                                
+                            </div>
+                            <!--begin::Title-->
+                            <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
-        <label for="username">{% trans %}Email{% endtrans %}:</label>
-        <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="text" id="username" name="_username" value="{{ last_username }}"/>
+                            <div class="form-group">
+                                <label for="username">{% trans %}Email{% endtrans %}:</label>
+                                <input class="form-control form-control-solid h-auto py-5 px-6" type="text" id="username" name="_username" value="{{ last_username }}"/>
+                            </div>
 
-        <label for="password">{% trans %}Password{% endtrans %}:</label>
-        <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="password" id="password" name="_password"/>
+                            <div class="form-group">
+                                <label for="password">{% trans %}Password{% endtrans %}:</label>
+                                <input class="form-control form-control-solid h-auto py-5 px-6" type="password" id="password" name="_password"/>
+                            </div>
 
-        {# If you want to control the URL the user is redirected to on success
-        <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="hidden" name="_target_path" value="/account"/> #}
+                            {# If you want to control the URL the user is redirected to on success
+                            <input class="mt-1 w-full bg-slate-50 border-2 border-gray-200 px-2 py-1" type="hidden" name="_target_path" value="/account"/> #}
 
-        <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold mt-4" type="submit">{% trans %}Login{% endtrans %}</button>
-    </form>
+                            <div class="form-group d-flex flex-wrap justify-content-start align-items-center">
+                                <button class="btn btn-primary font-weight-bold px-9 py-4 my-3" type="submit">{% trans %}Login{% endtrans %}</button>
+                            </div>
+                            
+                        </form>
+                        <!--end::Form-->
+                        
+                    </div>
+                    <!--end::Signin-->
+                </div>
+                <!--end::Wrapper-->
+            </div>
+            <!--begin::Content-->
+            <!--begin::Aside-->
+            <div class="login-aside order-1 order-lg-2 bgi-no-repeat bgi-position-x-right">
+                <div class="login-conteiner bgi-no-repeat bgi-position-x-right bgi-position-y-bottom" style="background-image: url(assets/media/svg/illustrations/login-visual-4.svg);">
+                    <!--begin::Aside title-->
+                    <h3 class="pt-lg-40 pl-lg-20 pb-lg-0 pl-10 py-20 m-0 d-flex justify-content-lg-start font-weight-boldest display4 display1-lg text-white">
+                    Portal de
+                    <br />Admin
+                    <br />de Trámites</h3>
+                    <!--end::Aside title-->
+                </div>
+            </div>
+            <!--end::Aside-->
+        </div>
+        <!--end::Login-->
+    </div>
+    <!--end::Main-->
+
 {% endblock %}
+
+                        
