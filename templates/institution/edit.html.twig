@@ -23,7 +23,9 @@
         {{ include('institution/_form.html.twig', {'button_label': 'Update'|trans}) }}
     </div>
 
-    <a class="font-bold" href="{{ path('app_institution_index') }}">{% trans %}back to list{% endtrans %}</a>
-
-    {{ include('institution/_delete_form.html.twig') }}
+    <div class="px-2">
+        {{ include('institution/_delete_form.html.twig') }}
+        <hr>
+        <a class="font-bold" href="{{ path('app_institution_index') }}">{% trans %}back to list{% endtrans %}</a>
+    </div>
 {% endblock %}

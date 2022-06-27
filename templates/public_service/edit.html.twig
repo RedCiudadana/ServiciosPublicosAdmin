@@ -14,7 +14,7 @@
             {{ buttons.link_text(
                 path('app_public_service_history', { id: public_service.id }),
                 "History",
-                "ml-auto mb-2"
+                
             ) }}
         </div>
     {% endif %}
@@ -23,7 +23,9 @@
         {{ include('public_service/_form.html.twig', {'button_label': 'Update'|trans}) }}
     </div>
 
-    <a class="font-bold" href="{{ path('app_public_service_index') }}">{% trans %}back to list{% endtrans %}</a>
-
-    {{ include('public_service/_delete_form.html.twig') }}
+    <div class="px-2">
+        {{ include('public_service/_delete_form.html.twig') }}
+        <hr>
+        <a class="font-bold" href="{{ path('app_public_service_index') }}">{% trans %}back to list{% endtrans %}</a>
+    </div>
 {% endblock %}
