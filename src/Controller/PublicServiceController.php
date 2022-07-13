@@ -72,137 +72,194 @@ class PublicServiceController extends BaseController
             $updatedResources = 0;
             $createdResources = 0;
 
-            foreach ($data as $row) {
-                $institution = $em->getRepository(Institution::class)->findOneBy([
-                    'name' => $row['institucion']
-                ]);
+            $dataChunk = array_chunk($data, 50);
 
-                $row = array_map(function($value) { return trim($value); }, $row);
+            foreach ($dataChunk as $data) {
+                foreach ($data as $row) {
+                    $trimAndEncodeFunction = function ($str) {
+                        return trim($str);
+                    };
 
-                if (!$institution) {
-                    $this->addFlash(
-                        'warning',
-                        sprintf('La institución %s no existe', $row['institucion'])
+                    $row = array_combine(
+                        array_map($trimAndEncodeFunction, array_keys($row)),
+                        array_map($trimAndEncodeFunction, array_values($row))
                     );
 
-                    $form->addError(
-                        new FormError(sprintf(
-                            'La institución %s no existe',
-                            $row['institucion']
-                        ))
-                    );
+                    $institution = $em->getRepository(Institution::class)->findOneBy([
+                        'name' => $row['institucion']
+                    ]);
+
+                    $row = array_map(function ($value) {
+                        return trim($value);
+                    }, $row);
+
+                    if (!$institution) {
+                        $this->addFlash(
+                            'warning',
+                            sprintf('La institución %s no existe', $row['institucion'])
+                        );
+
+                        $form->addError(
+                            new FormError(sprintf(
+                                'La institución %s no existe',
+                                $row['institucion']
+                            ))
+                        );
+
+                        if ($updatedResources > 0) {
+                            $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+                        }
+
+                        if ($createdResources > 0) {
+                            $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
+                        }
+
+                        return $this->renderForm('public_service/upload_collection.html.twig', [
+                            'form' => $form
+                        ]);
+                    }
+
+                    $publicService = $em->getRepository(PublicService::class)->findOneBy([
+                        'name' => $row['nombre'],
+                        'institution' => $institution
+                    ]);
+
+                    if (!$publicService) {
+                        $publicService = new PublicService();
+                    }
+
+                    $category = $em->getRepository(Category::class)->findOneBy([
+                        'name' => $row['categoria']
+                    ]);
+
+                    $subcategory = $em->getRepository(SubCategory::class)->findOneBy([
+                        'name' => $row['subcategoria']
+                    ]);
+
+                    if (!$subcategory) {
+                        $this->addFlash(
+                            'warning',
+                            sprintf('La sub-categoría %s no existe', $row['subcategoria'])
+                        );
+
+                        $form->addError(
+                            new FormError(sprintf(
+                                'La sub-categoría %s no existe',
+                                $row['subcategoria']
+                            ))
+                        );
+
+                        if ($updatedResources > 0) {
+                            $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+                        }
+
+                        if ($createdResources > 0) {
+                            $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
+                        }
+
+                        return $this->renderForm('public_service/upload_collection.html.twig', [
+                            'form' => $form
+                        ]);
+                    }
+
+
+                    $publicService->setInstitution($institution);
+                    $publicService->setSubcategory($subcategory);
+
+                    $publicService->setName($row['nombre']);
+                    $publicService->setDescription($row['descripcion']);
+                    $publicService->setInstructions($row['instrucciones']);
+                    $publicService->setRequirements($row['requisitos']);
+                    $publicService->setCost(floatval($row['costo']));
+                    $publicService->setTimeResponse($row['tiempo_de_respuesta']);
+                    $publicService->setTypeOfDocumentObtainable($row['documento_obtenible']);
+                    $publicService->setUrl($row['enlace']);
+                    $publicService->setNormative($row['respaldo_legal']);
+
+                    $errors = $validator->validate($publicService);
+
+                    if (count($errors) > 0) {
+                        $this->addFlash('danger', sprintf('Error al procesar tramite %s', $row['name']));
+
+                        if ($updatedResources > 0) {
+                            $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+                        }
+
+                        if ($createdResources > 0) {
+                            $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
+                        }
+
+                        return $this->renderForm('public_service/upload_collection.html.twig', [
+                            'form' => $form
+                        ]);
+                    }
+
+                    $formService = $this->createForm(PublicServiceType::class, $publicService, [
+                        'csrf_protection' => false
+                    ]);
+
+                    // TODO: Use validator component
+                    $formService->setData($publicService);
+                    $formService->submit([], false);
+
+                    if (!$formService->isValid()) {
+                        $this->addFlash('warning', sprintf('El servicio %s no es válido', $row['nombre']));
+
+                        if ($updatedResources > 0) {
+                            $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+                        }
+
+                        if ($createdResources > 0) {
+                            $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
+                        }
+
+                        return $this->renderForm('public_service/upload_collection.html.twig', [
+                            'form' => $form
+                        ]);
+                    }
+
+                    if ($publicService->getId()) {
+                        $updatedResources += 1;
+                    } else {
+                        $createdResources += 1;
+                    }
+
+                    $em->persist($publicService);
+
+                    $event = new ResourceEvent($publicService);
+                    $eventDispatcher->dispatch($event, ResourceEvent::name);
+                }
+
+                try {
+                    $em->flush();
+                } catch (\Throwable $th) {
+                    throw $th;
+                    $this->addFlash('warning', 'Error al persistir cambios');
+                    $form->addError(new FormError('Error al persistir los cambios'));
+
+                    if ($updatedResources > 0) {
+                        $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+                    }
+
+                    if ($createdResources > 0) {
+                        $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
+                    }
 
                     return $this->renderForm('public_service/upload_collection.html.twig', [
                         'form' => $form
                     ]);
                 }
 
-                $publicService = $em->getRepository(PublicService::class)->findOneBy([
-                    'name' => $row['nombre'],
-                    'institution' => $institution
-                ]);
-
-                if (!$publicService) {
-                    $publicService = new PublicService();
-                }
-
-                $category = $em->getRepository(Category::class)->findOneBy([
-                    'name' => $row['categoria']
-                ]);
-
-                $subcategory = $em->getRepository(SubCategory::class)->findOneBy([
-                    'name' => $row['subcategoria']
-                ]);
-
-                if (!$subcategory) {
-                    $this->addFlash(
-                        'warning',
-                        sprintf('La sub-categoría %s no existe', $row['subcategoria'])
-                    );
-
-                    $form->addError(
-                        new FormError(sprintf(
-                            'La sub-categoría %s no existe',
-                            $row['subcategoria']
-                        ))
-                    );
-
-                    return $this->renderForm('public_service/upload_collection.html.twig', [
-                        'form' => $form
-                    ]);
-                }
-
-
-                $publicService->setInstitution($institution);
-                $publicService->setSubcategory($subcategory);
-
-                $publicService->setName($row['nombre']);
-                $publicService->setDescription($row['descripcion']);
-                $publicService->setInstructions($row['instrucciones']);
-                $publicService->setRequirements($row['requisitos']);
-                $publicService->setCost($row['costo']);
-                $publicService->setTimeResponse($row['tiempo_de_respuesta']);
-                $publicService->setTypeOfDocumentObtainable($row['documento_obtenible']);
-                $publicService->setUrl($row['enlace']);
-                $publicService->setNormative($row['respaldo_legal']);
-
-                $errors = $validator->validate($publicService);
-
-                if (count($errors) > 0) {
-                    $this->addFlash('danger', sprintf('Error al procesar tramite %s', $row['name']));
-
-                    return $this->renderForm('public_service/upload_collection.html.twig', [
-                        'form' => $form
-                    ]);
-                }
-
-                $formService = $this->createForm(PublicServiceType::class, $publicService, [
-                    'csrf_protection' => false
-                ]);
-
-                // TODO: Use validator component
-                $formService->setData($publicService);
-                $formService->submit([], false);
-
-                if (!$formService->isValid()) {
-                    $this->addFlash('warning', sprintf('El servicio %s no es válido', $row['nombre']));
-
-                    return $this->renderForm('public_service/upload_collection.html.twig', [
-                        'form' => $form
-                    ]);
-                }
-
-                if ($publicService->getId()) {
-                    $updatedResources += 1;
-                } else {
-                    $createdResources += 1;
-                }
-
-                $em->persist($publicService);
-
-                $event = new ResourceEvent($publicService);
-                $eventDispatcher->dispatch($event, ResourceEvent::name);
+                $em->clear();
             }
+        }
 
-            try {
-                $em->flush();
-            } catch (\Throwable $th) {
-                throw $th;
-                $this->addFlash('warning', 'Error al persistir cambios');
-                $form->addError(new FormError('Error al persistir los cambios'));
+        if ($updatedResources > 0) {
+            $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+        }
 
-                return $this->renderForm('public_service/upload_collection.html.twig', [
-                    'form' => $form
-                ]);
-            }
-
-            if ($updatedResources > 0) {
-                $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
-            }
-
-            if ($createdResources > 0) {
-                $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
-            }
+        if ($createdResources > 0) {
+            $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
         }
 
         return $this->renderForm('public_service/upload_collection.html.twig', [

@@ -6,6 +6,7 @@ use App\Entity\Institution;
 use App\Event\ResourceEvent;
 use App\Form\Institution\BaseType as InstitutionType;
 use App\Form\PublicService\UploadCollectionType;
+use App\Handler\Institution as HandlerInstitution;
 use App\Repository\InstitutionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
@@ -40,7 +41,10 @@ class InstitutionController extends AbstractController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/upload_csv", name="app_institution_upload_csv", methods={"GET" ,"POST"})
      */
-    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, ValidatorInterface $validator)
+    public function uploadInstitutionsWithCSV(
+        Request $request,
+        HandlerInstitution $handlerInstitution
+    )
     {
         $form = $this->createForm(UploadCollectionType::class);
         $form->handleRequest($request);
@@ -54,99 +58,28 @@ class InstitutionController extends AbstractController
             $fileContents = utf8_encode(file_get_contents($file->getPathname()));
 
             $csvEncoder = new CsvEncoder();
-            $data = $csvEncoder->decode($fileContents, 'csv');
 
-            $updatedResources = 0;
-            $createdResources = 0;
-
-            foreach ($data as $row) {
-                $institution = $em->getRepository(Institution::class)->findOneBy([
-                    'name' => $row['nombre']
-                ]);
-
-                $row = array_map(function ($value) {
-                    return trim($value);
-                }, $row);
-
-
-                foreach ($row as $key => $value) {
-                    $row[trim($key)] = $value;
-                }
-
-                $institution = $em->getRepository(Institution::class)->findOneBy([
-                    'name' => $row['nombre']
-                ]);
-
-                if (!$institution) {
-                    $institution = new Institution();
-                }
-
-                $institution->setName($row['nombre']);
-                $institution->setDescription($row['descripcion']);
-                $institution->setAddress($row['direccion']);
-                $institution->setSchedule($row['horario']);
-                $institution->setWebpage($row['pagina_web']);
-                $institution->setEmail($row['correo_electronico']);
-                $institution->setFacebookURL($row['facebook']);
-                $institution->setTwitterURL($row['twitter']);
-
-                $errors = $validator->validate($institution);
-
-                if (count($errors) > 0) {
-                    $this->addFlash('danger', sprintf('Error al procesar tramite %s', $row['name']));
-
-                    return $this->renderForm('public_service/upload_collection.html.twig', [
-                        'form' => $form
-                    ]);
-                }
-
-                $formInstitution = $this->createForm(InstitutionType::class, $institution, [
-                    'csrf_protection' => false
-                ]);
-
-                // TODO: Use validator component
-                $formInstitution->setData($institution);
-                $formInstitution->submit([], false);
-
-                if (!$formInstitution->isValid()) {
-                    $this->addFlash('warning', sprintf('La institución %s no es válida', $row['nombre']));
-
-                    return $this->renderForm('public_service/upload_collection.html.twig', [
-                        'form' => $form
-                    ]);
-                }
-
-                if ($institution->getId()) {
-                    $updatedResources += 1;
-                } else {
-                    $createdResources += 1;
-                }
-
-                $em->persist($institution);
-
-                $event = new ResourceEvent($institution);
-                $eventDispatcher->dispatch($event, ResourceEvent::name);
-            }
+            $data = $csvEncoder->decode($fileContents, 'csv', [
+                'csv_delimiter' => $form->getData()['csv_delimiter'] ?? ','
+            ]);
 
             try {
-                $em->flush();
-            } catch (\Throwable $th) {
-                throw $th;
-                $this->addFlash('warning', 'Error al persistir cambios');
-                $form->addError(new FormError('Error al persistir los cambios'));
+                $resourcesProcessed = $handlerInstitution->processRowsAndCreate($data);
+            } catch (\LogicException $th) {
+                $this->addFlash('error', 'Error al procesar archivo');
 
                 return $this->renderForm('public_service/upload_collection.html.twig', [
                     'form' => $form
                 ]);
+
+                return $this->redirectToRoute('app_institution_index');
             }
 
-            if ($updatedResources > 0) {
-                $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
+            if (count($resourcesProcessed) > 0) {
+                $this->addFlash('success', sprintf('Se procesaron %s registros', count($resourcesProcessed)));
             }
 
-            if ($createdResources > 0) {
-                $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
-            }
+            return $this->redirectToRoute('app_institution_index');
         }
 
         return $this->renderForm('public_service/upload_collection.html.twig', [

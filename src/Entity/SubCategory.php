@@ -6,7 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\SubCategoryRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use App\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -53,7 +53,7 @@ class SubCategory
     /**
      * @ORM\Column(type="boolean")
      */
-    private $highlight;
+    private $highlight = false;
 
     /**
      * NOTE: This is not a mapped field of entity metadata, just a simple property.

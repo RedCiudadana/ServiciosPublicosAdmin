@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
+use App\Traits\TimestampableEntity;
 
 /**
  * @ApiResource(

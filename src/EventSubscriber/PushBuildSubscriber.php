@@ -43,11 +43,6 @@ class PushBuildSubscriber implements EventSubscriberInterface
         $notifications = $this->pushBuildHandler->getBuildNotifications();
 
         if (count($notifications) > 0) {
-            $message = 'Build triggered by: ';
-
-            foreach ($notifications as $title) {
-                $message = $message . sprintf('\n %s %s', $message, $title);
-            }
 
             $netlifyHook = $this->parameterBag->get('app_netlify_build_hook');
 

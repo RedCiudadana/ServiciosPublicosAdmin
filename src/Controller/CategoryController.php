@@ -4,12 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\Category\BaseType as CategoryType;
+use App\Form\PublicService\UploadCollectionType;
+use App\Handler\Category as HandlerCategory;
 use App\Repository\CategoryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 
 /**
  * @Route("/category")
@@ -24,6 +27,54 @@ class CategoryController extends AbstractController
     {
         return $this->render('category/index.html.twig', [
             'categories' => $categoryRepository->findAll(),
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/upload_csv", name="app_category_upload_csv", methods={"GET" ,"POST"})
+     */
+    public function uploadCategoriesWithCSV(
+        Request $request,
+        HandlerCategory $handlerCategory
+    ) {
+        $form = $this->createForm(UploadCollectionType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var UploadedFile
+             */
+            $file = $form->getData()['file'];
+
+            $fileContents = utf8_encode(file_get_contents($file->getPathname()));
+
+            $csvEncoder = new CsvEncoder();
+
+            $data = $csvEncoder->decode($fileContents, 'csv', [
+                'csv_delimiter' => $form->getData()['csv_delimiter'] ?? ','
+            ]);
+
+            try {
+                $resourcesProcessed = $handlerCategory->processRowsAndCreate($data);
+            } catch (\LogicException $th) {
+                $this->addFlash('error', 'Error al procesar archivo');
+
+                return $this->renderForm('public_service/upload_collection.html.twig', [
+                    'form' => $form
+                ]);
+            }
+
+            if (count($resourcesProcessed) > 0) {
+                $this->addFlash('success', sprintf('Se procesaron %s registros', count($resourcesProcessed)));
+            }
+
+            return $this->redirectToRoute('app_category_index');
+        }
+
+        return $this->renderForm('public_service/upload_collection.html.twig', [
+            'form' => $form
         ]);
     }
 

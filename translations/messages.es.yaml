@@ -66,6 +66,6 @@ Category: Categoría
 'Add institution': 'Agregar Institución o Dependencias'
 delete: Eliminar
 'This user has no institutions': 'Este usuario no tiene instituciones asignadas'
-'Upload PublicService': 'Subir tramites'
+'Upload csv': 'Cargar csv'
 'PublicService index': 'Tramites'
 'Image file': 'Imagen'

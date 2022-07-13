@@ -19,6 +19,7 @@ class BaseType extends AbstractType
             ->add('description')
             ->add('highlight')
             ->add('imageFile', VichImageType::class, [
+                'required' => false,
                 'error_bubbling' => true
             ])
         ;
