@@ -1,0 +1,101 @@
+{% extends '_main.html.twig' %}
+
+{% block title %}{% trans %}Home{% endtrans %}{% endblock %}
+
+{% block body %}
+    <div class="row mx-auto">
+        <div class="container">
+            <div class="w-100">
+                <div class="container" style="padding:6rem 0">
+                    <div class="row">
+                        <div class="col-lg-3 col-md-4 col-sm-12">
+                            <div class="card card-custom card-stretch gutter-b p-4">
+                                <h1>
+                                    {% trans %}Número de instituciones:{% endtrans %}
+                                </h1>
+                                <span>
+                                    {{ stats.countInsitutions[0].count_i }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-12">
+                            <div class="card card-custom card-stretch gutter-b p-4">
+                                <h1>
+                                    {% trans %}Número de tramites:{% endtrans %}
+                                </h1>
+                                <span>
+                                    {{ stats.countPublicServices[0].count_ps }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="card card-custom card-stretch gutter-b p-4">
+                                <h1>
+                                    {% trans %}Número de tramites por institución:{% endtrans %}
+                                </h1>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                {% trans %}Institución{% endtrans %}
+                                            </th>
+                                            <th>
+                                                {% trans %}Número de tramites{% endtrans %}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in stats.countPublicServicesByInstitution %}
+                                            <tr>
+                                                <td>
+                                                    {{item.institution_name}}
+                                                </td>
+                                                <td>
+                                                    {{item.count_ps}}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-sm-12">
+                            <div class="card card-custom card-stretch gutter-b p-4">
+                                <h1>
+                                    {% trans %}Número de tramites por categoria:{% endtrans %}
+                                </h1>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>
+                                                {% trans %}Categoria{% endtrans %}
+                                            </th>
+                                            <th>
+                                                {% trans %}Número de tramites{% endtrans %}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in stats.countPublicServicesByCategory %}
+                                            <tr>
+                                                <td>
+                                                    {{item.category_name}}
+                                                </td>
+                                                <td>
+                                                    {{item.count_ps}}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
