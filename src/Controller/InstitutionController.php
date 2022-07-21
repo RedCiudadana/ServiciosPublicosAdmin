@@ -55,7 +55,7 @@ class InstitutionController extends AbstractController
              */
             $file = $form->getData()['file'];
 
-            $fileContents = utf8_encode(file_get_contents($file->getPathname()));
+            $fileContents = file_get_contents($file->getPathname());
 
             $csvEncoder = new CsvEncoder();
 

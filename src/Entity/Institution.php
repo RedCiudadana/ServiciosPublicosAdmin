@@ -43,6 +43,13 @@ class Institution
     private $name;
 
     /**
+     * @Groups("type")
+     * @Gedmo\Versioned
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
      * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="text")
@@ -249,4 +256,17 @@ class Institution
 
         return $this;
     }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
 }

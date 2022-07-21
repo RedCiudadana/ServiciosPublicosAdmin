@@ -19,6 +19,7 @@ class BaseType extends AbstractType
             ->add('daysOpen')
             ->add('webpage')
             ->add('email')
+            ->add('type')
             ->add('facebookURL')
             ->add('twitterURL')
         ;

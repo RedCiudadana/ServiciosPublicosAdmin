@@ -31,6 +31,7 @@ class Institution
       'correo_electronico' => 'email',
       'facebook' => 'facebookURL',
       'twitter' => 'twitterURL',
+      'tipo' => 'type'
     ];
 
     $propertyColumns = array_flip($columns);
