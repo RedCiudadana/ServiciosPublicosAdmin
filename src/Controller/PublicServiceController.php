@@ -39,10 +39,10 @@ class PublicServiceController extends BaseController
         $publicServices = null;
 
         if ($this->isGranted(Roles::ADMIN)) {
-            $publicServices = $publicServiceRepository->findBy([], ['id' => 'DESC']);
+            $publicServices = $publicServiceRepository->findBy([], ['id' => 'DESC'], 30);
         } else {
             $publicServices =
-                $publicServiceRepository->findByUser($this->getUser());
+                $publicServiceRepository->findByUser($this->getUser(), 30);
         }
 
         return $this->render('public_service/index.html.twig', [

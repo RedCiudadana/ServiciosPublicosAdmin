@@ -51,15 +51,20 @@ class PublicServiceRepository extends ServiceEntityRepository
     /**
      * @return PublicService[] Returns an array of PublicService objects
      */
-    public function findByUser(User $user)
+    public function findByUser(User $user, $limit = null)
     {
-        return $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p')
             ->innerJoin('p.institution', 'i')
             ->innerJoin('i.members', 'm')
             ->andWhere('m = :user')
             ->setParameter('user', $user)
-            ->orderBy('p.id', 'ASC')
-            // ->setMaxResults(10)
+            ->orderBy('p.id', 'ASC');
+
+        if ($limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb
             ->getQuery()
             ->getResult()
         ;
