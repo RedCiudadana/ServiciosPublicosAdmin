@@ -262,9 +262,9 @@ class Institution
         return $this->type;
     }
 
-    public function setType(string $description): self
+    public function setType(string $type): self
     {
-        $this->description = $description;
+        $this->type = $type;
 
         return $this;
     }
