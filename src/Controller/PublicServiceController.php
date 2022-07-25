@@ -15,6 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -53,7 +54,7 @@ class PublicServiceController extends BaseController
      * @IsGranted("ROLE_ADMIN")
      * @Route("/upload_csv", name="app_public_service_upload_csv", methods={"GET" ,"POST"})
      */
-    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, ValidatorInterface $validator)
+    public function uploadPublicServicesWithCSV(Request $request, EntityManagerInterface $em, EventDispatcherInterface $eventDispatcher, ValidatorInterface $validator, ManagerRegistry $mr)
     {
         $form = $this->createForm(UploadCollectionType::class);
         $form->handleRequest($request);
@@ -74,7 +75,7 @@ class PublicServiceController extends BaseController
                 'csv_delimiter' => $form->getData()['csv_delimiter'] ?? ','
             ]);
 
-            $dataChunk = array_chunk($data, 50);
+            $dataChunk = array_chunk($data, 10);
 
             $institutionsNotFound = [];
             $subcategoryNotFound = [];
@@ -108,25 +109,6 @@ class PublicServiceController extends BaseController
                         }
 
                         continue;
-
-                        // $form->addError(
-                        //     new FormError(sprintf(
-                        //         'La institución %s no existe',
-                        //         $row['institucion']
-                        //     ))
-                        // );
-
-                        // if ($updatedResources > 0) {
-                        //     $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
-                        // }
-
-                        // if ($createdResources > 0) {
-                        //     $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
-                        // }
-
-                        // return $this->renderForm('public_service/upload_collection.html.twig', [
-                        //     'form' => $form
-                        // ]);
                     }
 
                     $publicService = $em->getRepository(PublicService::class)->findOneBy([
@@ -156,25 +138,6 @@ class PublicServiceController extends BaseController
                         }
 
                         continue;
-
-                        // $form->addError(
-                        //     new FormError(sprintf(
-                        //         'La sub-categoría %s no existe',
-                        //         $row['subcategoria']
-                        //     ))
-                        // );
-
-                        // if ($updatedResources > 0) {
-                        //     $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
-                        // }
-
-                        // if ($createdResources > 0) {
-                        //     $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
-                        // }
-
-                        // return $this->renderForm('public_service/upload_collection.html.twig', [
-                        //     'form' => $form
-                        // ]);
                     }
 
 
@@ -238,21 +201,10 @@ class PublicServiceController extends BaseController
                 try {
                     $em->flush();
                 } catch (\Throwable $th) {
-                    // throw $th;
-                    $this->addFlash('warning', 'Error al persistir cambios');
-                    $form->addError(new FormError('Error al persistir los cambios'));
+                    $this->addFlash('warning', sprintf('Error al persistir cambios del batch %s', array_search($data, array_keys($dataChunk))));
+                    $form->addError(new FormError(sprintf('Error al persistir cambios del batch %s', array_search($data, array_keys($dataChunk)))));
 
-                    if ($updatedResources > 0) {
-                        $this->addFlash('success', sprintf('Se actualizaron: %s', $updatedResources));
-                    }
-
-                    if ($createdResources > 0) {
-                        $this->addFlash('success', sprintf('Se agregaron: %s', $createdResources));
-                    }
-
-                    return $this->renderForm('public_service/upload_collection.html.twig', [
-                        'form' => $form
-                    ]);
+                    $mr->resetManager();
                 }
 
                 $em->clear();
