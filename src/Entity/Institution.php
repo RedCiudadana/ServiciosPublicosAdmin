@@ -43,7 +43,7 @@ class Institution
     private $name;
 
     /**
-     * @Groups("type")
+     * @Groups("get")
      * @Gedmo\Versioned
      * @ORM\Column(type="string", length=255, nullable=true)
      */
