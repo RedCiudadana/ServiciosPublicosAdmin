@@ -13,6 +13,7 @@
         "doctrine/doctrine-migrations-bundle": "^3.2",
         "doctrine/orm": "^2.12",
         "gedmo/doctrine-extensions": "^3.7",
+        "neitanod/forceutf8": "^2.0",
         "nelmio/cors-bundle": "^2.2",
         "php-flasher/flasher-symfony": "^1.6",
         "phpdocumentor/reflection-docblock": "^5.3",

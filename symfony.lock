@@ -139,6 +139,9 @@
     "monolog/monolog": {
         "version": "2.5.0"
     },
+    "neitanod/forceutf8": {
+        "version": "v2.0.4"
+    },
     "nelmio/cors-bundle": {
         "version": "2.2",
         "recipe": {
