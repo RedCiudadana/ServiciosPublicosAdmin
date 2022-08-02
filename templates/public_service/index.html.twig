@@ -16,7 +16,6 @@
                         <span class="card-label font-weight-bolder text-dark">{% trans %}PublicService index{% endtrans %}</span>
                     </h3>
                     <div class="card-toolbar">
-                        {{ buttons.link(path('app_public_service_new'), "Create new"|trans)}}
                         {{ buttons.link_text(
                             path('app_public_service_history_index'),
                             "Ver últimos cambios",
@@ -39,12 +38,12 @@
                                     {{ table.th("Id"|trans) }}
                                     {{ table.th("Institution"|trans) }}
                                     {{ table.th("Name"|trans) }}
-                                    {{ table.th("Description"|trans, "truncate w-48") }}
+                                    {{ table.th("Description"|trans, "w-48") }}
                                     {{ table.th("Cost"|trans) }}
                                     {{ table.th("TimeResponse"|trans, "w-48", "max-width:100px!important") }}
                                     {{ table.th("TypeOfDocumentObtainable"|trans) }}
                                     {{ table.th("Url"|trans) }}
-                                    {{ table.th("actions"|trans) }}
+                                    {{ table.th("actions"|trans, "w-48", "max-width:100px!important") }}
                                 </tr>
                             </thead>
                             <tbody>
@@ -74,6 +73,9 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div class="card-body pt-3 pb-3 mb-3">
+                    {{ buttons.link(path('app_public_service_new'), "Create new"|trans)}}
                 </div>
             </div>
         </div>

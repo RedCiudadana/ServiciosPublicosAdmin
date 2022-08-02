@@ -49,10 +49,11 @@
       <ul class="nav flex-column align-items-end">
          <li class="nav-item">
             <a class="nav-link disabled p-0" href="{{url('app_index')}}">
-            <span class="text-sm">{% trans %}Logged as{% endtrans %}</span> &nbsp {{ app.token.user.email }}
+            <span class="text-sm text-right">{% trans %}Logged as{% endtrans %} &nbsp {{ app.token.user.email }}</span> 
             </a>
          </li>
          <li class="nav-item">
+            
             <a class="nav-link p-0" href="/logout">
             {% trans %}Log out{% endtrans %}
             </a>
