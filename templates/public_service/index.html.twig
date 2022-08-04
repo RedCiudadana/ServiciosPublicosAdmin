@@ -30,24 +30,28 @@
                 </div>
                 <!--end::Header-->
                 <div class="card-body pt-3 pb-3">
+                    {{ knp_pagination_filter(pagination, {
+                        'ps.name': 'Nombre',
+                        'ps.description': 'Descripción',
+                    }) }}
                     <!--begin::Table-->
                     <div class="table-responsive">
                         <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead >
                                 <tr class="text-uppercase">
-                                    {{ table.th("Id"|trans) }}
-                                    {{ table.th("Institution"|trans) }}
-                                    {{ table.th("Name"|trans) }}
-                                    {{ table.th("Description"|trans) }}
-                                    {{ table.th("Cost"|trans) }}
-                                    {{ table.th("TimeResponse"|trans, "w-48", "max-width:100px!important") }}
-                                    {{ table.th("TypeOfDocumentObtainable"|trans) }}
-                                    {{ table.th("Url"|trans) }}
+                                    {{ table.th_sortable(pagination,"Id"|trans, "ps.id") }}
+                                    {{ table.th_sortable(pagination,"Institution"|trans, "institution.name") }}
+                                    {{ table.th_sortable(pagination,"Name"|trans, "ps.name") }}
+                                    {{ table.th_sortable(pagination,"Description"|trans, "ps.description") }}
+                                    {{ table.th_sortable(pagination,"Cost"|trans, "ps.cost") }}
+                                    {{ table.th_sortable(pagination,"TimeResponse"|trans, "ps.timeResponse", "w-48", "max-width:100px!important") }}
+                                    {{ table.th_sortable(pagination,"TypeOfDocumentObtainable"|trans, "ps.typeOfDocumentObtainable") }}
+                                    {{ table.th_sortable(pagination,"Url"|trans, "ps.url") }}
                                     {{ table.th("actions"|trans, "w-48", "max-width:100px!important") }}
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for public_service in public_services %}
+                            {% for public_service in pagination %}
                                 <tr>
                                     {{ table.td(public_service.id) }}
                                     {{ table.td(public_service.institution.name) }}
@@ -72,6 +76,9 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        <div class="navigation">
+                            {{ knp_pagination_render(pagination) }}
+                        </div>
                     </div>
                 </div>
                 <div class="card-body pt-3 pb-3 mb-3">

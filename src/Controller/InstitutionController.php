@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Institution;
-use App\Event\ResourceEvent;
 use App\Form\Institution\BaseType as InstitutionType;
 use App\Form\PublicService\UploadCollectionType;
 use App\Handler\Institution as HandlerInstitution;
@@ -11,15 +10,13 @@ use App\Repository\InstitutionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
 use Gedmo\Loggable\Entity\Repository\LogEntryRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @Route("/institution")
@@ -30,10 +27,18 @@ class InstitutionController extends AbstractController
     /**
      * @Route("/", name="app_institution_index", methods={"GET"})
      */
-    public function index(InstitutionRepository $institutionRepository): Response
+    public function index(InstitutionRepository $institutionRepository, PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $institutionRepository->createQueryBuilder('i');
+
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
         return $this->render('institution/index.html.twig', [
-            'institutions' => $institutionRepository->findAll(),
+            'pagination' => $pagination
         ]);
     }
 

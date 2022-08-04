@@ -25,6 +25,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/public/service")
@@ -34,19 +35,28 @@ class PublicServiceController extends BaseController
     /**
      * @Route("/", name="app_public_service_index", methods={"GET"})
      */
-    public function index(PublicServiceRepository $publicServiceRepository): Response
+    public function index(PublicServiceRepository $publicServiceRepository, PaginatorInterface $paginator, Request $request): Response
     {
         $publicServices = null;
 
         if ($this->isGranted(Roles::ADMIN)) {
-            $publicServices = $publicServiceRepository->findBy([], ['id' => 'DESC'], 30);
+            $query = $publicServiceRepository
+                ->createQueryBuilder('ps')
+                ->innerJoin('ps.institution', 'institution');
         } else {
-            $publicServices =
+            $query =
                 $publicServiceRepository->findByUser($this->getUser(), 30);
         }
 
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
+
         return $this->render('public_service/index.html.twig', [
-            'public_services' => $publicServices
+            'pagination' => $pagination
         ]);
     }
 
