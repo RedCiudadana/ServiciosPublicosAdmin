@@ -13,8 +13,12 @@ class BaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('description')
+            ->add('name',null,[
+                'label' => 'Nombre: Ingresa el nombre de la subcategoría, recuerda colocar un nombre llamativo, amigable, breve y fácil de recordar.',
+            ])
+            ->add('description',null,[
+                'label' => 'Descripción: Ingresa la descripción de la subcategoría, recuerda colocar la mayor cantidad de detalles posibles.',
+            ])
             ->add('highlight')
             ->add('category')
             ->add('imageFile', VichImageType::class, [

@@ -40,7 +40,7 @@ Register: Registrar
 "Public Services": Trámites
 Categories: Categorías
 SubCategories: Subcategorías
-Institutions: "Instituciones o Dependencias"
+Institutions: "Institucion"
 Users: Usuarios
 Address: Dirección
 Schedule: Horario
@@ -54,8 +54,8 @@ Update: Actualizar
 "Edit PublicService": "Editar trámite"
 "Category index": Categorías
 "Edit Category": "Editar Categoría"
-"Institution index": "Instituciones y Dependencias"
-"Edit Institution": "Editar Institución o Dependencias"
+"Institution index": "Institución"
+"Edit Institution": "Editar Institución"
 "SubCategory index": Subcategorías
 "Edit SubCategory": "Editar Subcategoría"
 "User index": Usuarios
