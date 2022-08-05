@@ -12,6 +12,7 @@ use App\Form\UserType;
 use App\Handler\User as HandlerUser;
 use App\Repository\InstitutionRepository;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -30,12 +31,18 @@ class UserController extends AbstractController
     /**
      * @Route("/", name="app_user_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository,PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $userRepository->createQueryBuilder('u');
+
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findBy([], [
-                'id' => 'DESC'
-            ])
+            'users' => $pagination
         ]);
     }
 

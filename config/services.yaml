@@ -31,3 +31,8 @@ services:
 
 trsteel_ckeditor:
     language: 'es'
+
+knp_paginator:
+    template:
+        pagination: '@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig'
+        filtration: '@KnpPaginator/Pagination/twitter_bootstrap_v4_filtration.html.twig'

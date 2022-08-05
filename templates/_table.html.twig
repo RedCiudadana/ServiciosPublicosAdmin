@@ -7,3 +7,7 @@
 {% macro th(value, cssStyles = "", attributes = "") %}
   <th style="{{attributes}}">{{ value }}</th>
 {% endmacro %}
+
+{% macro th_sortable(pagination, value, propertyPath, cssStyles = "", attributes = "") %}
+  <th>{{ knp_pagination_sortable(pagination, value, propertyPath)|raw }}</th>
+{% endmacro %}

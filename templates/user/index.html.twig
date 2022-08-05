@@ -28,6 +28,10 @@
                 </div>
                 <!--end::Header-->
                 <div class="card-body pt-3 pb-3">
+                    {{ knp_pagination_filter(users, {
+                        'u.email': 'Correo',
+                        'u.name': 'Nombre'
+                    }) }}
                     <!--begin::Table-->
                     <div class="table-responsive">
                         <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
@@ -35,6 +39,7 @@
                                 <tr class="text-uppercase">
                                     {{ table.th("Id"|trans) }}
                                     {{ table.th("Email"|trans) }}
+                                    {{ table.th("Name"|trans) }}
                                     {{ table.th("Roles"|trans) }}
                                     {{ table.th("actions", "w-48") }}
                                 </tr>
@@ -44,6 +49,7 @@
                                 <tr>
                                     {{ table.td(user.id) }}
                                     {{ table.td(user.email) }}
+                                    {{ table.td(user.name) }}
                                     {% set roles %}
                                         {{ user.roles ? (user.roles|map(p => "<span
                                             class='bg-orange-400 text-white font-bold rounded mx-1 px-2 py-1 text-xs'>#{p}</span>")|join('')|raw) : '' }}
@@ -64,6 +70,9 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        <div class="navigation">
+                            {{ knp_pagination_render(users) }}
+                        </div>
                     </div>
                 </div>
             </div>

@@ -70,6 +70,25 @@ class PublicServiceRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return PublicService[] Returns an array of PublicService objects
+     */
+    public function findByUserQuery(User $user, $limit = null)
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->innerJoin('p.institution', 'i')
+            ->innerJoin('i.members', 'm')
+            ->andWhere('m = :user')
+            ->setParameter('user', $user)
+            ->orderBy('p.id', 'ASC');
+
+        if ($limit) {
+            $qb->setMaxResults($limit);
+        }
+
+        return $qb;
+    }
+
     // /**
     //  * @return PublicService[] Returns an array of PublicService objects
     //  */
