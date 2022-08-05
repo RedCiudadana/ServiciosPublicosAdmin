@@ -96,7 +96,7 @@ class PublicServiceController extends BaseController
                     ]);
 
                     $row = array_map(function ($value) {
-                        return trim($value);
+                        return \ForceUTF8\Encoding::toUTF8(trim($value));
                     }, $row);
 
                     if (!$institution) {

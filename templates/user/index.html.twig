@@ -14,6 +14,13 @@
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label font-weight-bolder text-dark">{% trans %}User index{% endtrans %}</span>
                     </h3>
+                    <div class="card-toolbar">
+                        {{ buttons.link_text(
+                            path('app_user_upload_csv'),
+                            "Cargar CSV",
+                            "ml-auto mb-2"
+                        ) }}
+                    </div>
                 </div>
                 <!--end::Header-->
                 <div class="card-body pt-3 pb-3">
