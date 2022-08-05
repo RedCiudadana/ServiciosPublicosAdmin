@@ -15,6 +15,10 @@
                         <span class="card-label font-weight-bolder text-dark">{% trans %}User index{% endtrans %}</span>
                     </h3>
                     <div class="card-toolbar">
+                        {{ buttons.link(
+                            path('app_user_new'),
+                            "Create new"|trans)
+                        }}
                         {{ buttons.link_text(
                             path('app_user_upload_csv'),
                             "Cargar CSV",
@@ -61,9 +65,6 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
-                <div class="card-body pt-3 pb-3 mb-3">
-                    {{ buttons.link(path('app_user_new'), "Create new"|trans)}}
                 </div>
             </div>
         </div>
