@@ -9,7 +9,9 @@
 
     <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
         {{ form_start(form) }}
-            {{ form_row(form.email) }}
+            {{ form_row(form.email, {
+                label: 'Correo electrónico: Ingresa el Correo electrónico del usuario.'
+            }) }}
             {{ form_row(form.plainPassword, {
                 label: 'Password'|trans
             }) }}

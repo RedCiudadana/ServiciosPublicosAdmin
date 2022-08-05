@@ -28,9 +28,14 @@ class BaseType extends AbstractType
         $user = $this->session->getToken()->getUser();
 
         $builder
-            ->add('name')
-            ->add('description')
+            ->add('name',null,[
+                'label' => 'Nombre: Ingresa el nombre del trámite, recuerda colocar un nombre llamativo, amigable, breve y fácil de recordar.',
+            ])
+            ->add('description',null,[
+                'label' => 'Descripción: Ingresa la descripción del trámite, recuerda colocar la mayor cantidad de detalles posibles.',
+            ])
             ->add('institution', EntityType::class, [
+                'label' => 'Institución: Selecciona la institución o las instituciones donde se realiza el trámite.',
                 'class' => Institution::class,
                 'query_builder' => function(InstitutionRepository $er) use ($user) {
                     $qb = $er->createQueryBuilder('i');
@@ -47,16 +52,31 @@ class BaseType extends AbstractType
                 }
             ])
             ->add('subcategory', EntityType::class, [
+                'label' => 'Subcategoría: Selecciona una de las siguientes subcategorías para encontrar con más facilidad el trámite que buscas.',
                 'class' => SubCategory::class,
                 'choice_label' => 'getNameAndCategory'
             ])
-            ->add('instructions', CkeditorType::class)
-            ->add('requirements')
-            ->add('cost', NumberType::class)
-            ->add('timeResponse')
-            ->add('typeOfDocumentObtainable')
-            ->add('normative')
-            ->add('url')
+            ->add('instructions', CkeditorType::class,[
+                'label' => 'Instrucciones: Enumera los pasos para realizar el trámite, recuerda colocar los detalles de cada paso para concluir con éxito tu trámite.',
+            ])
+            ->add('requirements',null,[
+                'label' => 'Requisitos: Coloca todos los requisitos necesarios para realizar el trámite, recuerda colocar el mayor detalle posible.',
+            ])
+            ->add('cost', NumberType::class,[
+                'label' => 'Costo: Indica el costo total del trámite. Si el trámite es gratuito coloca 0.',
+            ])
+            ->add('timeResponse',null,[
+                'label' => 'Respuesta de tiempo: Ingresa el tiempo correspondiente de cada trámite hasta estar 100% resuelto. Expresa la temporalidad en días según corresponda.',
+            ])
+            ->add('typeOfDocumentObtainable',null,[
+                'label' => 'Tipo de documento obtenible: Indica el tipo de documento que los ciudadanos obtendrán al finalizar este trámite.',
+            ])
+            ->add('normative',null,[
+                'label' => 'Normativa: Ingresa el marco normativo, ley o reglamento que respalde el trámite correspondiente ',
+            ])
+            ->add('url',null,[
+                'label' => 'URL: Ingrese el enlace al trámite o plataforma según corresponda.',
+            ])
             ->add('highlight')
         ;
     }
