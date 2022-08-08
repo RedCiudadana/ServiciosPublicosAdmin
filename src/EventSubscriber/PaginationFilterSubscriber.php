@@ -2,6 +2,7 @@
 
 namespace App\EventSubscriber;
 
+use Doctrine\ORM\AbstractQuery;
 use Knp\Component\Pager\Event\BeforeEvent;
 use Knp\Component\Pager\Event\ItemsEvent;
 use Knp\Component\Pager\Event\Subscriber\Filtration\Doctrine\ORM\Query\WhereWalker;
@@ -22,8 +23,10 @@ class PaginationFilterSubscriber implements EventSubscriberInterface
 
     public function onItemsPagination(ItemsEvent $event)
     {
-        $event->target
-            ->setHint(WhereWalker::HINT_PAGINATOR_FILTER_CASE_INSENSITIVE, true);
+        if ($event->target instanceof AbstractQuery) {
+            $event->target
+                ->setHint(WhereWalker::HINT_PAGINATOR_FILTER_CASE_INSENSITIVE, true);
+        }
     }
 
     public static function getSubscribedEvents()

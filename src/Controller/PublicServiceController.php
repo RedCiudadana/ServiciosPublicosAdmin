@@ -45,7 +45,7 @@ class PublicServiceController extends BaseController
                 ->innerJoin('ps.institution', 'institution');
         } else {
             $query =
-                $publicServiceRepository->findByUser($this->getUser(), 30);
+                $publicServiceRepository->findByUserQuery($this->getUser(), 30);
         }
 
         $pagination = $paginator->paginate(
