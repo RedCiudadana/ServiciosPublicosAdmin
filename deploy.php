@@ -57,3 +57,8 @@ task('deploy:node', function () {
 // Migrate database before symlink new release.
 
 before('deploy:symlink', 'database:migrate');
+
+task('database:migrate', function() {
+    $options = '--force --dump-sql';
+    run(sprintf('{{bin/php}} {{bin/console}} doctrine:schema:update %s {{console_options}}', $options));
+});
