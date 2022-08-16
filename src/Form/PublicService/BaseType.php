@@ -77,7 +77,9 @@ class BaseType extends AbstractType
             ->add('url',null,[
                 'label' => 'URL: Ingrese el enlace al trámite o plataforma según corresponda.',
             ])
-            ->add('highlight')
+            ->add('highlight', null, [
+                'required' => false
+            ])
         ;
     }
 

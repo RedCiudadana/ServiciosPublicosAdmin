@@ -26,18 +26,21 @@
                 </div>
                 <!--end::Header-->
                 <div class="card-body pt-3 pb-3">
+                    {{ knp_pagination_filter(pagination, {
+                        'i.name': 'Nombre'
+                    }) }}
                     <!--begin::Table-->
                     <div class="table-responsive">
                         <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
                             <thead >
                                 <tr class="text-uppercase">
-                                    {{ table.th("Id"|trans) }}
-                                    {{ table.th("Name"|trans) }}
+                                    {{ table.th_sortable(pagination,"Id"|trans, "i.id") }}
+                                    {{ table.th_sortable(pagination,"Name"|trans, "i.name") }}
                                     {{ table.th("actions"|trans, "w-48", "max-width:100px!important") }}
                                 </tr>
                             </thead>
                             <tbody>
-                            {% for institution in institutions %}
+                            {% for institution in pagination %}
                                 <tr>
                                     {{ table.td(institution.id) }}
                                     {{ table.td(institution.name) }}
@@ -56,6 +59,9 @@
                             {% endfor %}
                             </tbody>
                         </table>
+                        <div class="navigation">
+                            {{ knp_pagination_render(pagination) }}
+                        </div>
                     </div>
                 </div>
             </div>

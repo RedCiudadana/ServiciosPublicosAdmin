@@ -19,7 +19,9 @@ class BaseType extends AbstractType
             ->add('description',null,[
                 'label' => 'Descripción: Ingresa la descripción de la subcategoría, recuerda colocar la mayor cantidad de detalles posibles.',
             ])
-            ->add('highlight')
+            ->add('highlight', null, [
+                'required' => false
+            ])
             ->add('category')
             ->add('imageFile', VichImageType::class, [
                 'required' => false,

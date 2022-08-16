@@ -5,11 +5,14 @@ namespace App\Controller;
 use App\Config\Roles;
 use App\Entity\Institution;
 use App\Entity\User;
+use App\Form\PublicService\UploadCollectionType;
 use App\Form\RegistrationFormType;
 use App\Form\User\SelectInstitutionType;
 use App\Form\UserType;
+use App\Handler\User as HandlerUser;
 use App\Repository\InstitutionRepository;
 use App\Repository\UserRepository;
+use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use LogicException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -17,6 +20,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\CsvEncoder;
 
 /**
  * @Route("/user")
@@ -27,10 +31,18 @@ class UserController extends AbstractController
     /**
      * @Route("/", name="app_user_index", methods={"GET"})
      */
-    public function index(UserRepository $userRepository): Response
+    public function index(UserRepository $userRepository,PaginatorInterface $paginator, Request $request): Response
     {
+        $query = $userRepository->createQueryBuilder('u');
+
+        $pagination = $paginator->paginate(
+            $query, /* query NOT result */
+            $request->query->getInt('page', 1), /*page number*/
+            10 /*limit per page*/
+        );
+
         return $this->render('user/index.html.twig', [
-            'users' => $userRepository->findAll(),
+            'users' => $pagination
         ]);
     }
 
@@ -58,6 +70,54 @@ class UserController extends AbstractController
         return $this->renderForm('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
+        ]);
+    }
+
+    /**
+     * @IsGranted("ROLE_ADMIN")
+     * @Route("/upload_csv", name="app_user_upload_csv", methods={"GET" ,"POST"})
+     */
+    public function uploadUsersWithCSV(
+        Request $request,
+        HandlerUser $handlerUser
+    ) {
+        $form = $this->createForm(UploadCollectionType::class);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /**
+             * @var UploadedFile
+             */
+            $file = $form->getData()['file'];
+
+            $fileContents = (file_get_contents($file->getPathname()));
+
+            $csvEncoder = new CsvEncoder();
+
+            $data = $csvEncoder->decode($fileContents, 'csv', [
+                'csv_delimiter' => $form->getData()['csv_delimiter'] ?? ','
+            ]);
+
+            try {
+                $resourcesProcessed = $handlerUser->processRowsAndCreate($data);
+            } catch (\LogicException $th) {
+                $this->addFlash('error', $th->getMessage());
+
+                return $this->renderForm('public_service/upload_collection.html.twig', [
+                    'form' => $form
+                ]);
+            }
+
+            if (count($resourcesProcessed) > 0) {
+                $this->addFlash('success', sprintf('Se procesaron %s registros', count($resourcesProcessed)));
+            }
+
+            return $this->redirectToRoute('app_user_index');
+        }
+
+        return $this->renderForm('public_service/upload_collection.html.twig', [
+            'form' => $form
         ]);
     }
 

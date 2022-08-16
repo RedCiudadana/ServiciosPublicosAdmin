@@ -40,7 +40,7 @@ class Institution
       // CLEAN DATA
 
       $trimAndEncodeFunction = function ($str) {
-        return trim($str);
+        return \ForceUTF8\Encoding::toUTF8(trim($str));
       };
 
       $row = array_combine(
