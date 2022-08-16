@@ -6,6 +6,7 @@ use App\Handler\PushBuildHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -50,13 +51,13 @@ class PushBuildSubscriber implements EventSubscriberInterface
                 try {
                     $this->httpClient->request('POST', $netlifyHook);
                 } catch (\Throwable $th) {
-                    $this->looger->error(sprintf('Fail the push build notification to Netlify %s', $netlifyHook));
+                    $this->logger->error(sprintf('Fail the push build notification to Netlify %s. %s', $netlifyHook, $th->getMessage()));
                 }
             }
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             'kernel.finish_request' => 'onKernelFinishRequest',
