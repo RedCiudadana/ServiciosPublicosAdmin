@@ -8,27 +8,6 @@
             <div class="w-100">
                 <div class="container" style="padding:6rem 0">
                     <div class="row">
-                        <div class="col-lg-3 col-md-4 col-sm-12">
-                            <div class="card card-custom card-stretch gutter-b p-4" style="max-height:150px!important;height:150px!important">
-                                <h1>
-                                    {% trans %}Número de instituciones:{% endtrans %}
-                                </h1>
-                                <h2>
-                                    {{ stats.countInsitutions[0].count_i }}
-                                </h2>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-3 col-md-4 col-sm-12">
-                            <div class="card card-custom card-stretch gutter-b p-4" style="max-height:150px!important;height:150px!important">
-                                <h1>
-                                    {% trans %}Número de tramites:{% endtrans %}
-                                </h1>
-                                <h2>
-                                    {{ stats.countPublicServices[0].count_ps }}
-                                </h2>
-                            </div>
-                        </div>
 
                         <div class="col-lg-6 col-sm-12">
                             <div class="card card-custom card-stretch gutter-b p-4">
@@ -95,6 +74,28 @@
                                         </tbody>
                                     </table>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-12">
+                            <div class="card card-custom card-stretch gutter-b p-4" style="max-height:150px!important;height:150px!important">
+                                <h1>
+                                    {% trans %}Número de instituciones:{% endtrans %}
+                                </h1>
+                                <h2>
+                                    {{ stats.countInsitutions[0].count_i }}
+                                </h2>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-12">
+                            <div class="card card-custom card-stretch gutter-b p-4" style="max-height:150px!important;height:150px!important">
+                                <h1>
+                                    {% trans %}Número de tramites:{% endtrans %}
+                                </h1>
+                                <h2>
+                                    {{ stats.countPublicServices[0].count_ps }}
+                                </h2>
                             </div>
                         </div>
                     </div>
