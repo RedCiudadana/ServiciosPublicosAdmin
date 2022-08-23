@@ -3,6 +3,7 @@
 namespace App\Form\PublicService;
 
 use App\Config\Roles;
+use App\Entity\Currency;
 use App\Entity\Institution;
 use App\Entity\PublicService;
 use App\Entity\SubCategory;
@@ -64,6 +65,11 @@ class BaseType extends AbstractType
             ])
             ->add('cost', NumberType::class,[
                 'label' => 'Costo: Indica el costo total del trámite. Si el trámite es gratuito coloca 0.',
+            ])
+            ->add('currency', EntityType::class, [
+                'label' => 'Moneda',
+                'class' => Currency::class,
+                'choice_label' => 'getCodeAndSymbol'
             ])
             ->add('timeResponse',null,[
                 'label' => 'Respuesta de tiempo: Ingresa el tiempo correspondiente de cada trámite hasta estar 100% resuelto. Expresa la temporalidad en días según corresponda.',

@@ -134,6 +134,15 @@ class PublicService
      */
     private $highlight;
 
+    /**
+     * @var Currency
+     * @Gedmo\Versioned
+     * @Groups("get")
+     * @ORM\ManyToOne(targetEntity=Currency::class)
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $currency;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -319,6 +328,30 @@ class PublicService
     public function setInstitutionDepartment($institutionDepartment)
     {
         $this->institutionDepartment = $institutionDepartment;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of currency
+     *
+     * @return  Currency
+     */ 
+    public function getCurrency()
+    {
+        return $this->currency;
+    }
+
+    /**
+     * Set the value of currency
+     *
+     * @param  Currency  $currency
+     *
+     * @return  self
+     */ 
+    public function setCurrency(Currency $currency)
+    {
+        $this->currency = $currency;
 
         return $this;
     }
