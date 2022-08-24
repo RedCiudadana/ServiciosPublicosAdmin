@@ -30,7 +30,7 @@ security:
         api:
             pattern: ^/api
             login_throttling:
-                max_attempts: 300
+                max_attempts: 20
                 interval: '30 minutes'
             provider: users_in_memory
             http_basic:
