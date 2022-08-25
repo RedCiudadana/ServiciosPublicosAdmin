@@ -157,8 +157,20 @@
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
     },
+    "maennchen/zipstream-php": {
+        "version": "2.2.1"
+    },
+    "markbaker/complex": {
+        "version": "3.0.1"
+    },
+    "markbaker/matrix": {
+        "version": "3.0.0"
+    },
     "monolog/monolog": {
         "version": "2.5.0"
+    },
+    "myclabs/php-enum": {
+        "version": "1.8.4"
     },
     "neitanod/forceutf8": {
         "version": "v2.0.4"
@@ -211,6 +223,9 @@
     "phpdocumentor/type-resolver": {
         "version": "1.6.1"
     },
+    "phpoffice/phpspreadsheet": {
+        "version": "1.24.1"
+    },
     "phpstan/phpdoc-parser": {
         "version": "1.4.5"
     },
@@ -237,6 +252,9 @@
     },
     "psr/log": {
         "version": "1.1.4"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.1"
     },
     "ralouphie/getallheaders": {
         "version": "3.0.3"
