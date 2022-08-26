@@ -7,6 +7,7 @@ use App\Entity\SubCategory;
 use App\Form\Category\BaseType;
 use App\Form\SubCategory\BaseType as SubCategoryBaseType;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\UnitOfWork;
 use LogicException;
 use Symfony\Component\Form\FormError;
@@ -139,15 +140,26 @@ class Category
       $subResource = null;
 
       // Check if already exists in cache
-      if (isset($subResources[$subResourceData['name']])) {
-        $subResource = $subResources[$subResourceData['name']];
+      if (isset($subResources[$resource->getName()][$subResourceData['name']])) {
+        $subResource = $subResources[$resource->getName()][$subResourceData['name']];
       }
 
       // Search if exist already in the database
       if (!$subResource) {
-        $subResource = $this->em->getRepository(SubCategory::class)->findOneBy([
-          'name' => $subResourceData['name']
-        ]);
+        /**
+         * @var EntityRepository
+         */
+        $repo = $this->em
+          ->getRepository(SubCategory::class);
+
+        $subResource = $repo->createQueryBuilder('sc')
+          ->innerjoin('sc.category', 'c')
+          ->andWhere('sc.name = :subcategory_name')
+          ->andWhere('c = :category')
+          ->setParameter('subcategory_name', $subResourceData['name'])
+          ->setParameter('category', $resource)
+          ->getQuery()
+          ->getOneOrNullResult();
       }
 
       if (!$subResource) {
@@ -165,14 +177,15 @@ class Category
 
       if ($form->isValid()) {
         if (
-          $this->em->getUnitOfWork()->getEntityState($subResource) == UnitOfWork::STATE_NEW // its new
+          ($this->em->getUnitOfWork()->getEntityState($subResource) == UnitOfWork::STATE_NEW // its new
+          && !$this->em->getUnitOfWork()->isScheduledForInsert($subResource))
           || $this->em->getUnitOfWork()->getEntityChangeSet($subResource) != []
         ) // has changes
         {
           $this->em->persist($subResource);
         }
 
-        $subResources[$subResourceData['name']] = $subResource;
+        $subResources[$resource->getName()][$subResourceData['name']] = $subResource;
       } else {
         /**
          * @var FormError
