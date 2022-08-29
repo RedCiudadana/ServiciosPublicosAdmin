@@ -58,7 +58,7 @@ class BaseType extends AbstractType
                 'choice_label' => 'getNameAndCategory'
             ])
             ->add('instructions', CkeditorType::class,[
-                'label' => 'Instrucciones: Enumera los pasos para realizar el trámite, recuerda colocar los detalles de cada paso para concluir con éxito tu trámite.',
+                'label' => 'Pasos: Enumera los pasos para realizar el trámite, recuerda colocar los detalles de cada paso para concluir con éxito tu trámite.',
             ])
             ->add('requirements',null,[
                 'label' => 'Requisitos: Coloca todos los requisitos necesarios para realizar el trámite, recuerda colocar el mayor detalle posible.',
