@@ -123,7 +123,7 @@ class PublicService
     /**
      * @Gedmo\Versioned
      * @Groups("get")
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text", length=600)
      */
     private $normative;
 

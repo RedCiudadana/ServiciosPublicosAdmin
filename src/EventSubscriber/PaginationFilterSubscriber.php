@@ -15,6 +15,10 @@ class PaginationFilterSubscriber implements EventSubscriberInterface
         $request = $paginationEvent->getRequest();
 
         if ($request->query->get('filterValue')) {
+            if (is_numeric($request->query->get('filterValue'))) {
+                return;
+            }
+
             $request->query->set('filterValue',
                 sprintf('%%%s%%', trim($request->query->get('filterValue')))
             );
