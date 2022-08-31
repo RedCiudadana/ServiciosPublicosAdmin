@@ -18,7 +18,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  *  itemOperations={"get"},
  * )
  * @ORM\Entity(repositoryClass=SubCategoryRepository::class)
- * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"name"})})
+ * @ORM\Table(uniqueConstraints={@ORM\UniqueConstraint(columns={"name", "category_id"})})
  */
 class SubCategory
 {

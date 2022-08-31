@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Config\Roles;
 use App\Entity\Category;
+use App\Entity\Currency;
 use App\Entity\Institution;
 use App\Entity\PublicService;
 use App\Entity\SubCategory;
@@ -90,6 +91,9 @@ class PublicServiceController extends BaseController
             $institutionsNotFound = [];
             $subcategoryNotFound = [];
 
+            // cache
+            $currencies = [];
+
             foreach ($dataChunk as $data) {
                 foreach ($data as $row) {
                     $trimAndEncodeFunction = function ($str) {
@@ -130,6 +134,9 @@ class PublicServiceController extends BaseController
                         $publicService = new PublicService();
                     }
 
+                    /**
+                     * @TODO Pendiente separar category y subcategory. Actualmente son 
+                     */
                     $category = $em->getRepository(Category::class)->findOneBy([
                         'name' => $row['categoria']
                     ]);
@@ -150,6 +157,19 @@ class PublicServiceController extends BaseController
                         continue;
                     }
 
+                    $currency = isset($currencies[$row['moneda']]) ? $currencies[$row['moneda']] : null;
+
+                    if (!$currency) {
+                        $currency = $em->getRepository(Currency::class)->findOneBy([
+                            'code' => $row['moneda']
+                        ]);
+
+                        // Cache is causing a error with entityManager; 
+                        // Maybe the entity is reintilizaed in the form, so the fetched and cached entity
+                        // doesn't exists in the new entity manager
+                        // $currencies[$currency->getCode()] = $currency;
+                    }
+
 
                     $publicService->setInstitution($institution);
                     $publicService->setSubcategory($subcategory);
@@ -163,6 +183,7 @@ class PublicServiceController extends BaseController
                     $publicService->setTypeOfDocumentObtainable(substr($row['documento_obtenible'], 0, 250));
                     $publicService->setUrl(substr($row['enlace'], 0, 250));
                     $publicService->setNormative(substr($row['respaldo_legal'], 0, 250));
+                    $publicService->setCurrency($currency);
 
                     $errors = $validator->validate($publicService);
 
