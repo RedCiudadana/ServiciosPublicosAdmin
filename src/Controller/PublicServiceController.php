@@ -10,7 +10,9 @@ use App\Entity\PublicService;
 use App\Entity\SubCategory;
 use App\Event\ResourceEvent;
 use App\Form\PublicService\BaseType as PublicServiceType;
+use App\Form\PublicService\DownloadReportType;
 use App\Form\PublicService\UploadCollectionType;
+use App\Reporter\PublicServiceReporter;
 use App\Repository\PublicServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Loggable\Entity\LogEntry;
@@ -279,6 +281,63 @@ class PublicServiceController extends BaseController
 
         return $this->render('public_service/index_history.html.twig', [
             'logs' => $logs
+        ]);
+    }
+
+    /**
+     * @Route("/download", name="app_public_service_download", methods={"GET", "POST"})
+     * {@inheritdoc}
+     */
+    public function download(Request $request, EntityManagerInterface $em)
+    {
+        /**
+         * @var LogEntryRepository
+         */
+        $publicServiceRepository = $em->getRepository(PublicService::class);
+
+        $form = $this->createForm(DownloadReportType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $qb = $publicServiceRepository->createQueryBuilder('ps')
+                ->innerJoin('ps.institution', 'i')
+                ->innerJoin('ps.currency', 'c')
+                ->innerJoin('ps.subcategory', 'sc')
+                ->innerJoin('sc.category', 'cc')
+                ->select(
+                    'ps.id',
+                    'i.name',
+                    'cc.name as categoria',
+                    'sc.name as subcategoria',
+                    'ps.name as nombre',
+                    'ps.description',
+                    'ps.instructions',
+                    'ps.requirements',
+                    'ps.cost',
+                    'c.code',
+                    'ps.timeResponse',
+                    'ps.typeOfDocumentObtainable',
+                    'ps.url',
+                    'ps.normative',
+                    'ps.updatedAt'
+                )
+            ;
+
+            if ($institution = $form->getData()['institution']) {
+                $qb
+                    ->andWhere('ps.institution = :institution')
+                    ->setParameter('institution', $institution)
+                ;
+            }
+
+            $reporter = new PublicServiceReporter();
+            $response = $reporter->getReport($qb->getQuery()->getResult());
+
+            return $response;
+        }
+
+        return $this->renderForm('public_service/download.html.twig', [
+            'form' => $form
         ]);
     }
 
