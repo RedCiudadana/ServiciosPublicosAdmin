@@ -88,7 +88,7 @@ class PublicService
     /**
      * @Gedmo\Versioned
      * @Groups("get")
-     * @ORM\Column(type="float")
+     * @ORM\Column(type="float", nullable=true)
      */
     private $cost;
 

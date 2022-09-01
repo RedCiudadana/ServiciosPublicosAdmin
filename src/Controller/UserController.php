@@ -52,6 +52,10 @@ class UserController extends AbstractController
     public function new(Request $request, UserRepository $userRepository, UserPasswordHasherInterface $userPasswordHasher): Response
     {
         $user = new User();
+
+        // Just skip password as is the handler who add the password.
+        $user->setPassword(' ');
+
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
