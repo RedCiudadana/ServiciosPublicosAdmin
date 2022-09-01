@@ -29,7 +29,7 @@ class DownloadReportType extends AbstractType
                 'label' => 'Institución',
                 'class' => Institution::class,
                 'required' => !$user->isAdmin(),
-                'help' => 'Vacío para generar reporte de todos los trámites',
+                'placeholder' => 'Todos',
                 'query_builder' => function (InstitutionRepository $er) use ($user) {
                     $qb = $er->createQueryBuilder('i');
 

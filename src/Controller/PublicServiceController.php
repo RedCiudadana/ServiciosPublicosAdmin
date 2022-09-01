@@ -307,9 +307,9 @@ class PublicServiceController extends BaseController
                 ->select(
                     'ps.id',
                     'i.name',
+                    'ps.name as nombre',
                     'cc.name as categoria',
                     'sc.name as subcategoria',
-                    'ps.name as nombre',
                     'ps.description',
                     'ps.instructions',
                     'ps.requirements',
