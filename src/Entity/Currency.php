@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\CurrencyRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CurrencyRepository::class)
@@ -11,6 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Currency
 {
     /**
+     * @Groups("get")
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -18,16 +20,19 @@ class Currency
     private $id;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $name;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255)
      */
     private $symbol;
 
     /**
+     * @Groups("get")
      * @ORM\Column(type="string", length=255, unique=true)
      */
     private $code;
