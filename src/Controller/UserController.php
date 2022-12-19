@@ -68,7 +68,8 @@ class UserController extends AbstractController
             );
 
             $userRepository->add($user);
-            return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+
+            return $this->redirectToRoute('app_user_institutions', ['id' => $user->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('user/new.html.twig', [

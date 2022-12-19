@@ -17,6 +17,12 @@ class UserType extends AbstractType
             ->add('email', TextType::class, [
                 'disabled' => true
             ])
+            ->add('name', null, [
+                'label' => 'Nombre'
+            ])
+            ->add('position', null, [
+                'label' => 'Cargo o puesto'
+            ])
             // Asigna el rol ADMIN si es marcado
             ->add('isAdministrator', CheckboxType::class,[
                 'mapped' => true

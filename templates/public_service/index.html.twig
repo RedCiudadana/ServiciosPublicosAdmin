@@ -56,21 +56,19 @@
                                     {{ table.th_sortable(pagination,"Cost"|trans, "ps.cost", "w-48", "max-width:100px!important") }}
                                     {{ table.th_sortable(pagination,"TimeResponse"|trans, "ps.timeResponse", "w-48", "max-width:100px!important") }}
                                     {{ table.th_sortable(pagination,"TypeOfDocumentObtainable"|trans, "ps.typeOfDocumentObtainable") }}
-                                    {{ table.th_sortable(pagination,"Url"|trans, "ps.url") }}
                                     {{ table.th("actions"|trans, "w-48", "max-width:100px!important") }}
                                 </tr>
                             </thead>
                             <tbody>
                             {% for public_service in pagination %}
                                 <tr>
-                                    {{ table.td(public_service.id) }}
-                                    {{ table.td(public_service.institution.name) }}
-                                    {{ table.td(public_service.name) }}
-                                    {{ table.td(public_service.description, "truncate w-48") }}
-                                    {{ table.td(public_service.cost) }}
-                                    {{ table.td(public_service.timeResponse) }}
-                                    {{ table.td(public_service.typeOfDocumentObtainable) }}
-                                    {{ table.td(public_service.url) }}
+                                    {{ table.td(public_service.id, "", "max-height: 8rem; overflow: hidden;") }}
+                                    {{ table.td(public_service.institution.name, "", "max-height: 8rem; overflow: hidden;") }}
+                                    {{ table.td(public_service.name, "", "max-height: 8rem; overflow: hidden;") }}
+                                    {{ table.td(public_service.description, "", "max-height: 8rem; overflow: hidden;") }}
+                                    {{ table.td(public_service.cost, "", "max-height: 8rem; overflow: hidden;") }}
+                                    {{ table.td(public_service.timeResponse, "", "max-height: 8rem; overflow: hidden;") }}
+                                    {{ table.td(public_service.typeOfDocumentObtainable, "", "max-height: 8rem; overflow: hidden;") }}
 
                                     {% set actions %}
                                         <a href="{{ path('app_public_service_show', {'id': public_service.id}) }}" class="underline pr-2 hidden">{% trans %}show{% endtrans %}</a>

@@ -17,5 +17,9 @@
         {{ include('public_service/_form.html.twig') }}
     </div>
 
+    {% block javascripts_finales %}
+        {{ include('public_service/_base_form_scripts.html.twig') }}
+    {% endblock %}
+
     <a class="font-bold" href="{{ path('app_public_service_index') }}">{% trans %}back to list{% endtrans %}</a>
 {% endblock %}

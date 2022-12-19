@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use App\Traits\TimestampableEntity;
+use Doctrine\DBAL\Types\Types;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -60,6 +61,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\ManyToMany(targetEntity=Institution::class, mappedBy="members", fetch="EXTRA_LAZY")
      */
     private $institutions;
+
+    /**
+     * @var \DateTime|null
+     *
+     * @ORM\Column(type=Types::DATETIME_MUTABLE, nullable=true)
+     */
+    private $lastLogin;
 
     public $isAdministrator;
 
@@ -244,5 +252,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->position = $position;
 
         return $this;
+    }
+
+    /**
+     * Sets lastLogin.
+     *
+     * @return $this
+     */
+    public function setLastLogin(\DateTime $lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    /**
+     * Returns lastLogin.
+     *
+     * @return \DateTime
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
     }
 }

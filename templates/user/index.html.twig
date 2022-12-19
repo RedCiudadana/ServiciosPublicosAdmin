@@ -41,6 +41,8 @@
                                     {{ table.th("Email"|trans) }}
                                     {{ table.th("Name"|trans) }}
                                     {{ table.th("Roles"|trans) }}
+                                    {{ table.th("Fecha creación"|trans) }}
+                                    {{ table.th("Fecha última sesión"|trans) }}
                                     {{ table.th("actions", "w-48") }}
                                 </tr>
                             </thead>
@@ -55,6 +57,9 @@
                                             class='bg-orange-400 text-white font-bold rounded mx-1 px-2 py-1 text-xs'>#{p}</span>")|join('')|raw) : '' }}
                                     {% endset %}
                                     {{ table.td(roles) }}
+
+                                    {{ table.td(user.createdAt|format_datetime('short', locale="es")) }}
+                                    {{ table.td(user.lastLogin ? user.lastLogin|format_datetime('short', locale="es") : '') }}
 
                                     {% set actions %}
                                         <a href="{{ path('app_user_show', {'id': user.id}) }}" class="underline pr-2 hidden">{% trans %}show{% endtrans %}</a>

@@ -12,6 +12,8 @@
             {{ form_row(form.email, {
                 label: 'Correo electrónico: Ingresa el Correo electrónico del usuario.'
             }) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.position) }}
             {{ form_row(form.plainPassword, {
                 label: 'Password'|trans
             }) }}

@@ -1,13 +1,25 @@
-{% macro td(value, cssStyles = "", attributes = "") %}
-  <td >
+{% macro td(value, cssClass = "", cssStyles = "") %}
+  <td
+    class="{{cssClass}}"
+    style="{{cssStyles}}"
+  >
     {{ value }}
   </td>
 {% endmacro %}
 
-{% macro th(value, cssStyles = "", attributes = "") %}
-  <th style="{{attributes}}">{{ value }}</th>
+{% macro th(value, cssClass = "", cssStyles = "") %}
+  <th
+    style="{{cssStyles}}"
+  >
+    {{ value }}
+  </th>
 {% endmacro %}
 
-{% macro th_sortable(pagination, value, propertyPath, cssStyles = "", attributes = "") %}
-  <th>{{ knp_pagination_sortable(pagination, value, propertyPath)|raw }}</th>
+{% macro th_sortable(pagination, value, propertyPath, cssClass = "", cssStyles = "") %}
+  <th
+    class="{{cssClass}}"
+    style={{cssStyles}}
+  >
+    {{ knp_pagination_sortable(pagination, value, propertyPath)|raw }}
+  </th>
 {% endmacro %}

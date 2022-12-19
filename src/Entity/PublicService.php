@@ -27,6 +27,9 @@ class PublicService
     use TimestampableEntity;
     use BlameableEntity;
 
+    const COST_FIXED = 'fixed';
+    const COST_VARIABLE = 'variable';
+
     /**
      * @Groups("get")
      * @ORM\Id
@@ -93,6 +96,21 @@ class PublicService
     private $cost;
 
     /**
+     * @Gedmo\Versioned
+     * @Groups("get")
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $typeOfCost = self::COST_FIXED;
+
+
+    /**
+     * @Gedmo\Versioned
+     * @Groups("get")
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $variableCostDescription;
+
+    /**
      * @Groups("get")
      * @ORM\Column(type="string")
      */
@@ -123,7 +141,7 @@ class PublicService
     /**
      * @Gedmo\Versioned
      * @Groups("get")
-     * @ORM\Column(type="text", length=600)
+     * @ORM\Column(type="text")
      */
     private $normative;
 
@@ -352,6 +370,46 @@ class PublicService
     public function setCurrency(Currency $currency)
     {
         $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of typeOfCost
+     */ 
+    public function getTypeOfCost()
+    {
+        return $this->typeOfCost;
+    }
+
+    /**
+     * Set the value of typeOfCost
+     *
+     * @return  self
+     */ 
+    public function setTypeOfCost($typeOfCost)
+    {
+        $this->typeOfCost = $typeOfCost;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of variableCostDescription
+     */ 
+    public function getVariableCostDescription()
+    {
+        return $this->variableCostDescription;
+    }
+
+    /**
+     * Set the value of variableCostDescription
+     *
+     * @return  self
+     */ 
+    public function setVariableCostDescription($variableCostDescription)
+    {
+        $this->variableCostDescription = $variableCostDescription;
 
         return $this;
     }

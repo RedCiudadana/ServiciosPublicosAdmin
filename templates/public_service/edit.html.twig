@@ -28,4 +28,8 @@
         <hr>
         <a class="font-bold" href="{{ path('app_public_service_index') }}">{% trans %}back to list{% endtrans %}</a>
     </div>
+
+    {% block javascripts_finales %}
+        {{ include('public_service/_base_form_scripts.html.twig') }}
+    {% endblock %}
 {% endblock %}
