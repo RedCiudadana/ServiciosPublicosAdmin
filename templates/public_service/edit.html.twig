@@ -11,7 +11,7 @@
 
     {% if is_granted('ROLE_ADMIN') %}
         <div class="w-full flex">
-            {{ buttons.link_text(
+            {{ buttons.link(
                 path('app_public_service_history', { id: public_service.id }),
                 "History",
                 

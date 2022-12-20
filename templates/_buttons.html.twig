@@ -5,9 +5,9 @@
 {% endmacro %}
 
 {% macro link_text(url, text, cssStyles = "") %}
-<a href="{{ url }}" class="btn btn-success font-weight-bolder font-size-sm mx-2 my-2">
-  {{ text }}
-</a>
+  <a href="{{ url }}" class="font-weight-bolder underline font-size-sm mx-2 my-2">
+    {{ text }}
+  </a>
 {% endmacro %}
 
 {% macro submit(value, name, cssStyles = "") %}

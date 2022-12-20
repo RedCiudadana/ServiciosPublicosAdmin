@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
 
+{% import "_buttons.html.twig" as buttons %}
+
 {% block body %}
     {% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -45,6 +47,12 @@
 
                             <div class="form-group d-flex flex-wrap justify-content-start align-items-center">
                                 <button class="btn btn-primary font-weight-bold px-9 py-4 my-3" type="submit">{% trans %}Login{% endtrans %}</button>
+                            </div>
+                            <div class="form-group d-flex flex-wrap justify-content-start align-items-center">
+                                {{ buttons.link_text(
+                                    path('app_forgot_password_request'),
+                                    "Recuperar contraseña"
+                                ) }}
                             </div>
                             
                         </form>

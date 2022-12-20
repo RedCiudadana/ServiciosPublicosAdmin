@@ -28,7 +28,7 @@
                     {% for log in logs %}
                         {{ "#{log.username} - #{log.getLoggedAt|format_datetime('full', locale="es")}" }}
 
-                        {{ buttons.link_text(
+                        {{ buttons.link(
                             path('app_public_service_edit', { id: log.objectId }),
                             "Ver más información",
                             "float-right mb-2"

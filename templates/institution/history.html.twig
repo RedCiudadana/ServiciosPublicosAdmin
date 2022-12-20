@@ -12,7 +12,7 @@
 
     {% for log in logs %}
         {{ "#{log.username} - #{log.getLoggedAt|format_datetime('full', locale="es")}" }}
-        {{ buttons.link_text(
+        {{ buttons.link(
             path('app_institution_apply_version', { id: institution.id, version: log.version }),
             "Apply version",
             "float-right mb-2"
