@@ -1,7 +1,7 @@
 <?php
 namespace Deployer;
 
-require 'recipe/symfony4.php';
+require 'recipe/symfony.php';
 
 // User chmod whie we learn about acl.
 set('writable_mode', 'acl'); // chmod, chown, chgrp or acl.
@@ -26,8 +26,8 @@ add('writable_dirs', ['public/images', 'node_modules']);
 // Hosts
 
 host('servicios-ocean')
-    ->hostname('142.93.77.143')
-    ->user('redciudadana')
+    ->setHostname('142.93.77.143')
+    ->setRemoteUser('redciudadana')
     ->set('remote_user', 'redciudadana')
     ->set('deploy_path', '/srv/web-apps/admin.tramites.redciudadana.org');
 
