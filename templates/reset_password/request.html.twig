@@ -1,8 +1,8 @@
-{% extends 'base.html.twig' %}
+{% extends 'reset_password/_base_reset_password.html.twig' %}
 
 {% block title %}Restablecer su contraseña{% endblock %}
 
-{% block body %}
+{% block content %}
     {% for flash_error in app.flashes('reset_password_error') %}
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
     {% endfor %}
