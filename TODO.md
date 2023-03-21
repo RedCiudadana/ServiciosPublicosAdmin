@@ -13,3 +13,31 @@
 - Eliminar tramites de ministerio de gobernación y carga nueva plantilla
 - Agregar moneda en plantilla
 - Base de datos actualizada
+
+
+# CREATE GRAPH
+
+```
+SELECT * 
+FROM cypher('graph_name', $$
+	MATCH (x:Tramite)
+	WHERE x.name = 'Inscripcion patronal' AND x.institution = 'IGGS'
+    CREATE  p = 
+    	(:Tramite {name: 'Licencia Sanitaria para establecimientos de alimentos preparados', institution: 'MSPAS'})<-[:NEED_OF]-(x)-[:NEED_OF]->(:Tramite {name: 'Licencia ambiental', institution: 'MARN'}) $$)
+as (p agtype);
+```
+
+
+```
+SELECT * 
+FROM cypher('graph_name', $$
+    CREATE  p = (:Tramite {name: 'DPI', institution: 'SAT'})-[:NEED_OF]->(:Tramite {name: 'NACIMIENTO', institution: 'SAT'})<-[:NEED_OF]-(:Tramite {name: 'NIT', institution: 'SAT'}) $$)
+as (p agtype);
+```
+
+```
+SELECT * FROM cypher('graph_name', $$
+MATCH (v)
+RETURN v
+$$) as (v agtype);
+```

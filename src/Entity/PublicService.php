@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\PublicServiceRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -160,6 +162,16 @@ class PublicService
      * @ORM\JoinColumn(nullable=false)
      */
     private $currency;
+
+    /**
+     * @ORM\OneToMany(targetEntity=RouteServiceItem::class, mappedBy="publicService")
+     */
+    private $routeServiceItems;
+
+    public function __construct()
+    {
+        $this->routeServiceItems = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -410,6 +422,36 @@ class PublicService
     public function setVariableCostDescription($variableCostDescription)
     {
         $this->variableCostDescription = $variableCostDescription;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RouteServiceItem>
+     */
+    public function getRouteServiceItems(): Collection
+    {
+        return $this->routeServiceItems;
+    }
+
+    public function addRouteServiceItem(RouteServiceItem $routeServiceItem): self
+    {
+        if (!$this->routeServiceItems->contains($routeServiceItem)) {
+            $this->routeServiceItems[] = $routeServiceItem;
+            $routeServiceItem->setPublicService($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRouteServiceItem(RouteServiceItem $routeServiceItem): self
+    {
+        if ($this->routeServiceItems->removeElement($routeServiceItem)) {
+            // set the owning side to null (unless already changed)
+            if ($routeServiceItem->getPublicService() === $this) {
+                $routeServiceItem->setPublicService(null);
+            }
+        }
 
         return $this;
     }

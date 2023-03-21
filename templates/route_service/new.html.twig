@@ -1,0 +1,15 @@
+{% extends '_main.html.twig' %}
+
+{% block title %}{% trans %}New Ruta de servicios{% endtrans %}{% endblock %}
+
+{% block body %}
+    <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
+        {% trans %}Create new Ruta de servicios{% endtrans %}
+    </h1>
+
+    <div class="border-collapse w-full bg-white rounded text-left font-sans drop-shadow-md mb-8 px-8 py-4">
+        {{ include('route_service/_form.html.twig') }}
+    </div>
+
+    <a class="font-bold" href="{{ path('app_user_index') }}">{% trans %}back to list{% endtrans %}</a>
+{% endblock %}
