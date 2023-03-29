@@ -6,56 +6,56 @@
 {% block title %}{% trans %}Rutas de servicios{% endtrans %}{% endblock %}
 
 {% block body %}
-    <div class="row w-full">
-        <div class="col-lg-12">
-            <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}Add institution{% endtrans %}</h1>
+    <div class="col-lg-12">
+        <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white shadow-sm text-xl font-bold">{% trans %}Add institution{% endtrans %}</h1>
+    </div>
+    <div class="col-lg-12">
+        <div class="px-8 py-4 rounded mt-0 mb-4 bg-white shadow-sm text-xl font-bold">
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold text-xs mb-4">{{ button_label|default('Agregar institución') }}</button>
+            {{ form_end(form) }}
         </div>
-        <div class="col-lg-12">
-            <div class="px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">
-                {{ form_start(form) }}
-                    {{ form_widget(form) }}
-                    <button class="bg-blue-700 text-white px-3 py-2 rounded font-bold text-xs mb-4">{{ button_label|default('Agregar institución') }}</button>
-                {{ form_end(form) }}
-            </div>
-        </div>
+    </div>
 
-        <div class="col-lg-12">
-            <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white drop-shadow-sm text-xl font-bold">{% trans %}Servicios de rutas{% endtrans %}</h1>
-        </div>
+    <div class="col-lg-12 relative z-0">
+        <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white shadow-sm text-xl font-bold relative">
+            {% trans %}Servicios de rutas{% endtrans %}
+        </h1>
+    </div>
 
-        <div class="col-lg-12">
-            <div class="table-responsive bg-white">
-                <table class="table table-head-custom table-head-bg table-borderless table-vertical-center">
-                    <thead class="bg-slate-50">
-                        <tr>
-                            {{ table.th("Id"|trans) }}
-                            {{ table.th("Name"|trans) }}
-                            {{ table.th("actions"|trans) }}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for institution in route_service.routeServiceItems %}
-                        <tr>
-                            {{ table.td(institution.id) }}
-                            {{ table.td(institution.name) }}
-                
-                            {% set actions %}
-                            <form action="{{ path('app_route_service_items_delete', {'id': route_service.id, institution: institution.id }) }}"
-                                method="post">
-                                <button type="submit" class="underline pr-2 text-red-600">{% trans %}delete{% endtrans %}</a>
-                            </form>
-                            {% endset %}
-                
-                            {{ table.td(actions, "w-48") }}
-                        </tr>
-                        {% else %}
-                        <tr>
-                            <td colspan="3">{% trans %}This route_service has no routeServiceItems{% endtrans %}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
+    <div class="col-lg-12 relative">
+        <div class="table-responsive bg-white relative">
+            <table class="table table-head-custom table-head-bg table-borderless table-vertical-center relative">
+                <thead class="bg-slate-50">
+                    <tr>
+                        {{ table.th("Id"|trans) }}
+                        {{ table.th("Name"|trans) }}
+                        {{ table.th("actions"|trans) }}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in route_service.routeServiceItems %}
+                    <tr>
+                        {{ table.td(item.id) }}
+                        {{ table.td(item.publicService.name) }}
+            
+                        {% set actions %}
+                        <form action="{{ path('app_route_service_items_delete', {'id': route_service.id, routeServiceItem: item.id }) }}"
+                            method="post">
+                            <button type="submit" class="underline pr-2 text-red-600">{% trans %}delete{% endtrans %}</a>
+                        </form>
+                        {% endset %}
+            
+                        {{ table.td(actions, "w-48") }}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">{% trans %}Está ruta no tiene ningún tramite asignado{% endtrans %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}

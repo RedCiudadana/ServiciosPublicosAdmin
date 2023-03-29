@@ -15,6 +15,7 @@
         "gedmo/doctrine-extensions": "^3.7",
         "knplabs/knp-components": "3.*",
         "knplabs/knp-paginator-bundle": "^5.8",
+        "laminas/laminas-code": "^4.7",
         "neitanod/forceutf8": "^2.0",
         "nelmio/cors-bundle": "^2.2",
         "php-flasher/flasher-symfony": "^1.6",
@@ -50,10 +51,11 @@
         "symfony/string": "5.4.*",
         "symfony/translation": "5.4.*",
         "symfony/twig-bundle": "5.4.*",
+        "symfony/ux-autocomplete": "^2.7",
         "symfony/validator": "5.4.*",
         "symfony/web-link": "5.4.*",
         "symfony/webapp-meta": "^1.0",
-        "symfony/webpack-encore-bundle": "^1.14",
+        "symfony/webpack-encore-bundle": "^1.16",
         "symfony/yaml": "5.4.*",
         "symfonycasts/reset-password-bundle": "^1.16",
         "symfonycasts/verify-email-bundle": "^1.10",
@@ -61,7 +63,7 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/intl-extra": "^3.4",
         "twig/twig": "^2.12|^3.0",
-        "vich/uploader-bundle": "^1.15"
+        "vich/uploader-bundle": "^1.22"
     },
     "require-dev": {
         "deployer/deployer": "^7.0",

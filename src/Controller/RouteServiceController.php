@@ -110,11 +110,14 @@ class RouteServiceController extends AbstractController
      */
     public function userItems(Request $request, RouteService $routeService, RouteServiceRepository $routeServiceRepository): Response
     {
-        $form = $this->createForm(SelectItemType::class);
+        $item = new RouteServiceItem();
+        $item->setRouteService($routeService);
+
+        $form = $this->createForm(SelectItemType::class, $item);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $routeService->addRouteServiceItem($form->getData()['route_service_item']);
+            $routeService->addRouteServiceItem($form->getData());
             $routeServiceRepository->add($routeService);
 
             return $this->redirectToRoute('app_route_service_items', [ 'id' => $routeService->getId() ], Response::HTTP_SEE_OTHER);
@@ -135,7 +138,7 @@ class RouteServiceController extends AbstractController
 
         $routeServiceRepository->add($routeService);
 
-        $this->addFlash('success', 'RouteServiceItem removed from user');
+        $this->addFlash('success', 'Tramite de ruta eliminado');
 
         return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
     }

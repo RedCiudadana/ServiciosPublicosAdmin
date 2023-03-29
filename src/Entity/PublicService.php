@@ -32,6 +32,11 @@ class PublicService
     const COST_FIXED = 'fixed';
     const COST_VARIABLE = 'variable';
 
+    public function __toString()
+    {
+        return sprintf('%s - %s', $this->name, $this->institution->getName());
+    }
+
     /**
      * @Groups("get")
      * @ORM\Id

@@ -444,7 +444,7 @@
 
 .fv-plugins-tooltip {
   position: absolute;
-  z-index: 10000;
+  z-index: 999;
 }
 
 .fv-plugins-tooltip .fv-plugins-tooltip__content {
@@ -1849,7 +1849,7 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
 
 .tempusdominus-bootstrap-datetimepicker-widget-day-click-glass-panel {
   position: absolute;
-  z-index: 999999999999;
+  z-index: 999;
   top: 0;
   left: 0;
   right: 0;
@@ -2401,7 +2401,7 @@ body.tempusdominus-bootstrap-datetimepicker-widget-day-click {
   margin-top: 7px;
   top: 100px;
   left: 20px;
-  z-index: 3001;
+  z-index: 301;
   display: none;
   font-family: arial;
   font-size: 15px;
@@ -3061,7 +3061,7 @@ select.selectpicker {
 }
 
 .bootstrap-select.bs-container .dropdown-menu {
-  z-index: 1060;
+  z-index: 106;
 }
 
 .bootstrap-select .dropdown-toggle .filter-option {
@@ -3255,7 +3255,7 @@ select.selectpicker {
 
 .bootstrap-select.show-menu-arrow.open > .dropdown-toggle,
 .bootstrap-select.show-menu-arrow.show > .dropdown-toggle {
-  z-index: 1061;
+  z-index: 106;
 }
 
 .bootstrap-select.show-menu-arrow .dropdown-toggle .filter-option:before {
@@ -3655,7 +3655,7 @@ select.selectpicker {
   position: absolute;
   left: -100000px;
   width: 100%;
-  z-index: 1051;
+  z-index: 105;
 }
 
 .select2-results {
@@ -4359,7 +4359,7 @@ Build date: 2019-12-19 16:51:02
   margin: 0 !important;
   overflow: hidden;
   outline: none !important;
-  z-index: -9999 !important;
+  z-index: -999 !important;
   background: none !important;
   border-style: solid !important;
   border-color: transparent !important;
@@ -5528,7 +5528,7 @@ Build date: 2019-12-19 16:51:02
 }
 
 .dropzone .dz-preview:hover {
-  z-index: 1000;
+  z-index: 100;
 }
 
 .dropzone .dz-preview:hover .dz-details {
@@ -5684,7 +5684,7 @@ Build date: 2019-12-19 16:51:02
 
 .dropzone .dz-preview .dz-progress {
   opacity: 1;
-  z-index: 1000;
+  z-index: 100;
   pointer-events: none;
   position: absolute;
   height: 16px;
@@ -5723,7 +5723,7 @@ Build date: 2019-12-19 16:51:02
 
 .dropzone .dz-preview .dz-error-message {
   pointer-events: none;
-  z-index: 1000;
+  z-index: 100;
   position: absolute;
   display: block;
   display: none;
@@ -7509,7 +7509,7 @@ Build date: 2019-12-19 16:51:02
 
 .tagify__dropdown {
   position: absolute;
-  z-index: 9999;
+  z-index: 999;
   -webkit-transform: translateY(1px);
   transform: translateY(1px);
   overflow: hidden;
@@ -7976,7 +7976,7 @@ Build date: 2019-12-19 16:51:02
   top: 0;
   left: 0;
   width: 100% !important;
-  z-index: 1050;
+  z-index: 105;
 }
 
 .note-editor.note-frame.fullscreen .note-resizebar, .note-editor.note-airframe.fullscreen .note-resizebar {
@@ -8520,7 +8520,7 @@ Build date: 2019-12-19 16:51:02
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 99999;
+  z-index: 999;
   padding: 60px 30px 15px;
   background: #fff !important;
   border: 0 !important;
@@ -8583,7 +8583,7 @@ Build date: 2019-12-19 16:51:02
   top: 20px;
   right: 20px;
   text-align: right;
-  z-index: 1002;
+  z-index: 102;
   display: block;
 }
 
@@ -12430,7 +12430,7 @@ button.toast-close-button {
 
 #toast-container {
   position: fixed;
-  z-index: 999999;
+  z-index: 999;
   pointer-events: none;
   /*overrides*/
 }
@@ -13587,7 +13587,7 @@ button.toast-close-button {
   display: -ms-flexbox;
   display: flex;
   position: fixed;
-  z-index: 1060;
+  z-index: 106;
   top: 0;
   right: 0;
   bottom: 0;

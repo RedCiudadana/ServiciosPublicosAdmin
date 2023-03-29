@@ -30,7 +30,7 @@ class RouteService
     private $description;
 
     /**
-     * @ORM\OneToMany(targetEntity=RouteServiceItem::class, mappedBy="routeService", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=RouteServiceItem::class, mappedBy="routeService", orphanRemoval=true, cascade={"persist"})
      */
     private $routeServiceItems;
 
