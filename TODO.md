@@ -41,3 +41,26 @@ MATCH (v)
 RETURN v
 $$) as (v agtype);
 ```
+
+```
+SELECT * FROM cypher('graph_name', $$
+MATCH (a:Tramite)
+RETURN a
+$$) as (a agtype);
+```
+
+```
+SELECT * from cypher('graph_name', $$
+        MATCH (V)-[R:NEED_OF]-(V2)
+        RETURN V,R,V2
+$$) as (V agtype, R agtype, V2 agtype);
+```
+
+
+```
+SELECT * 
+FROM cypher('graph_name', $$
+  MATCH (v:Tramite)
+  DETACH DELETE v
+$$) as (v agtype);
+```

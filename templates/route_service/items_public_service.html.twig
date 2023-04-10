@@ -7,7 +7,9 @@
 
 {% block body %}
     <div class="col-lg-12">
-        <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white shadow-sm text-xl font-bold">{% trans %}Add institution{% endtrans %}</h1>
+        <h1 class="font-sans px-8 py-4 rounded mt-0 mb-4 bg-white shadow-sm text-xl font-bold">
+            {% trans %}Add dependency for{% endtrans %} {{publicService.name}}
+        </h1>
     </div>
     <div class="col-lg-12">
         <div class="px-8 py-4 rounded mt-0 mb-4 bg-white shadow-sm text-xl font-bold">
@@ -35,7 +37,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in route_service.routeServiceItems %}
+                    {% for item in dependencies %}
                     <tr>
                         {{ table.td(item.id) }}
                         {{ table.td(item.publicService.name) }}
