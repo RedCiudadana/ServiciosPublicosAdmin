@@ -53,7 +53,7 @@ class NodeHandler
 
         $stmString = "
             SELECT * from cypher('graph_name', $$
-                MATCH (V:%s)-[R:NEED_OF *]-(V2)
+                MATCH (V:%s %s)-[R:NEED_OF *]->(V2)
                 RETURN V,R,V2
             $$) as (V agtype, R agtype, V2 agtype);
         ";
@@ -61,13 +61,13 @@ class NodeHandler
         $stmString = sprintf(
             $stmString,
             $type,
-            sprintf('{%s: \'%s\'}', $type, $identifier),
+            sprintf('{identifier: \'%s\'}', $identifier),
         );
 
         $result = $connection->fetchAllAssociative($stmString);
 
         if (count($result) < 1) {
-            return null;
+            return [];
         }
 
         $data = [];

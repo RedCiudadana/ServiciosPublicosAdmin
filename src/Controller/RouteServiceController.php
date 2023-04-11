@@ -10,6 +10,7 @@ use App\Form\RouteService\SelectDependencyType;
 use App\Form\RouteService\SelectItemType;
 use App\Handler\NodeHandler;
 use App\Handler\PublicService as HandlerPublicService;
+use App\Repository\PublicServiceRepository;
 use App\Repository\RouteServiceRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -122,7 +123,8 @@ class RouteServiceController extends AbstractController
         RouteService $routeService,
         RouteServiceRepository $routeServiceRepository,
         NodeHandler $nodeHandler,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        PublicServiceRepository $publicServiceRepository
     ): Response
     {
         $item = new RouteServiceItem();
@@ -181,9 +183,9 @@ class RouteServiceController extends AbstractController
                 ->getNodesBy($routeService->getId(), NodeHandler::TYPE_ROUTE);
 
         $treeNodes = [];
+        $publicServicesId = [];
 
         foreach ($nodes as $row) {
-            dump('start', $treeNodes);
             # CREATE PARENT ROUTE
             if (!isset($treeNodes[$row['v']->id])) {
                 $treeNodes[$row['v']->id] = $row['v'];
@@ -204,13 +206,28 @@ class RouteServiceController extends AbstractController
                 }
             }
 
+            $publicServicesId[] = $row['v2']->properties->identifier;
+
             $currentNode->children[$row['v2']->id] = $row['v2'];
-            dump('end', $treeNodes);
+        }
+
+        $publicServices = [];
+        if (count($publicServicesId) > 0) {
+            $publicServices = $publicServiceRepository->findBy([
+                'id' => $publicServicesId
+            ]);
+        }
+
+        $publicServicesHash = [];
+
+        foreach ($publicServices as $pb) {
+            $publicServicesHash[$pb->getId()] = $pb;
         }
 
         return $this->renderForm('route_service/items.html.twig', [
             'route_service' => $routeService,
             'nodes' => $treeNodes,
+            'publicServicesHash' => $publicServicesHash,
             'form' => $form,
         ]);
     }
