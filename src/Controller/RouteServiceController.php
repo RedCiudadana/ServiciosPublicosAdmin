@@ -107,8 +107,6 @@ class RouteServiceController extends AbstractController
      */
     public function delete(Request $request, RouteService $routeService, RouteServiceRepository $routeServiceRepository): Response
     {
-        throw new LogicException('No se puede eliminar usuarios');
-
         if ($this->isCsrfTokenValid('delete'.$routeService->getId(), $request->request->get('_token'))) {
             $routeServiceRepository->remove($routeService);
         }
@@ -144,12 +142,12 @@ class RouteServiceController extends AbstractController
                 $publicService = $form->getData()->getPublicService();
 
                 if (!$nodeHandler->getNode(
-                        $publicService,
+                        $publicService->getId(),
                         NodeHandler::TYPE_PUBLIC_SERVICE
                     )
                 ) {
                     $nodeHandler->addNode(
-                        $publicService,
+                        $publicService->getId(),
                         NodeHandler::TYPE_PUBLIC_SERVICE
                     );
                 }
@@ -161,7 +159,7 @@ class RouteServiceController extends AbstractController
                     NodeHandler::TYPE_PUBLIC_SERVICE
                 );
 
-                if (!$dependency) {
+                if (!$dependency && count($dependency) < 1) {
                     $nodeHandler->addDependency(
                         $routeService->getId(),
                         NodeHandler::TYPE_ROUTE,
@@ -179,9 +177,40 @@ class RouteServiceController extends AbstractController
             return $this->redirectToRoute('app_route_service_items', [ 'id' => $routeService->getId() ], Response::HTTP_SEE_OTHER);
         }
 
+        $nodes = $nodeHandler
+                ->getNodesBy($routeService->getId(), NodeHandler::TYPE_ROUTE);
+
+        $treeNodes = [];
+
+        foreach ($nodes as $row) {
+            dump('start', $treeNodes);
+            # CREATE PARENT ROUTE
+            if (!isset($treeNodes[$row['v']->id])) {
+                $treeNodes[$row['v']->id] = $row['v'];
+            }
+
+            $parent = $treeNodes[$row['v']->id];
+            $currentNode = $parent;
+
+            foreach ($row['r'] as $rel) {
+                if ($rel->start_id === $parent->id && $currentNode) {
+                    $currentNode = $parent;
+                } else {
+                    $currentNode = $currentNode->children[$rel->start_id];
+                }
+
+                if (!isset($currentNode->children)) {
+                    $currentNode->children = [];
+                }
+            }
+
+            $currentNode->children[$row['v2']->id] = $row['v2'];
+            dump('end', $treeNodes);
+        }
+
         return $this->renderForm('route_service/items.html.twig', [
             'route_service' => $routeService,
-            'nodes' => $nodeHandler->getNodesBy($routeService, NodeHandler::TYPE_ROUTE),
+            'nodes' => $treeNodes,
             'form' => $form,
         ]);
     }
@@ -207,7 +236,7 @@ class RouteServiceController extends AbstractController
         Request $request,
         RouteService $routeService,
         PublicService $publicService,
-        HandlerPublicService $publicServiceHandler
+        NodeHandler $nodeHandler
     ): Response
     {
         $form = $this->createForm(SelectDependencyType::class, [], ['data_class' => null]);
@@ -216,11 +245,18 @@ class RouteServiceController extends AbstractController
         // get dependencies with dataprovider
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if (!$publicServiceHandler->getNode($form->getData()['publicService'])) {
-                $publicServiceHandler->addNode($form->getData()['publicService']);
+            $dependency = $form->getData()['publicService'];
+
+            if (!$nodeHandler->getNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE)) {
+                $nodeHandler->addNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE);
             }
 
-            $publicServiceHandler->addDependency($publicService, $form->getData()['publicService']);
+            $nodeHandler->addDependency(
+                $publicService->getId(),
+                NodeHandler::TYPE_PUBLIC_SERVICE,
+                $dependency->getId(),
+                NodeHandler::TYPE_PUBLIC_SERVICE
+            );
 
             $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
             return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
@@ -229,7 +265,8 @@ class RouteServiceController extends AbstractController
         return $this->renderForm('route_service/items_public_service.html.twig', [
             'route_service' => $routeService,
             'publicService' => $publicService,
-            'dependencies' => [],
+            'dependencies' => [], /* $nodeHandler
+                ->getNodesBy($routeService->getId(), NodeHandler::TYPE_ROUTE), */
             'form' => $form,
         ]);
     }

@@ -49,19 +49,19 @@ class NodeHandler
 
     public function getNodesBy($identifier, string $type)
     {
-        return [];
-
         $connection = $this->getConnection();
 
         $stmString = "
-            SELECT * FROM cypher('graph_name',
-            $$ MATCH (v:%s %s) RETURN v $$ ) as (v agtype);
+            SELECT * from cypher('graph_name', $$
+                MATCH (V:%s)-[R:NEED_OF *]-(V2)
+                RETURN V,R,V2
+            $$) as (V agtype, R agtype, V2 agtype);
         ";
 
         $stmString = sprintf(
             $stmString,
             $type,
-            sprintf('{identifier: \'%s\'}', $identifier),
+            sprintf('{%s: \'%s\'}', $type, $identifier),
         );
 
         $result = $connection->fetchAllAssociative($stmString);
@@ -70,10 +70,20 @@ class NodeHandler
             return null;
         }
 
-        $string = str_replace('::vertex', '', $result[0]['v']);
-        $json = json_decode($string);
+        $data = [];
 
-        return $json;
+        foreach ($result as $row => $item) {
+            $data[$row] = [];
+
+            foreach ($item as $idx => $value) {
+                $string = str_replace('::vertex', '', $value);
+                $string = str_replace('::edge', '', $string);
+
+                $data[$row][$idx] = json_decode($string);
+            }
+        }
+
+        return $data;
     }
 
     public function getDependency($parentIdentifier, $parentType, $dependecyIndetifier, $dependecyType)
@@ -103,13 +113,13 @@ class NodeHandler
             return null;
         }
 
-        $string = str_replace('::vertex', '', $result[0]['v']);
+        $string = str_replace('::vertex', '', $result[0]['r']);
         $json = json_decode($string);
 
         return $json;
     }
 
-    public function addNode($identifier, string $type, $data = null)
+    public function addNode(string $identifier, string $type, $data = null)
     {
         $connection = $this->getConnection();
 
@@ -124,7 +134,7 @@ class NodeHandler
         $connection->executeStatement($stmString);
     }
 
-    public function addDependency($parentIdentifier, $parentType, $dependecyIndetifier, $dependecyType)
+    public function addDependency(string $parentIdentifier, $parentType, string $dependecyIndetifier, $dependecyType)
     {
         $connection = $this->getConnection();
 
