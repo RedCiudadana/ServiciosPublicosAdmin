@@ -116,6 +116,8 @@ class RouteServiceController extends AbstractController
     }
 
     /**
+     * Agrega una dependencia a una ruta. Agregar un edge entre vertex:Route -> vertex:PublicService
+     *
      * @Route("/{id}/items", name="app_route_service_items", methods={"GET", "POST"})
      */
     public function routeServiceItems(
@@ -127,60 +129,31 @@ class RouteServiceController extends AbstractController
         PublicServiceRepository $publicServiceRepository
     ): Response
     {
-        $item = new RouteServiceItem();
-        $item->setRouteService($routeService);
-
-        $form = $this->createForm(SelectItemType::class,
-        $item);
+        $form = $this->createForm(SelectDependencyType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                $entityManager->beginTransaction();
 
-                $routeService->addRouteServiceItem($form->getData());
-                $routeServiceRepository->add($routeService);
+            $dependency = $form->getData()['publicService'];
 
-                $publicService = $form->getData()->getPublicService();
-
-                if (!$nodeHandler->getNode(
-                        $publicService->getId(),
-                        NodeHandler::TYPE_PUBLIC_SERVICE
-                    )
-                ) {
-                    $nodeHandler->addNode(
-                        $publicService->getId(),
-                        NodeHandler::TYPE_PUBLIC_SERVICE
-                    );
-                }
-
-                $dependency = $nodeHandler->getDependency(
-                    $routeService->getId(),
-                    NodeHandler::TYPE_ROUTE,
-                    $publicService->getId(),
-                    NodeHandler::TYPE_PUBLIC_SERVICE
-                );
-
-                if (!$dependency && count($dependency) < 1) {
-                    $nodeHandler->addDependency(
-                        $routeService->getId(),
-                        NodeHandler::TYPE_ROUTE,
-                        $publicService->getId(),
-                        NodeHandler::TYPE_PUBLIC_SERVICE
-                    );
-                }
-
-                $entityManager->commit();
-            } catch (\Throwable $th) {
-                $entityManager->rollback();
-                throw $th;
+            if (!$nodeHandler->getNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE)) {
+                $nodeHandler->addNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE);
             }
 
-            return $this->redirectToRoute('app_route_service_items', [ 'id' => $routeService->getId() ], Response::HTTP_SEE_OTHER);
+            $nodeHandler->addDependency(
+                $routeService->getId(),
+                NodeHandler::TYPE_ROUTE,
+                $dependency->getId(),
+                NodeHandler::TYPE_PUBLIC_SERVICE,
+                $routeService->getId()
+            );
+
+            $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
+            return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
         }
 
         $nodes = $nodeHandler
-                ->getNodesBy($routeService->getId(), NodeHandler::TYPE_ROUTE);
+            ->getNodesBy($routeService->getId(), NodeHandler::TYPE_ROUTE);
 
         $treeNodes = [];
         $publicServicesId = [];
@@ -193,6 +166,7 @@ class RouteServiceController extends AbstractController
 
             $parent = $treeNodes[$row['v']->id];
             $currentNode = $parent;
+            $lastRelId = null;
 
             foreach ($row['r'] as $rel) {
                 if ($rel->start_id === $parent->id && $currentNode) {
@@ -204,9 +178,13 @@ class RouteServiceController extends AbstractController
                 if (!isset($currentNode->children)) {
                     $currentNode->children = [];
                 }
+
+                $lastRelId = $rel->id;
             }
 
             $publicServicesId[] = $row['v2']->properties->identifier;
+            $row['v2']->properties->parentId = $currentNode->id;
+            $row['v2']->properties->edgeParentId = $lastRelId;
 
             $currentNode->children[$row['v2']->id] = $row['v2'];
         }
@@ -272,7 +250,8 @@ class RouteServiceController extends AbstractController
                 $publicService->getId(),
                 NodeHandler::TYPE_PUBLIC_SERVICE,
                 $dependency->getId(),
-                NodeHandler::TYPE_PUBLIC_SERVICE
+                NodeHandler::TYPE_PUBLIC_SERVICE,
+                $routeService->getId()
             );
 
             $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
@@ -286,5 +265,24 @@ class RouteServiceController extends AbstractController
                 ->getNodesBy($routeService->getId(), NodeHandler::TYPE_ROUTE), */
             'form' => $form,
         ]);
+    }
+
+    /**
+     * @Route("/{id}/items/{publicService}/public_service/delete/{edgeId}", name="app_route_service_items_public_service_delete", methods={"POST"})
+     */
+    public function routeServiceItemsDeleteDependency(
+        Request $request,
+        RouteService $routeService,
+        PublicService $publicService,
+        NodeHandler $nodeHandler
+    ): Response
+    {
+        $edgeId = $request->attributes->get('edgeId');
+
+        $nodeHandler->removeDependencyById($edgeId);
+
+        $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
+
+        return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
     }
 }

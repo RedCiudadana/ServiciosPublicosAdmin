@@ -19,6 +19,7 @@ class SelectItemType extends AbstractType
         $builder
             ->add('publicService', EntityType::class, [
                 'class' => PublicService::class,
+                'label' => 'Servicio',
                 'autocomplete' => true,
                 'placeholder' => 'Sin seleccionar',
                 'required' => false
