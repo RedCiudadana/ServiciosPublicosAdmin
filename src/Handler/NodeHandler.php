@@ -25,7 +25,7 @@ class NodeHandler
         $connection = $this->getConnection();
 
         $stmString = "
-            SELECT * FROM cypher('graph_name',
+            SELECT * FROM cypher('graph_public_services',
             $$ MATCH (v:%s %s) RETURN v $$ ) as (v agtype);
         ";
 
@@ -52,7 +52,7 @@ class NodeHandler
         $connection = $this->getConnection();
 
         $stmString = "
-            SELECT * from cypher('graph_name', $$
+            SELECT * from cypher('graph_public_services', $$
                 MATCH (V:%s %s)-[R:NEED_OF *]->(V2)
                 RETURN V,R,V2
             $$) as (V agtype, R agtype, V2 agtype);
@@ -93,7 +93,7 @@ class NodeHandler
         $connection = $this->getConnection();
 
         $stmString = "SELECT * FROM 
-            cypher('graph_name', $$
+            cypher('graph_public_services', $$
                 MATCH
                     (x:{$parentType} %s)-[r:NEED_OF {%s}]-(y:{$dependecyType} %s)
                 RETURN as (r agtype);";
@@ -121,7 +121,7 @@ class NodeHandler
     {
         $connection = $this->getConnection();
 
-        $stmString = "SELECT * FROM cypher('graph_name', $$ CREATE  p = (:%s %s) $$ ) as (p agtype);";
+        $stmString = "SELECT * FROM cypher('graph_public_services', $$ CREATE  p = (:%s %s) $$ ) as (p agtype);";
 
         $stmString = sprintf(
             $stmString,
@@ -137,7 +137,7 @@ class NodeHandler
         $connection = $this->getConnection();
 
         $stmString = "SELECT * FROM 
-            cypher('graph_name', $$
+            cypher('graph_public_services', $$
                 MATCH
                     (x:{$parentType} %s),
                     (y:{$dependecyType} %s)
@@ -152,7 +152,7 @@ class NodeHandler
 
         $stm = $connection->executeStatement($stmString);
 
-        // $result = $connection->fetchAllAssociative('SELECT * FROM cypher(\'graph_name\', $$ MATCH (v) RETURN v $$) as (v agtype);');
+        // $result = $connection->fetchAllAssociative('SELECT * FROM cypher(\'graph_public_services\', $$ MATCH (v) RETURN v $$) as (v agtype);');
         // $string = str_replace('::vertex', '', $result[0]['v']);
         // $json = json_decode($string);
     }
@@ -177,7 +177,7 @@ class NodeHandler
     {
         $connection = $this->getConnection();
 
-        $stmString = "SELECT * from cypher('graph_name', $$
+        $stmString = "SELECT * from cypher('graph_public_services', $$
             MATCH (V)-[R:NEED_OF]->(V2)
             WHERE id(R) = %s
             DELETE R
@@ -197,7 +197,7 @@ class NodeHandler
         $connection = $this->getConnection();
 
         $stmString = "
-            SELECT * from cypher('graph_name', $$
+            SELECT * from cypher('graph_public_services', $$
                 MATCH p = (V:Route { identifier: '%s' })-[R:NEED_OF *]->(V2 { identifier: '%s' })
                 RETURN relationships(p)
             $$) as (V2 agtype);

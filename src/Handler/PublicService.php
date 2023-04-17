@@ -25,7 +25,7 @@ class PublicService
         $connection = $this->getConnection();
 
         $stmString = "
-            SELECT * FROM cypher('graph_name',
+            SELECT * FROM cypher('graph_public_services',
             $$ MATCH (v:Tramite %s) RETURN v $$ ) as (v agtype);
         ";
 
@@ -50,7 +50,7 @@ class PublicService
     {
         $connection = $this->getConnection();
 
-        $stmString = "SELECT * FROM cypher('graph_name', $$ CREATE  p = (:Tramite %s) $$ ) as (p agtype);";
+        $stmString = "SELECT * FROM cypher('graph_public_services', $$ CREATE  p = (:Tramite %s) $$ ) as (p agtype);";
 
         $stmString = sprintf(
             $stmString,
@@ -64,7 +64,7 @@ class PublicService
     {
         $connection = $this->getConnection();
 
-        $stmString = "SELECT * FROM cypher('graph_name', $$ MATCH (x:Tramite %s), (y:Tramite %s) CREATE  p = (x)-[:NEED_OF]->(y) $$ ) as (p agtype);";
+        $stmString = "SELECT * FROM cypher('graph_public_services', $$ MATCH (x:Tramite %s), (y:Tramite %s) CREATE  p = (x)-[:NEED_OF]->(y) $$ ) as (p agtype);";
 
         $stmString = sprintf(
             $stmString,
@@ -74,7 +74,7 @@ class PublicService
 
         $stm = $connection->executeStatement($stmString);
 
-        // $result = $connection->fetchAllAssociative('SELECT * FROM cypher(\'graph_name\', $$ MATCH (v) RETURN v $$) as (v agtype);');
+        // $result = $connection->fetchAllAssociative('SELECT * FROM cypher(\'graph_public_services\', $$ MATCH (v) RETURN v $$) as (v agtype);');
         // $string = str_replace('::vertex', '', $result[0]['v']);
         // $json = json_decode($string);
     }

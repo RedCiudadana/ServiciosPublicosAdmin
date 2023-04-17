@@ -25,9 +25,9 @@ class IndexController extends AbstractController
         $connection->executeQuery('LOAD \'age\';');
         $connection->executeQuery('SET search_path = ag_catalog, "$user", public;');
 
-        $stm = $connection->executeStatement("SELECT * FROM cypher('graph_name', $$ CREATE  p = (:Tramite {name: 'DPI', institution: 'SAT'})-[:NEED_OF]->(:Tramite {name: 'NACIMIENTO', institution: 'SAT'})<-[:NEED_OF]-(:Tramite {name: 'NIT', institution: 'SAT'}) $$ ) as (p agtype);");
+        $stm = $connection->executeStatement("SELECT * FROM cypher('graph_public_services', $$ CREATE  p = (:Tramite {name: 'DPI', institution: 'SAT'})-[:NEED_OF]->(:Tramite {name: 'NACIMIENTO', institution: 'SAT'})<-[:NEED_OF]-(:Tramite {name: 'NIT', institution: 'SAT'}) $$ ) as (p agtype);");
 
-        $result = $connection->fetchAllAssociative('SELECT * FROM cypher(\'graph_name\', $$ MATCH (v) RETURN v $$) as (v agtype);');
+        $result = $connection->fetchAllAssociative('SELECT * FROM cypher(\'graph_public_services\', $$ MATCH (v) RETURN v $$) as (v agtype);');
         $string = str_replace('::vertex', '', $result[0]['v']);
         $json = json_decode($string);
 
