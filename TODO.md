@@ -1,3 +1,6 @@
+# Crontab example for update netlify
+`0 */4 * * * /usr/bin/php /srv/web-apps/admin.tramites.redciudadana.org/current/bin/console app:update-netlify`
+
 # TODO
 - Mejoras a creación de usuario, roles
 - Mejoras a creación de usuario, contraseña
