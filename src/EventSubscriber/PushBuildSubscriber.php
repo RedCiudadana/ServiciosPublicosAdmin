@@ -6,8 +6,10 @@ use App\Handler\PushBuildHandler;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpKernel\Event\FinishRequestEvent;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PushBuildSubscriber implements EventSubscriberInterface
@@ -32,11 +34,17 @@ class PushBuildSubscriber implements EventSubscriberInterface
      */
     private $logger;
 
-    public function __construct(PushBuildHandler $pushBuildHandler, ParameterBagInterface $parameterBag, HttpClientInterface $httpClient, LoggerInterface $logger) {
+    /**
+     * {@inheritdoc}
+     */
+    private $kernel;
+
+    public function __construct(PushBuildHandler $pushBuildHandler, ParameterBagInterface $parameterBag, HttpClientInterface $httpClient, LoggerInterface $logger, KernelInterface $kernel) {
         $this->pushBuildHandler = $pushBuildHandler;
         $this->parameterBag = $parameterBag;
         $this->httpClient = $httpClient;
         $this->logger = $logger;
+        $this->kernel = $kernel;
     }
 
     public function onKernelFinishRequest(FinishRequestEvent $event)
@@ -45,15 +53,12 @@ class PushBuildSubscriber implements EventSubscriberInterface
 
         if (count($notifications) > 0) {
 
-            $netlifyHook = $this->parameterBag->get('app_netlify_build_hook');
+            $fs = new Filesystem();
 
-            if ($netlifyHook) {
-                try {
-                    $this->httpClient->request('POST', $netlifyHook);
-                } catch (\Throwable $th) {
-                    $this->logger->error(sprintf('Fail the push build notification to Netlify %s. %s', $netlifyHook, $th->getMessage()));
-                }
-            }
+            /**
+             * Use command `app:update-netlify` to trigger build
+             */
+            $fs->dumpFile($this->kernel->getCacheDir() .'need_udpate.txt', '1');
         }
     }
 
