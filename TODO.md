@@ -1,3 +1,7 @@
+- Actualizar
+- Hacer pruebas de crear rutas
+- Probar endpoint con usuario web
+
 # TODO
 - Mejoras a creación de usuario, roles
 - Mejoras a creación de usuario, contraseña

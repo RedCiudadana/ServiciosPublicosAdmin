@@ -31,6 +31,14 @@ host('servicios-ocean')
     ->set('remote_user', 'redciudadana')
     ->set('deploy_path', '/srv/web-apps/admin.tramites.redciudadana.org');
 
+host('test-servicios-ocean')
+    ->setHostname('164.92.136.254')
+    ->setRemoteUser('redciudadana')
+    ->set('remote_user', 'redciudadana')
+    ->set('branch', 'feature/rutas_servicio')
+    ->set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=php')
+    ->set('deploy_path', '/srv/web-apps/test.admin.tramites.gob.gt');
+
 // Tasks
 
 task('build', function () {
@@ -42,23 +50,26 @@ after('deploy:failed', 'deploy:unlock');
 
 
 // Javascript deployment
-after('deploy:vendors', 'deploy:vendors_js');
+after('deploy:vendors', 'deploy:build_vendors_js');
 
-task('deploy:vendors_js', function () {
-    run('cd {{release_path}} && npm install');
+task('deploy:build_vendors_js', function () {
+    runLocally('npm install');
+    runLocally('npm build');
 });
 
-after('deploy:vendors_js', 'deploy:node');
+after('deploy:build_vendors_js', 'deploy:upload_vendors_js');
 
-task('deploy:node', function () {
-    run('cd {{release_path}} && npm run build');
+task('deploy:upload_vendors_js', function () {
+    upload('public/build/', '{{release_path}}/public/build/');
 });
 
 // Migrate database before symlink new release.
 
-before('deploy:symlink', 'database:migrate');
+// PENDIENTE CORREGIR, LA BASE DE datos de graph deberia estar en otra schema o corregir los problemas de tipeados de tenerlos mezclados
+// before('deploy:symlink', 'database:migrate');
 
+# move to migrations files onegai
 task('database:migrate', function() {
     $options = '--force --dump-sql';
-    run(sprintf('{{bin/php}} {{bin/console}} doctrine:schema:update %s {{console_options}}', $options));
+    run(sprintf('{{bin/console}} doctrine:schema:update %s {{console_options}}', $options));
 });
