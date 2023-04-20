@@ -54,7 +54,7 @@ shared_preload_libraries = 'age'
 search_path = 'ag_catalog, "$user", public'
 ```
 
-<VirtualHost *:80>
+<VirtualHost *:443>
     ServerAlias 164.92.136.254
     # ServerAlias test.admin.tramites.gob.gt
 
@@ -73,3 +73,11 @@ search_path = 'ag_catalog, "$user", public'
         FallbackResource disabled
     </Directory>
 </VirtualHost>
+
+Redirect / https://test.admin.tramites.gob.gt/
+
+Include /etc/letsencrypt/options-ssl-apache.conf
+SSLCertificateFile /etc/letsencrypt/live/test.admin.tramites.gob.gt/fullchain.pem
+SSLCertificateKeyFile /etc/letsencrypt/live/test.admin.tramites.gob.gt/privkey.pem
+
+sdf

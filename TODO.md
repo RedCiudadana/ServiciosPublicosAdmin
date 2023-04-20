@@ -1,6 +1,7 @@
 - Actualizar
 - Hacer pruebas de crear rutas
 - Probar endpoint con usuario web
+- Actualizar cronjob para ejecutarse mas rapido
 
 # TODO
 - Mejoras a creación de usuario, roles
