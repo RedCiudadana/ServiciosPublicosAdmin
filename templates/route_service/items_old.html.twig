@@ -1,0 +1,76 @@
+{# <table class="table table-head-custom table-head-bg table-borderless table-vertical-center relative">
+                <thead class="bg-slate-50">
+                    <tr>
+                        {{ table.th("Id"|trans) }}
+                        {{ table.th("Name"|trans) }}
+                        {{ table.th("actions"|trans) }}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in route_service.routeServiceItems %}
+                    <tr>
+                        {{ table.td(item.id) }}
+                        {{ table.td(item.publicService.name) }}
+            
+                        {% set actions %}
+                            <form action="{{ path('app_route_service_items_delete', {'id': route_service.id, routeServiceItem: item.id }) }}"
+                                method="post">
+                                <button type="submit" class="underline pr-2 text-red-600">{% trans %}delete{% endtrans %}</a>
+                            </form>
+                            <a href="{{ path('app_route_service_items_public_service', {'id': route_service.id, publicService: item.publicService.id }) }}">
+                                Agregar dependencia
+                            </a>
+                        {% endset %}
+
+                        {{ table.td(actions, "w-48") }}
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">{% trans %}Está ruta no tiene ningún tramite asignado{% endtrans %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table> #}
+
+            {# {% macro menu_nodes(nodes, public_services_hash, level, route_service, parent) %}
+                {% import _self as macros %}
+
+                {% for node in nodes %}
+                    <div style="padding-left: {{level + 1}}rem;">
+                        {{ public_services_hash[node.properties.identifier].name }}
+                        <a href="{{
+                                path('app_route_service_items_public_service',
+                                {'id': route_service.id, publicService: public_services_hash[node.properties.identifier].id })
+                            }}"
+                            class="ml-10"
+                        >
+                            Agregar dependencia
+                        </a>
+                        <form action="{{
+                                path('app_route_service_items_public_service_delete',
+                                {
+                                    'id': route_service.id,
+                                    publicService: public_services_hash[node.properties.identifier].id,
+                                    edgeId: node.properties.edgeParentId 
+                                }) }}"
+                            method="post"
+                            class="inline ml-2"
+                        >
+                            <button type="submit" class="underline pr-2 text-red-600">{% trans %}delete{% endtrans %}</a>
+                        </form>
+                    </div>
+                    {% if node.children is defined %}
+                        <div>
+                            {{ macros.menu_nodes(node.children, public_services_hash, level + 1, route_service, parent) }}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endmacro %}
+
+            {% import _self as macros %} #}
+
+            {# <ul class="main-menu">
+            {% if nodes|length > 0 %}
+                {{ macros.menu_nodes((nodes|first).children, public_services_hash, 0, route_service, (nodes|first)) }}
+            {% endif %}
+            </ul> #}

@@ -653,6 +653,9 @@
             "config/routes/ux_autocomplete.yaml"
         ]
     },
+    "symfony/ux-react": {
+        "version": "v2.7.1"
+    },
     "symfony/validator": {
         "version": "5.4",
         "recipe": {

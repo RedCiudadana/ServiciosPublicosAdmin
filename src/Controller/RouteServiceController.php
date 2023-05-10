@@ -22,6 +22,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * @Route("/routes")
@@ -87,7 +92,13 @@ class RouteServiceController extends AbstractController
     /**
      * @Route("/{id}/edit", name="app_route_service_edit", methods={"GET", "POST"})
      */
-    public function edit(Request $request, RouteService $routeService, RouteServiceRepository $routeServiceRepository): Response
+    public function edit(
+        Request $request,
+        RouteService $routeService,
+        RouteServiceRepository $routeServiceRepository,
+        NodeHandler $nodeHandler,
+        PublicServiceRepository $publicServiceRepository
+    ): Response
     {
         $form = $this->createForm(RouteServiceBaseType::class, $routeService);
         $form->handleRequest($request);
@@ -95,61 +106,6 @@ class RouteServiceController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $routeServiceRepository->add($routeService);
             return $this->redirectToRoute('app_route_service_index', [], Response::HTTP_SEE_OTHER);
-        }
-
-        return $this->renderForm('route_service/edit.html.twig', [
-            'route_service' => $routeService,
-            'form' => $form,
-        ]);
-    }
-
-    /**
-     * @Route("/{id}", name="app_route_service_delete", methods={"POST"})
-     */
-    public function delete(Request $request, RouteService $routeService, RouteServiceRepository $routeServiceRepository): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$routeService->getId(), $request->request->get('_token'))) {
-            $routeServiceRepository->remove($routeService);
-        }
-
-        return $this->redirectToRoute('app_route_service_index', [], Response::HTTP_SEE_OTHER);
-    }
-
-    /**
-     * Agrega una dependencia a una ruta. Agregar un edge entre vertex:Route -> vertex:PublicService
-     *
-     * @Route("/{id}/items", name="app_route_service_items", methods={"GET", "POST"})
-     */
-    public function routeServiceItems(
-        Request $request,
-        RouteService $routeService,
-        RouteServiceRepository $routeServiceRepository,
-        NodeHandler $nodeHandler,
-        EntityManagerInterface $entityManager,
-        PublicServiceRepository $publicServiceRepository
-    ): Response
-    {
-        $form = $this->createForm(SelectDependencyType::class);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            $dependency = $form->getData()['publicService'];
-
-            if (!$nodeHandler->getNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE)) {
-                $nodeHandler->addNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE);
-            }
-
-            $nodeHandler->addDependency(
-                $routeService->getId(),
-                NodeHandler::TYPE_ROUTE,
-                $dependency->getId(),
-                NodeHandler::TYPE_PUBLIC_SERVICE,
-                $routeService->getId()
-            );
-
-            $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
-            return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
         }
 
         $nodes = $nodeHandler
@@ -202,10 +158,84 @@ class RouteServiceController extends AbstractController
             $publicServicesHash[$pb->getId()] = $pb;
         }
 
-        return $this->renderForm('route_service/items.html.twig', [
+        $encoders = [new JsonEncoder()];
+        $normalizers = [new DateTimeNormalizer(['datetime_format' => 'd-m-Y']), new ObjectNormalizer()];
+
+        $serializer = new Serializer($normalizers, $encoders);
+
+        $defaultContext = [
+            AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function ($object, $format, $context) {
+                return $object->getName();
+            },
+        ];
+
+        $publicServiceData = $serializer->serialize($publicServicesHash, 'json', $defaultContext);
+        // Maybe there is a way to ask the serializer to return a array
+        $publicServiceData = json_decode($publicServiceData, true);
+
+        $routeData = $serializer->serialize($routeService, 'json', $defaultContext);
+        // Maybe there is a way to ask the serializer to return a array
+        $routeData = json_decode($routeData, true);
+
+        return $this->renderForm('route_service/edit.html.twig', [
             'route_service' => $routeService,
-            'nodes' => $treeNodes,
-            'publicServicesHash' => $publicServicesHash,
+            'route_service_data' => $routeData,
+            'nodesList' => $nodes,
+            'public_service_data' => $publicServiceData,
+            'form' => $form,
+        ]);
+    }
+
+    /**
+     * @Route("/{id}", name="app_route_service_delete", methods={"POST"})
+     */
+    public function delete(Request $request, RouteService $routeService, RouteServiceRepository $routeServiceRepository): Response
+    {
+        if ($this->isCsrfTokenValid('delete'.$routeService->getId(), $request->request->get('_token'))) {
+            $routeServiceRepository->remove($routeService);
+        }
+
+        return $this->redirectToRoute('app_route_service_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * Agrega una dependencia a una ruta. Agregar un edge entre vertex:Route -> vertex:PublicService
+     *
+     * @Route("/{id}/items", name="app_route_service_items", methods={"GET", "POST"})
+     */
+    public function routeServiceItems(
+        Request $request,
+        RouteService $routeService,
+        RouteServiceRepository $routeServiceRepository,
+        NodeHandler $nodeHandler,
+        EntityManagerInterface $entityManager,
+        PublicServiceRepository $publicServiceRepository
+    ): Response
+    {
+        $form = $this->createForm(SelectDependencyType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $dependency = $form->getData()['publicService'];
+
+            if (!$nodeHandler->getNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE)) {
+                $nodeHandler->addNode($dependency->getId(), NodeHandler::TYPE_PUBLIC_SERVICE);
+            }
+
+            $nodeHandler->addDependency(
+                $routeService->getId(),
+                NodeHandler::TYPE_ROUTE,
+                $dependency->getId(),
+                NodeHandler::TYPE_PUBLIC_SERVICE,
+                $routeService->getId()
+            );
+
+            $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
+            return $this->redirectToRoute('app_route_service_edit', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('route_service/items.html.twig', [
             'form' => $form,
         ]);
     }
