@@ -58,7 +58,7 @@
         "symfony/webapp-meta": "^1.0",
         "symfony/webpack-encore-bundle": "^1.16",
         "symfony/yaml": "5.4.*",
-        "symfonycasts/reset-password-bundle": "^1.16",
+        "symfonycasts/reset-password-bundle": "1.14.1",
         "symfonycasts/verify-email-bundle": "^1.10",
         "trsteel/ckeditor-bundle": "~1.11",
         "twig/extra-bundle": "^2.12|^3.0",
@@ -78,7 +78,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "php-http/discovery": false
         },
         "optimize-autoloader": true,
         "preferred-install": {
