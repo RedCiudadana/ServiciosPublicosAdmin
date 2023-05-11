@@ -36,7 +36,7 @@ host('test-servicios-ocean')
     ->setRemoteUser('redciudadana')
     ->set('remote_user', 'redciudadana')
     ->set('branch', 'feature/rutas_servicio')
-    ->set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --ignore-platform-req=php')
+    ->set('composer_options', '--verbose --prefer-dist --no-progress --no-interaction --no-dev --optimize-autoloader --no-scripts')
     ->set('deploy_path', '/srv/web-apps/test.admin.tramites.gob.gt');
 
 // Tasks

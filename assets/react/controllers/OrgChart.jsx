@@ -77,8 +77,8 @@ export const OrgChartComponent = (props, ref) => {
           }
 
           return (`
-            <div class="bg-gray-200 p-4" style="height: ${node.height}px; width: ${node.width}px;">
-              <h6> ${title} </h6>
+            <div class="bg-gray-200 p-4" style="height: ${node.height}px; width: ${node.width}px; cursor: default !important;">
+              <h6 style="overflow: hidden; height: 60px;"> ${title} </h6>
               ${buttons}
             </div>
           `);

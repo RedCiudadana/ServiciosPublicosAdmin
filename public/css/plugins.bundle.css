@@ -32519,9 +32519,9 @@ readers do not read off random characters that represent icons */
   src: url("fonts/@fortawesome/fa-solid-900.eot");
   src: url("fonts/@fortawesome/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("fonts/@fortawesome/fa-solid-900.woff2") format("woff2"), url("fonts/@fortawesome/fa-solid-900.woff") format("woff"), url("fonts/@fortawesome/fa-solid-900.ttf") format("truetype"), url("fonts/@fortawesome/fa-solid-900.svg#fontawesome") format("svg");
 }
-.fa, .far, .fas {
+/* .fa, .far, .fas {
   font-family: "Font Awesome 5 Free";
-}
+} */
 
 .fa, .fas {
   font-weight: 900;

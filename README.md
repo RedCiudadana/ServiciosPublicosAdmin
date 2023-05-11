@@ -1,5 +1,7 @@
 # Install
 - php8.0 `sudo apt install php8.1 php8.1-xml php8.1-pgsql php8.1-cgi php8.1-intl php8.1-mbstring php8.1-gd`
+    sudo apt install php8.1
+    sudo apt install php8.1-ctype php8.1-dom php8.1-fileinfo php8.1-gd php8.1-iconv php8.1-xml php8.1-mbstring php8.1-pdo php8.1-simplexml php8.1-tokenizer php8.1-xml php8.1-xmlreader php8.1-xmlwriter php8.1-zip php8.1-curl
 - postgresql12 ``
 - apache2
 

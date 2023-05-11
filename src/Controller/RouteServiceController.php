@@ -70,7 +70,7 @@ class RouteServiceController extends AbstractController
 
             $nodeHandler->addNode($routeService->getId(), NodeHandler::TYPE_ROUTE);
 
-            return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_route_service_edit', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('route_service/new.html.twig', [
@@ -251,7 +251,7 @@ class RouteServiceController extends AbstractController
 
         $this->addFlash('success', 'Tramite de ruta eliminado');
 
-        return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_route_service_edit', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
     }
 
     /**
@@ -285,7 +285,7 @@ class RouteServiceController extends AbstractController
             );
 
             $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
-            return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_route_service_edit', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
         }
 
         return $this->renderForm('route_service/items_public_service.html.twig', [
@@ -313,6 +313,6 @@ class RouteServiceController extends AbstractController
 
         $this->addFlash('success', 'Se agrego la dependencia exisitosamente');
 
-        return $this->redirectToRoute('app_route_service_items', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_route_service_edit', ['id' => $routeService->getId()], Response::HTTP_SEE_OTHER);
     }
 }

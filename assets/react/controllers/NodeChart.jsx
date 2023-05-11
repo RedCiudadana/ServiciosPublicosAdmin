@@ -21,7 +21,7 @@ const data = [
 export default function NodeChart(props) {
     let nodesData = [];
 
-    if (props.nodes.length > 1) {
+    if (props.nodes.length >= 1) {
         // Here we add the root node. We assume that is the first node of the first edge
         nodesData.push({
             nodeId: props.nodes[0].v.id,
