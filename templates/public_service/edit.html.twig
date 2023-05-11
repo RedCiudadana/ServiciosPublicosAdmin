@@ -30,6 +30,7 @@
     </div>
 
     {% block javascripts_finales %}
+        {{ parent() }}
         {{ include('public_service/_base_form_scripts.html.twig') }}
     {% endblock %}
 {% endblock %}

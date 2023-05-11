@@ -54,9 +54,13 @@ class BaseType extends AbstractType
                     return $qb;
                 }
             ])
-            ->add('subcategory', EntityType::class, [
+            ->add('subcategories', EntityType::class, [
                 'label' => 'Subcategoría: Selecciona una de las siguientes subcategorías para encontrar con más facilidad el trámite que buscas.',
                 'class' => SubCategory::class,
+                'attr' => [
+                    'multiple' => 'multiple',
+                ],
+                'multiple' => true,
                 'choice_label' => 'getNameAndCategory'
             ])
             ->add('instructions', CkeditorType::class, [
