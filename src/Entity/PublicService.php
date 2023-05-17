@@ -164,6 +164,7 @@ class PublicService
     private $currency;
 
     /**
+     * @Groups("get")
      * @ORM\ManyToMany(targetEntity=SubCategory::class)
      */
     private $subcategories;
