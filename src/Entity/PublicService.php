@@ -136,7 +136,7 @@ class PublicService
      * @Gedmo\Versioned
      * @Groups("get")
      * @ORM\ManyToOne(targetEntity=SubCategory::class)
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $subcategory;
 
