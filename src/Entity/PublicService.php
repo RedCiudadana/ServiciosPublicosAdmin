@@ -244,7 +244,7 @@ class PublicService
         return $this->cost;
     }
 
-    public function setCost(float $cost): self
+    public function setCost(?float $cost): self
     {
         $this->cost = $cost;
 

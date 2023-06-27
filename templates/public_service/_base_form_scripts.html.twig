@@ -1,32 +1,39 @@
 <script>
   (function() {
-      var costTypeSelect = document.getElementById('base_typeOfCost');
-      costTypeSelect.addEventListener('change', function(e) {
-          if (e.target.value === 'fixed') {
-              document
-                  .getElementById('base_cost')
-                  .parentElement
-                  .style.display = 'block';
-              document
-                  .getElementById('base_variableCostDescription')
-                  .parentElement
-                  .style.display = 'none';
-          }
-
-          if (e.target.value === 'variable') {
-              document
-                  .getElementById('base_cost')
-                  .parentElement
-                  .style.display = 'none';
-              document
-                  .getElementById('base_variableCostDescription')
-                  .parentElement
-                  .style.display = 'block';
-          }
-      });
-
     $(document).ready(function() {
         $('#base_subcategories').select2();
+    });
+
+    $(document).ready(function() {
+        var costTypeSelect = document.getElementById('base_typeOfCost');
+
+        const selectCostTypeFormsElements = function(select) {
+            if (select === 'fixed') {
+                document
+                    .getElementById('base_cost')
+                    .parentElement
+                    .style.display = 'block';
+                document
+                    .getElementById('base_variableCostDescription')
+                    .parentElement
+                    .style.display = 'none';
+            }
+
+            if (select === 'variable') {
+                document
+                    .getElementById('base_cost')
+                    .parentElement
+                    .style.display = 'none';
+                document
+                    .getElementById('base_variableCostDescription')
+                    .parentElement
+                    .style.display = 'block';
+            }
+        }
+
+        selectCostTypeFormsElements(costTypeSelect.value);
+
+        costTypeSelect.addEventListener('change', (e) => { selectCostTypeFormsElements(e.target.value) });
     });
   })()
 </script>

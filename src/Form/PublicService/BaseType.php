@@ -109,6 +109,9 @@ class BaseType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => PublicService::class,
+            'attr' => [
+                'novalidate' => 'novalidate'
+            ]
         ]);
     }
 }
