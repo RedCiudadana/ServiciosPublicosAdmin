@@ -30,7 +30,19 @@ class PublicServiceReporter {
             'fecha_actualizado'
         ];
 
-        $rows = array_merge([$headers], $data);
+        $idsUsed = [];
+        $newData = [];
+
+        foreach ($data as $item) {
+            if (in_array($item['id'], $idsUsed)) {
+                continue;
+            }
+
+            $newData[] = $item;
+            $idsUsed[] = $item['id'];
+        }
+
+        $rows = array_merge([$headers], $newData);
 
         $sheet
             ->fromArray(
