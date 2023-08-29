@@ -302,7 +302,7 @@ class PublicServiceController extends BaseController
             $qb = $publicServiceRepository->createQueryBuilder('ps')
                 ->innerJoin('ps.institution', 'i')
                 ->innerJoin('ps.currency', 'c')
-                ->innerJoin('ps.subcategory', 'sc')
+                ->innerJoin('ps.subcategories', 'sc')
                 ->innerJoin('sc.category', 'cc')
                 ->select(
                     'ps.id',
