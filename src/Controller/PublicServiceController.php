@@ -127,12 +127,18 @@ class PublicServiceController extends BaseController
                         continue;
                     }
 
+                    /**
+                     * @var PublicService|null
+                     */
                     $publicService = $em->getRepository(PublicService::class)->findOneBy([
                         'name' => $row['nombre'],
                         'institution' => $institution
                     ]);
 
                     if (!$publicService) {
+                        /**
+                         * @var PublicService
+                         */
                         $publicService = new PublicService();
                     }
 
@@ -159,11 +165,11 @@ class PublicServiceController extends BaseController
                         continue;
                     }
 
-                    $currency = isset($currencies[$row['moneda']]) ? $currencies[$row['moneda']] : null;
+                    $currency = isset($currencies[$row['codigo_moneda']]) ? $currencies[$row['codigo_moneda']] : null;
 
                     if (!$currency) {
                         $currency = $em->getRepository(Currency::class)->findOneBy([
-                            'code' => $row['moneda']
+                            'code' => $row['codigo_moneda']
                         ]);
 
                         // Cache is causing a error with entityManager; 
@@ -172,15 +178,37 @@ class PublicServiceController extends BaseController
                         // $currencies[$currency->getCode()] = $currency;
                     }
 
+                    $typeOfCost = null;
+                    switch ($row['tipo_de_costo']) {
+                        case 'fijo':
+                            $typeOfCost = PublicService::COST_FIXED;
+                            break;
+                        case 'variable':
+                            $typeOfCost = PublicService::COST_VARIABLE;
+                            break;
+                        default:
+                            $this->addFlash(
+                                'warning',
+                                sprintf('El tipo de costo %s no existe', $row['tipo_de_costo'])
+                            );
+                            break;
+                    }
+
 
                     $publicService->setInstitution($institution);
-                    $publicService->setSubcategory($subcategory);
+                    $publicService->addSubcategory($subcategory);
 
                     $publicService->setName($row['nombre']);
                     $publicService->setDescription(substr($row['descripcion'], 0, 250));
                     $publicService->setInstructions($row['instrucciones']);
                     $publicService->setRequirements($row['requisitos']);
-                    $publicService->setCost(floatval($row['costo']));
+
+                    if ($typeOfCost === PublicService::COST_FIXED) {
+                        $publicService->setCost(floatval($row['costo']));
+                    } else {
+                        $publicService->setVariableCostDescription($row['costo']);
+                    }
+
                     $publicService->setTimeResponse(substr($row['tiempo_de_respuesta'], 0, 250));
                     $publicService->setTypeOfDocumentObtainable(substr($row['documento_obtenible'], 0, 250));
                     $publicService->setUrl(substr($row['enlace'], 0, 250));
@@ -302,7 +330,7 @@ class PublicServiceController extends BaseController
             $qb = $publicServiceRepository->createQueryBuilder('ps')
                 ->innerJoin('ps.institution', 'i')
                 ->innerJoin('ps.currency', 'c')
-                ->innerJoin('ps.subcategories', 'sc')
+                ->innerJoin('ps.subcategory', 'sc')
                 ->innerJoin('sc.category', 'cc')
                 ->select(
                     'ps.id',
