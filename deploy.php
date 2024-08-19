@@ -24,12 +24,7 @@ add('writable_dirs', ['public/images', 'node_modules']);
 
 
 // Hosts
-
-host('servicios-ocean')
-    ->setHostname('142.93.77.143')
-    ->setRemoteUser('redciudadana')
-    ->set('remote_user', 'redciudadana')
-    ->set('deploy_path', '/srv/web-apps/admin.tramites.redciudadana.org');
+// Add deployable hosts
 
 // Tasks
 
